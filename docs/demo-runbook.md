@@ -31,6 +31,10 @@ Keep the SSH terminal open and browse to http://127.0.0.1:8765/. If model status
 
 The simulation toggle on the dashboard only shows or hides the fictional SOC examples. It does not start/stop capture or change model inference.
 
+## Run an isolated Digital Twin scenario
+
+Open **Digital Twin** from the sidebar. Select External reconnaissance, Credential spray, or Suspicious data movement, then choose **Run scenario**. The page animates events across four virtual assets and keeps the run only in browser memory. All events are fictional. The runner makes no network requests, does not call the AI engine, and does not perform security actions. Use the separate Flow Analysis page for real model inference and the capture runner for authorized packet analysis.
+
 ## Analyze one real flow in the browser
 
 Open Flow Analysis and load a JSON record with the model's named 67-feature schema. A template can be loaded from the UI or fetched from:

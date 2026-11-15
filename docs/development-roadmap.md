@@ -10,6 +10,7 @@ Verified demo components:
 - FastAPI health, GPU, model metadata, and flow detection routes.
 - Hybrid V2 serves Random Forest and Isolation Forest outputs over the named 67-feature CIC-IDS2017 schema.
 - Dashboard simulation mode displays fictional sample alerts, cases, inventory, severity counts, and illustrative paths. These remain explicitly labeled as simulated.
+- Digital Twin Lab preview runs three deterministic scenarios over four virtual assets in-browser; it creates no live traffic, AI predictions, or response actions.
 - Browser-submitted flow records reach the real model endpoint; outputs and short browser trend are session-only.
 - Experimental Python packet capture / PCAP replay runner posts completed records to the CICFlowMeter adapter and prints output to the terminal.
 - Capture-adapter predictions are recorded in bounded metadata-only local SQLite history (maximum 1000), exposed by GET /api/v1/demo/events. Raw feature vectors, IP addresses, and packet payloads are not stored.
@@ -17,7 +18,7 @@ Verified demo components:
 - Java 21 / Spring Boot 3.5.16 provides login, JWT/RBAC-protected routes, Flyway V1–V3 migrations, database-backed JWT logout revocation, a public database-readiness probe, an authenticated AI proxy, and protected analysis history. MySQL 8.4 and platform-api are running on Ubuntu; Flyway schema version 3 is up to date and one platform user exists. The last recorded Maven run passed 12 H2-backed tests.
 - A source-only Git checkpoint exists on the Ubuntu host on branch main (initial commit c5fa200). No remote is configured, so the checkpoint is not an off-machine backup.
 
-The dashboard uses Spring for authenticated flow analysis and saved history; engine status and model metadata come from FastAPI. Both services bind to loopback and are reached through SSH tunneling. No production deployment, durable alert/case workflow, managed collector service, digital twin, Cowrie analytics, RabbitMQ, WebSocket, or automated response system is implemented. The live runner is a separate CLI workflow; its metadata prediction results appear in the dashboard section named “Stored detection records,” separate from the simulated alert, case, and asset examples. Refer to docs/demo-runbook.md.
+The dashboard uses Spring for authenticated flow analysis and saved history; engine status and model metadata come from FastAPI. Both services bind to loopback and are reached through SSH tunneling. No production deployment, durable alert/case workflow, managed collector service, persistent digital twin, Cowrie analytics, RabbitMQ, WebSocket, or automated response system is implemented. The live runner is a separate CLI workflow; its metadata prediction results appear in the dashboard section named “Stored detection records,” separate from the simulated alert, case, and asset examples. Refer to docs/demo-runbook.md.
 
 ## Phases and current status
 
@@ -45,9 +46,11 @@ Outstanding: exact parity with the training generator release, evaluation on ind
 
 Exit criteria: versioned input contract; independent holdout evidence; repeatable prediction record; failures and uncertainty visible; no prediction is treated as a confirmed incident by default.
 
-### Phase 4 — Digital Twin — Not started
+### Phase 4 — Digital Twin — Partial
 
-Build only after an isolated asset/scenario contract exists. Simulated data must be visibly marked and prevented from invoking production actions.
+Implemented: an isolated in-browser preview with four virtual assets and three deterministic scenarios. Runs create ephemeral, visibly simulated timeline events; they cannot access live telemetry, invoke model inference, or trigger production actions.
+
+Outstanding: versioned topology and scenario contracts, server-side run persistence, repeatable scenario state snapshots, and validation of isolation boundaries.
 
 Exit criteria: reproducible isolated scenarios, provenance labels, and enforced separation from production endpoints.
 

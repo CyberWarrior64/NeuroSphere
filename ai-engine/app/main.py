@@ -1,5 +1,5 @@
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -146,3 +146,19 @@ def gpu_status():
 
 # Built React dashboard assets are served from the same loopback-only origin.
 app.mount("/assets", StaticFiles(directory=FRONTEND_DIST / "assets"), name="frontend-assets")
+
+
+# Whitelisted React routes support direct links and browser refreshes without
+# turning unknown API paths into successful HTML responses.
+SPA_ROUTES = {
+    "detection", "login", "monitor", "search", "alerts", "incidents",
+    "endpoints", "network", "twin", "threat-intel", "vulnerabilities",
+    "cases", "reports", "playbooks", "settings",
+}
+
+
+@app.get("/{spa_path:path}", include_in_schema=False)
+def frontend_route(spa_path: str):
+    if spa_path not in SPA_ROUTES:
+        raise HTTPException(status_code=404, detail="Not found")
+    return home()
