@@ -6,6 +6,7 @@ This is a separate Java 21 / Spring Boot 3.5.16 service. It adds an authenticate
 
 - `POST /api/v1/auth/login` — public username/password login. Returns `access_token`, `token_type`, `expires_in` (900 seconds), and `roles`.
 - `POST /api/v1/auth/logout` — authenticated; revokes the presented access token immediately. Returns 204.
+- `GET /api/v1/platform/status` — public readiness probe; checks MySQL with `SELECT 1` and returns 503 if the database is unavailable.
 - `GET /api/v1/platform/health` — bearer token required.
 - `GET /api/v1/platform/me` — bearer token required; returns the authenticated username and roles.
 - `GET /api/v1/platform/admin/health` — requires `ADMIN`.

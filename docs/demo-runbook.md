@@ -65,7 +65,7 @@ The file path above is an example and must exist on the host. Use the readiness 
 
 ## Spring Boot platform API and MySQL
 
-The Java 21 / Spring Boot 3.5.16 API is running on Ubuntu with MySQL 8.4. Flyway reports schema version 3 up to date; V1 through V3 are successful. One platform user is provisioned. Logout revokes the current access token in MySQL; refresh tokens are not implemented. The API binds to loopback on port 8081. The last recorded Maven run passed 12 H2-backed tests; these do not establish full MySQL compatibility.
+The Java 21 / Spring Boot 3.5.16 API is running on Ubuntu with MySQL 8.4. Flyway reports schema version 3 up to date; V1 through V3 are successful. One platform user is provisioned. The public platform status route checks MySQL with `SELECT 1` and the dashboard polls it every 30 seconds. Logout revokes the current access token in MySQL; refresh tokens are not implemented. The API binds to loopback on port 8081. The last recorded Maven run passed 12 H2-backed tests; these do not establish full MySQL compatibility.
 
 The FastAPI research engine remains unauthenticated and loopback-bound. The dashboard reads AI health/model metadata from FastAPI; login, flow analysis, and saved history use the authenticated Spring platform API.
 

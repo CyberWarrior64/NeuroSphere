@@ -3,6 +3,11 @@ export const AI_API_URL = import.meta.env.VITE_AI_API_URL || "http://127.0.0.1:8
 const http = axios.create({ baseURL: AI_API_URL, timeout: 6000 });
 export const PLATFORM_API_URL = import.meta.env.VITE_PLATFORM_API_URL || "http://127.0.0.1:8081";
 const platformHttp = axios.create({ baseURL: PLATFORM_API_URL, timeout: 20000 });
+const platformStatusHttp = axios.create({ baseURL: PLATFORM_API_URL, timeout: 5000 });
+
+export async function loadPlatformStatus() {
+  return (await platformStatusHttp.get("/api/v1/platform/status")).data;
+}
 
 export async function loginToPlatform(username, password) {
   return (await platformHttp.post("/api/v1/auth/login", { username, password })).data;

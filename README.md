@@ -4,7 +4,7 @@ NeuroSphere currently has a research demo plus an early, optional Java platform 
 
 ## Current capabilities
 
-- React SOC dashboard serves clearly labeled fictional simulation data alongside real AI health and model outputs. The browser preview is available at 127.0.0.1:8765 through the SSH tunnel.
+- React SOC dashboard serves clearly labeled fictional simulation data alongside real AI and platform/database readiness status and model outputs. The browser preview is available at 127.0.0.1:8765 through the SSH tunnel.
 - Authenticated flow analysis sends the 67-feature request through Spring Boot; the API calls the private FastAPI service and stores only model scores, classifications, flags, model version, timestamp, and submitting username in MySQL. Raw feature vectors are not retained.
 - The live/PCAP capture runner processes traffic on Ubuntu and prints experimental model results. The separate metadata store keeps up to 1000 prediction records and displays the runner-reported capture mode without raw features, packet payloads, IP addresses, or interface names. The mode is client-reported, not independently attested; predictions are not alerts.
 - The Spring Boot 3.5 / Java 21 platform API has JWT/RBAC login, Flyway migrations V1–V3, database-backed JWT logout revocation, an authenticated AI proxy, and protected recent-analysis history. Maven build and tests pass (12/12).

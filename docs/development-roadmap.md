@@ -14,7 +14,7 @@ Verified demo components:
 - Experimental Python packet capture / PCAP replay runner posts completed records to the CICFlowMeter adapter and prints output to the terminal.
 - Capture-adapter predictions are recorded in bounded metadata-only local SQLite history (maximum 1000), exposed by GET /api/v1/demo/events. Raw feature vectors, IP addresses, and packet payloads are not stored.
 - The frontend production build completed successfully for the current FastAPI host.
-- Java 21 / Spring Boot 3.5.16 provides login, JWT/RBAC-protected routes, Flyway V1–V3 migrations, database-backed JWT logout revocation, an authenticated AI proxy, and protected analysis history. MySQL 8.4 and platform-api are running on Ubuntu; Flyway schema version 3 is up to date and one platform user exists. The last recorded Maven run passed 12 H2-backed tests.
+- Java 21 / Spring Boot 3.5.16 provides login, JWT/RBAC-protected routes, Flyway V1–V3 migrations, database-backed JWT logout revocation, a public database-readiness probe, an authenticated AI proxy, and protected analysis history. MySQL 8.4 and platform-api are running on Ubuntu; Flyway schema version 3 is up to date and one platform user exists. The last recorded Maven run passed 12 H2-backed tests.
 - A source-only Git checkpoint exists on the Ubuntu host on branch main (initial commit c5fa200). No remote is configured, so the checkpoint is not an off-machine backup.
 
 The dashboard uses Spring for authenticated flow analysis and saved history; engine status and model metadata come from FastAPI. Both services bind to loopback and are reached through SSH tunneling. No production deployment, durable alert/case workflow, managed collector service, digital twin, Cowrie analytics, RabbitMQ, WebSocket, or automated response system is implemented. The live runner is a separate CLI workflow; its metadata prediction results appear in the dashboard section named “Stored detection records,” separate from the simulated alert, case, and asset examples. Refer to docs/demo-runbook.md.
@@ -23,7 +23,7 @@ The dashboard uses Spring for authenticated flow analysis and saved history; eng
 
 ### Phase 1 — Core platform and authentication — Partial
 
-Implemented: SOC dashboard shell and local FastAPI connection; separate Spring Boot login, JWT/RBAC-protected routes, database-backed access-token logout revocation, user model/repository, Flyway migrations, and authenticated AI proxy. Maven build and 12 H2-backed tests passed in the last recorded run.
+Implemented: SOC dashboard shell and local FastAPI connection; separate Spring Boot login, JWT/RBAC-protected routes, database-backed access-token logout revocation, a public MySQL readiness probe, user model/repository, Flyway migrations, and authenticated AI proxy. Maven build and 12 H2-backed tests passed in the last recorded run.
 
 Outstanding: account recovery, refresh tokens, audit event storage, and production secret/deployment operations. The current FastAPI demo remains unauthenticated; keep it bound to loopback and use SSH tunneling.
 

@@ -24,6 +24,7 @@ The feature body is strict. Example shape only (not a valid full request):
 
 - POST /api/v1/platform/flows/analyze requires a bearer session and exactly 67 feature keys. Spring calls the loopback AI service, persists only score/result metadata, and returns the AI result with an analysis ID and timestamp.
 - GET /api/v1/platform/flows/recent?limit=10 requires a bearer session and returns at most 50 stored summaries. It never returns raw input features.
+- GET /api/v1/platform/status is public and checks database readiness with a lightweight SELECT 1; it reports no user or configuration details.
 - The React flow screen keeps the short-lived access token in memory and clears it on refresh or expiry. Explicit logout calls POST /api/v1/auth/logout; Spring stores the token ID until expiration and rejects further use. If logout cannot reach the API, the UI still clears local state and warns that the token may remain valid until expiry. The demo dashboard remains available without login.
 
 ## Target browser-to-platform contract
