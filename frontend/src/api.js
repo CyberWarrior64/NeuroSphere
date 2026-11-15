@@ -29,6 +29,10 @@ export async function analyzeFlow(features, accessToken) {
   })).data;
 }
 
+export async function loadCaptureReadiness() {
+  return (await http.get("/api/v1/capture/cicflowmeter-python/readiness")).data;
+}
+
 export async function loadCaptureRunnerStatus() {
   return (await http.get("/api/v1/capture/runner/status")).data;
 }
