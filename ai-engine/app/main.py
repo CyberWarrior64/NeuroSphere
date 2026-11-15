@@ -20,6 +20,7 @@ from app.api.detection_v2 import (
 )
 
 from app.api.demo_events import router as demo_events_router
+from app.api.capture_status import router as capture_status_router
 
 from app.api.detection_validated import (
     router as validated_router,
@@ -66,6 +67,7 @@ app.include_router(v2_router)
 app.include_router(validated_router)
 
 app.include_router(demo_events_router)
+app.include_router(capture_status_router)
 
 
 FRONTEND_DIST = Path(__file__).resolve().parents[2] / "frontend" / "dist"

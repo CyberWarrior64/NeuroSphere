@@ -4,6 +4,8 @@ import argparse
 import json
 import sys
 import threading
+import uuid
+from urllib.parse import urlsplit, urlunsplit
 from decimal import Decimal
 
 import requests
@@ -25,6 +27,51 @@ from app.feature_extraction.cicflowmeter_packet_compat import (
 from app.feature_extraction.cicflowmeter_java_session import CICFlowMeterReferenceSession
 from cicflowmeter.sniffer import create_sniffer
 from scapy.sendrecv import AsyncSniffer
+
+
+class CaptureStatusReporter:
+    """Report runner lifecycle only; packet and interface data are excluded."""
+
+    def __init__(self, prediction_url: str, capture_mode: str) -> None:
+        parsed = urlsplit(prediction_url)
+        self.url = urlunsplit((parsed.scheme, parsed.netloc, "/api/v1/capture/runner/session", "", ""))
+        self.capture_mode = capture_mode
+        self.session_id = str(uuid.uuid4())
+        self._stop = threading.Event()
+        self._thread = None
+        self._registered = False
+        self._warning_printed = False
+
+    def _post(self, action: str) -> bool:
+        payload = {"session_id": self.session_id, "action": action}
+        if action == "start":
+            payload["capture_mode"] = self.capture_mode
+        try:
+            response = requests.post(self.url, json=payload, timeout=3)
+            response.raise_for_status()
+            return True
+        except Exception as exc:
+            if not self._warning_printed:
+                print(f"Capture status update unavailable: {exc}", file=sys.stderr, flush=True)
+                self._warning_printed = True
+            return False
+
+    def _heartbeat_loop(self) -> None:
+        while not self._stop.wait(10):
+            self._post("heartbeat")
+
+    def start(self) -> None:
+        self._registered = self._post("start")
+        if self._registered:
+            self._thread = threading.Thread(target=self._heartbeat_loop, daemon=True)
+            self._thread.start()
+
+    def stop(self) -> None:
+        self._stop.set()
+        if self._thread is not None:
+            self._thread.join(timeout=2)
+        if self._registered:
+            self._post("stop")
 
 
 class PredictionWriter:
@@ -94,12 +141,14 @@ def main() -> int:
             verbose=False,
         )
     session.output_writer = PredictionWriter(args.url, "pcap" if args.file else "live")
+    capture_status = CaptureStatusReporter(args.url, "pcap" if args.file else "live")
     if args.file:
         print(f"Processing {args.file}; completed flows will be posted to {args.url}.")
     else:
         print(f"Capturing on {args.interface}; completed flows will be posted to {args.url}.")
     print("Each completed flow will print its experimental prediction. Press Ctrl+C to stop.")
     try:
+        capture_status.start()
         sniffer.start()
         sniffer.join()
     except KeyboardInterrupt:
@@ -109,6 +158,7 @@ def main() -> int:
         except Exception:
             pass
     finally:
+        capture_status.stop()
         stop_event = getattr(session, "_gc_stop", None)
         gc_thread = getattr(session, "_gc_thread", None)
         if stop_event is not None:

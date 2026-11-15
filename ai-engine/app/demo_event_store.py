@@ -29,6 +29,15 @@ def _connect() -> sqlite3.Connection:
 def initialize_store() -> None:
     with _connect() as connection:
         connection.execute("""
+            CREATE TABLE IF NOT EXISTS capture_sessions (
+                session_id TEXT PRIMARY KEY,
+                capture_mode TEXT NOT NULL CHECK(capture_mode IN ('live', 'pcap')),
+                started_at TEXT NOT NULL,
+                last_heartbeat_at TEXT NOT NULL,
+                stopped_at TEXT
+            )
+        """)
+        connection.execute("""
             CREATE TABLE IF NOT EXISTS prediction_events (
                 id TEXT PRIMARY KEY,
                 recorded_at TEXT NOT NULL,
@@ -119,3 +128,85 @@ def recent_predictions(limit: int = 100) -> list[dict[str, Any]]:
     return [{**dict(row), "rf_flagged": bool(row["rf_flagged"]),
              "if_flagged": bool(row["if_flagged"]), "simulated": False}
             for row in rows]
+
+
+
+def start_capture_session(session_id: str, capture_mode: str) -> None:
+    session_id = str(uuid.UUID(session_id))
+    if capture_mode not in {"live", "pcap"}:
+        raise ValueError("capture_mode must be live or pcap")
+    now = datetime.now(timezone.utc).isoformat()
+    with _connect() as connection:
+        connection.execute("""
+            INSERT INTO capture_sessions (session_id, capture_mode, started_at, last_heartbeat_at, stopped_at)
+            VALUES (?, ?, ?, ?, NULL)
+            ON CONFLICT(session_id) DO UPDATE SET
+                capture_mode=excluded.capture_mode,
+                started_at=excluded.started_at,
+                last_heartbeat_at=excluded.last_heartbeat_at,
+                stopped_at=NULL
+        """, (session_id, capture_mode, now, now))
+        connection.execute("""
+            DELETE FROM capture_sessions
+            WHERE session_id NOT IN (
+                SELECT session_id FROM capture_sessions ORDER BY started_at DESC LIMIT 100
+            )
+        """)
+
+
+def heartbeat_capture_session(session_id: str) -> bool:
+    session_id = str(uuid.UUID(session_id))
+    now = datetime.now(timezone.utc).isoformat()
+    with _connect() as connection:
+        cursor = connection.execute("""
+            UPDATE capture_sessions SET last_heartbeat_at=?
+            WHERE session_id=? AND stopped_at IS NULL
+        """, (now, session_id))
+    return cursor.rowcount == 1
+
+
+def stop_capture_session(session_id: str) -> bool:
+    session_id = str(uuid.UUID(session_id))
+    now = datetime.now(timezone.utc).isoformat()
+    with _connect() as connection:
+        cursor = connection.execute("""
+            UPDATE capture_sessions SET stopped_at=?, last_heartbeat_at=?
+            WHERE session_id=? AND stopped_at IS NULL
+        """, (now, now, session_id))
+    return cursor.rowcount == 1
+
+
+def capture_runner_status() -> dict[str, Any]:
+    with _connect() as connection:
+        rows = connection.execute("""
+            SELECT capture_mode, started_at, last_heartbeat_at, stopped_at
+            FROM capture_sessions ORDER BY started_at DESC LIMIT 100
+        """).fetchall()
+    if not rows:
+        return {"status": "idle", "capture_mode": None, "last_heartbeat_at": None, "source": "runner-reported"}
+    now = datetime.now(timezone.utc)
+    candidates = []
+    for stored in rows:
+        row = dict(stored)
+        last_seen = datetime.fromisoformat(row["last_heartbeat_at"])
+        age_seconds = max(0, (now - last_seen).total_seconds())
+        if row["stopped_at"] is not None:
+            status = "stopped"
+        elif age_seconds <= 45:
+            status = "running"
+        else:
+            status = "stale"
+        candidates.append((status, row, age_seconds))
+    running = [candidate for candidate in candidates if candidate[0] == "running"]
+    status, row, age_seconds = (running or candidates)[0]
+    return {
+        "status": status,
+        "active_sessions": len(running),
+        "capture_mode": row["capture_mode"],
+        "started_at": row["started_at"],
+        "last_heartbeat_at": row["last_heartbeat_at"],
+        "stopped_at": row["stopped_at"],
+        "heartbeat_age_seconds": round(age_seconds, 1),
+        "stale_after_seconds": 45,
+        "source": "runner-reported",
+    }

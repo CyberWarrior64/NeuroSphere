@@ -29,6 +29,10 @@ export async function analyzeFlow(features, accessToken) {
   })).data;
 }
 
+export async function loadCaptureRunnerStatus() {
+  return (await http.get("/api/v1/capture/runner/status")).data;
+}
+
 export async function loadDemoEvents(limit = 8) {
   return (await http.get("/api/v1/demo/events", { params: { limit } })).data;
 }

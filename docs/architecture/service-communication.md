@@ -35,7 +35,7 @@ Java validates session, schema version, and request size, then calls private AI.
 
 ## Target Java-to-AI contract
 
-Use private HTTP with bounded payloads/timeouts, service identity, network isolation, and X-Request-ID. Validate all 67 names against model metadata. Translate FastAPI errors into safe platform errors; do not leak traces. The current proxy stores model version and the RF/IF scores, classifications, flags, and agreement. Thresholds and raw features are not stored. The private AI endpoint itself still has no service-auth token or request envelope.
+Use private HTTP with bounded payloads/timeouts, service identity, network isolation, and X-Request-ID. Validate all 67 names against model metadata. Translate FastAPI errors into safe platform errors; do not leak traces. The current proxy stores model version and the RF/IF scores, classifications, flags, and agreement. Thresholds and raw features are not stored. The private AI endpoint itself still has no service-auth token or request envelope. The manual capture runner reports lifecycle to GET /api/v1/capture/runner/status and POST /api/v1/capture/runner/session; it sends only a generated session ID, live/PCAP mode, and lifecycle action. The runner controls these client-reported values, and stale status means no heartbeat for 45 seconds.
 
 ## Target asynchronous events
 

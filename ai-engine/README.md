@@ -27,6 +27,8 @@ is at /docs. Useful endpoints:
 - POST /api/v1/detect/validated-randomsplit - experimental validated-data models
 - GET /api/v1/capture/cicflowmeter-python/readiness - adapter support and known parity gaps
 - POST /api/v1/detect/cicflowmeter-python - experimental CICFlowMeter Python input adapter
+- GET /api/v1/capture/runner/status - manual runner status; running is based on client-reported heartbeats and becomes stale after 45 seconds
+- POST /api/v1/capture/runner/session - loopback runner lifecycle updates; stores session mode and timestamps only
 
 The detector uses scikit-learn; PyTorch is optional. The GPU endpoint reports
 available NVIDIA information when the relevant runtime tools are installed.
@@ -51,6 +53,8 @@ Start the API in one terminal using the command above. In another terminal, send
 To process a saved PCAP/PCAPNG file without capturing live traffic, use the -f option instead of -i, for example:
 
     .venv/bin/python -m app.feature_extraction.run_reference_capture -f datasets/reference_pcaps/Monday-first-20000.pcap -u http://127.0.0.1:8000/api/v1/detect/cicflowmeter-python
+
+The dashboard shows whether the manual runner last reported live capture, PCAP replay, stopped, or stale status. Status is client-reported, is not an independent sensor heartbeat, and excludes interface names. A runner crash is marked stale 45 seconds after its last heartbeat.
 
 The readiness endpoint includes a feature-by-feature parity audit and source links. The packet adapter recalculates payload, header, timing, ratio, subflow, initial-window, and active/idle fields from raw packets, with several formulas calibrated against the CICIDS2017 training table. A bounded comparison against the first 100,000 packets of Monday traffic found 92.17% feature-cell agreement across 5,831 unique direct flows; 4,547 flows matched all 67 fields. Header-derived fields agreed on 92.30% of compared cells; the best tested candidate carries the preceding TCP header length into UDP fields, an empirical inference. See `datasets/reference_pcaps/Monday-first-100000-feature-parity.json` and rerun with `.venv/bin/python -m app.feature_extraction.compare_training_reference`. Among the 4,899 flows with exact core duration/count/payload fields, 99.62% of feature cells matched and 92.81% matched all 67 fields; this points to flow segmentation as a major remaining source of differences, though that explanation is not proven. That comparison alone does not establish parity with the exact training-generator release, full flow boundaries, or external-capture quality; see the capture-day holdout section below. Use for research only; do not automate blocking or alert escalation. Keep the API bound to loopback.
 
