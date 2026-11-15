@@ -1,6 +1,6 @@
 # NeuroSphere Platform API (Phase 1 slice)
 
-This is a separate Java 21 / Spring Boot 3.5.16 service. It adds an authenticated platform boundary and proxies flow analysis to the existing Python AI engine. It does not replace ai-engine. It persists successful flow-analysis result metadata only; raw features, alerts, and incidents are not stored.
+This is a separate Java 21 / Spring Boot 3.5.16 service. It adds an authenticated platform boundary and proxies flow analysis to the existing Python AI engine. It does not replace ai-engine. It persists successful flow-analysis result metadata and authenticated analyst case records; raw flow features are not stored.
 
 ## API
 
@@ -12,6 +12,11 @@ This is a separate Java 21 / Spring Boot 3.5.16 service. It adds an authenticate
 - `GET /api/v1/platform/admin/health` — requires `ADMIN`.
 - POST /api/v1/platform/flows/analyze — bearer token required; requires exactly 67 feature keys, forwards the record to the configured AI engine, and stores model result metadata. Do not send personal or production-sensitive records to the research model.
 - GET /api/v1/platform/flows/recent?limit=10 — bearer token required; returns up to 50 recent result summaries without raw feature values.
+- GET /api/v1/platform/cases?limit=50&status=OPEN — bearer token required; returns up to 100 recent case summaries.
+- POST /api/v1/platform/cases — bearer token required; opens a manually reviewed case and writes its initial activity event.
+- GET /api/v1/platform/cases/{id} — bearer token required; returns the case and its activity history.
+- PATCH /api/v1/platform/cases/{id}/status — bearer token required; changes lifecycle status and records the transition.
+- POST /api/v1/platform/cases/{id}/notes — bearer token required; appends an analyst note to the activity history.
 
 Invalid credentials return the same 401 message. Access tokens use HS256, include issuer, expiry, and unique token ID claims, and last 15 minutes. Logout records the token ID until expiry; subsequent requests with that token return 401. There are no refresh tokens.
 
@@ -45,8 +50,8 @@ Before starting the local Ubuntu Compose stack, package the JAR from the project
 
 Compose mounts platform-api/target/platform-api-0.1.0.jar read-only and runs it from the Maven/Temurin image, avoiding a separate API image build. The Compose service uses Linux host networking, keeps the app bound to 127.0.0.1, and reaches the existing AI engine and loopback-published MySQL port. Do not run the service with missing DB/JWT configuration. This host-network setup is specific to Linux, not Docker Desktop on Windows/macOS.
 
-Integration tests use H2 and a test-only signing secret. The 12 tests cover login/security behavior, token revocation, protected history reads, and persistence of score-only analysis metadata against a mocked AI response; they do not connect to the production MySQL or AI host.
+The existing integration tests use H2 and a test-only signing secret. The 12 tests cover login/security behavior, token revocation, protected history reads, and score-only analysis metadata against a mocked AI response; they predate the case-management feature and do not cover its endpoints or connect to production MySQL/AI. The current case-management package was compiled with tests skipped.
 
 ## Current boundary
 
-This slice provides authentication, authorization, migration-backed users and flow-result history, and an authenticated AI proxy. The React dashboard uses the platform session for flow submissions and displays stored summaries after sign-in. It does not include user registration, password reset, account recovery, refresh tokens, formal flow-history retention, audit logging, alert/case workflows, or production deployment.
+This slice provides authentication, migration-backed users and flow-result history, an authenticated AI proxy, and shared MySQL-backed cases with activity history. The React dashboard uses the platform session for flow submissions and case management. It does not include user registration, password reset, account recovery, refresh tokens, formal retention, a general authentication audit log, tenant isolation, incident/alert workflows, or production deployment.

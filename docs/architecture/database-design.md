@@ -2,7 +2,7 @@
 
 ## Status and rules
 
-Current platform persistence: MySQL 8.4 with Flyway V1–V3 backs platform users/roles, flow-analysis result summaries, and revoked JWT access-token IDs. The AI engine still loads model artifacts locally and does not use MySQL.
+Current platform persistence: MySQL 8.4 with Flyway V1–V4 backs platform users/roles, flow-analysis result summaries, revoked JWT access-token IDs, and authenticated case records/activity. The AI engine still loads model artifacts locally and does not use MySQL.
 
 Use UTC timestamps, stable generated IDs, foreign keys, migrations, least-privilege DB accounts, and documented retention. Preserve provenance and model/schema versions. Store detector signals separately from analyst-confirmed incidents. Do not persist full flow vectors or raw PCAP by default; first agree on purpose, privacy, access, and retention. Keep credentials out of ordinary tables.
 
@@ -11,6 +11,7 @@ Use UTC timestamps, stable generated IDs, foreign keys, migrations, least-privil
 - platform_users and platform_user_roles (Flyway V1): BCrypt account records and role assignments.
 - platform_flow_analyses (Flyway V2): submitter, model version, timestamp, RF/IF classifications, scores, flags, and detector agreement. Raw feature vectors, packet data, and IP addresses are excluded.
 - revoked_access_tokens (Flyway V3): JWT ID (jti), expiration timestamp, and revocation timestamp. Revoked IDs are retained only until their tokens expire; bearer tokens are never stored.
+- platform_cases and platform_case_activity (Flyway V4): manually reviewed case records and append-only status/note activity, tied to authenticated usernames. No packet features or network addresses are stored in these tables.
 
 The flow-analysis table currently has no automated retention policy. Define and implement retention before treating this as a production store.
 

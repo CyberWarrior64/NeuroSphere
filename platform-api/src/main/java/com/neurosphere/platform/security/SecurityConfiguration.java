@@ -55,7 +55,7 @@ public class SecurityConfiguration {
             @Value("${neurosphere.cors.allowed-origins}") String originCsv) {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(Arrays.stream(originCsv.split(",")).map(String::trim).filter(s -> !s.isEmpty()).toList());
-        config.setAllowedMethods(List.of("GET", "POST", "OPTIONS"));
+        config.setAllowedMethods(List.of("GET", "POST", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         config.setExposedHeaders(List.of("Authorization"));
         config.setAllowCredentials(false);

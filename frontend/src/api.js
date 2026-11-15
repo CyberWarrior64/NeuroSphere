@@ -41,6 +41,38 @@ export async function loadDemoEvents(limit = 8) {
   return (await http.get("/api/v1/demo/events", { params: { limit } })).data;
 }
 
+export async function loadCases(accessToken, limit = 50, status) {
+  if (!accessToken) throw new Error("Sign in to view cases.");
+  return (await platformHttp.get("/api/v1/platform/cases", {
+    params: { limit, ...(status ? { status } : {}) },
+    headers: { Authorization: "Bearer " + accessToken },
+  })).data;
+}
+
+export async function createCase(accessToken, payload) {
+  return (await platformHttp.post("/api/v1/platform/cases", payload, {
+    headers: { Authorization: "Bearer " + accessToken },
+  })).data;
+}
+
+export async function loadCase(accessToken, id) {
+  return (await platformHttp.get("/api/v1/platform/cases/" + id, {
+    headers: { Authorization: "Bearer " + accessToken },
+  })).data;
+}
+
+export async function changeCaseStatus(accessToken, id, status) {
+  return (await platformHttp.patch("/api/v1/platform/cases/" + id + "/status", { status }, {
+    headers: { Authorization: "Bearer " + accessToken },
+  })).data;
+}
+
+export async function addCaseNote(accessToken, id, note) {
+  return (await platformHttp.post("/api/v1/platform/cases/" + id + "/notes", { note }, {
+    headers: { Authorization: "Bearer " + accessToken },
+  })).data;
+}
+
 export async function loadRecentAnalyses(accessToken, limit = 10) {
   if (!accessToken) throw new Error("Sign in to view stored analyses.");
   return (await platformHttp.get("/api/v1/platform/flows/recent", {

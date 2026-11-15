@@ -16,12 +16,13 @@ Verified demo components:
 - Capture-adapter predictions are recorded in bounded metadata-only local SQLite history (maximum 1000), exposed by GET /api/v1/demo/events. Raw feature vectors, IP addresses, and packet payloads are not stored.
 - Alerts presents flagged predictions from the same metadata history with model and capture-mode filters; no alert lifecycle or analyst disposition is persisted.
 - Incidents has a browser-only simulation with three fictional scenarios and local in-memory status changes; it is not connected to alerts, telemetry, or a case database.
+- Case Management uses authenticated Spring endpoints and MySQL migrations for manual case creation, status changes, and an append-only activity history. Model predictions are not automatically promoted to cases.
 - SIEM Search and Reports pages read that existing history: Search filters up to 250 prediction summaries; Reports aggregates the same bounded window and exports CSV metadata. They do not represent a connected SIEM or alert/incident pipeline.
 - The frontend production build completed successfully for the current FastAPI host.
-- Java 21 / Spring Boot 3.5.16 provides login, JWT/RBAC-protected routes, Flyway V1–V3 migrations, database-backed JWT logout revocation, a public database-readiness probe, an authenticated AI proxy, and protected analysis history. MySQL 8.4 and platform-api are running on Ubuntu; Flyway schema version 3 is up to date and one platform user exists. The last recorded Maven run passed 12 H2-backed tests.
+- Java 21 / Spring Boot 3.5.16 provides login, JWT-protected routes, Flyway V1–V4, database-backed JWT logout revocation, a public database-readiness probe, an authenticated AI proxy, protected analysis history, and authenticated case management with MySQL activity history. MySQL 8.4 and platform-api are running on Ubuntu; Flyway schema version 4 is up to date. The earlier 12 H2-backed tests predate case management; the current package build skipped tests.
 - A source-only Git checkpoint exists on the Ubuntu host on branch main (initial commit c5fa200). No remote is configured, so the checkpoint is not an off-machine backup.
 
-The dashboard uses Spring for authenticated flow analysis and saved history; engine status and model metadata come from FastAPI. Both services bind to loopback and are reached through SSH tunneling. No production deployment, durable alert/case workflow, managed collector service, persistent digital twin, Cowrie analytics, RabbitMQ, WebSocket, or automated response system is implemented. The live runner is a separate CLI workflow; its metadata prediction results appear in the dashboard section named “Stored detection records,” separate from the simulated alert, case, and asset examples. Refer to docs/demo-runbook.md.
+The dashboard uses Spring for authenticated flow analysis, saved history, and manually created cases; engine status/model metadata come from FastAPI. Both services bind to loopback and are reached through SSH tunneling. The case feature is a basic shared analyst workflow, not a multi-tenant incident-management system. No production deployment, durable alert pipeline, managed collector, persistent server-side digital twin, Cowrie analytics, RabbitMQ, WebSocket, or approved response system is implemented. The live runner is a separate CLI workflow; its metadata prediction results appear in the dashboard section named “Stored detection records,” separate from the simulated alert, case, and asset examples. Refer to docs/demo-runbook.md.
 
 ## Phases and current status
 
@@ -65,7 +66,7 @@ Exit criteria: approved and isolated decoy deployment, parsed and sourced events
 
 ### Phase 6 — Orchestration and real-time monitoring — Not started
 
-The dashboard's simulated cases are illustrative only. There is no durable incident or playbook service, RabbitMQ, authenticated WebSocket stream, or response execution.
+The dashboard's simulated incidents are illustrative only. Manual case records persist in MySQL, but there is no alert-to-incident pipeline, incident correlation service, playbook engine, RabbitMQ, authenticated WebSocket stream, or response execution.
 
 Exit criteria: durable/idempotent event handling, bounded retry/dead-letter behavior, authenticated stream, review/approval workflow, audit history, and rollback. Begin with review-only actions; do not automate containment without separate validation and approval.
 
@@ -73,7 +74,7 @@ Exit criteria: durable/idempotent event handling, bounded retry/dead-letter beha
 
 Implemented: current host-run FastAPI and built frontend; optional platform API Dockerfile and Compose configuration; Compose config validation; loopback SSH-tunnel workflow.
 
-Completed on the demo host: Java/MySQL containers are running; Flyway V1–V3 succeeded and the schema is at version 3. A private logical MySQL backup was created with a SHA-256 sidecar. Backup and guarded restore scripts are implemented; restore/rollback rehearsal remains outstanding. Outstanding: configure an approved remote backup/hosting destination, CI, broader integration/security tests, monitoring, and clean-machine setup. A local Git checkpoint exists, but it does not protect against loss of the Ubuntu host. Spring H2 tests do not cover full MySQL behavior.
+Completed on the demo host: Java/MySQL containers are running; Flyway V1–V4 succeeded and the schema is at version 4. A private logical MySQL backup was created with a SHA-256 sidecar. Backup and guarded restore scripts are implemented; restore/rollback rehearsal remains outstanding. Outstanding: configure an approved remote backup/hosting destination, CI, broader integration/security tests, monitoring, and clean-machine setup. A local Git checkpoint exists, but it does not protect against loss of the Ubuntu host. Spring H2 tests do not cover full MySQL behavior.
 
 Exit criteria: reproducible install and deployment; integration/security checks pass; data restore and rollback demonstrated; demo and production configuration separated; limitations documented.
 
@@ -83,7 +84,7 @@ Exit criteria: reproducible install and deployment; integration/security checks 
 2. Demonstrate the real model through browser flow submission or the Ubuntu capture runner. Keep experimental results separate from fictional SOC events.
 3. Use the bounded metadata history from capture-adapter predictions (GET /api/v1/demo/events). Store no raw feature vectors, packet payloads, or IP addresses; do not treat a model signal as a persisted alert.
 4. Rehearse the “Stored detection records” view with actual adapter predictions and verify timestamps/source labels. Keep capture explicit and local; do not grant the web app raw-packet privileges.
-5. The Ubuntu demo host now runs MySQL and the Spring API with Flyway schema version 3 and logout revocation enabled. Use the existing account for authenticated flow analysis and saved history; keep the FastAPI engine loopback-bound and the research limitations visible.
+5. The Ubuntu demo host now runs MySQL and the Spring API with Flyway schema version 4, logout revocation, and the case API enabled. Use the existing account for authenticated flow analysis and saved history; keep the FastAPI engine loopback-bound and the research limitations visible.
 6. Run a clean demo rehearsal using docs/demo-runbook.md and record what remains unconnected.
 
 The demo can be completed far sooner than the production system. Production completion requires implementing and validating each phase, not simply polishing the dashboard. Do not claim all seven phases are complete because the demo runs.
