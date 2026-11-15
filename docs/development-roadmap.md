@@ -14,6 +14,7 @@ Verified demo components:
 - Browser-submitted flow records reach the real model endpoint; outputs and short browser trend are session-only.
 - Experimental Python packet capture / PCAP replay runner posts completed records to the CICFlowMeter adapter and prints output to the terminal.
 - Capture-adapter predictions are recorded in bounded metadata-only local SQLite history (maximum 1000), exposed by GET /api/v1/demo/events. Raw feature vectors, IP addresses, and packet payloads are not stored.
+- SIEM Search and Reports pages read that existing history: Search filters up to 250 prediction summaries; Reports aggregates the same bounded window and exports CSV metadata. They do not represent a connected SIEM or alert/incident pipeline.
 - The frontend production build completed successfully for the current FastAPI host.
 - Java 21 / Spring Boot 3.5.16 provides login, JWT/RBAC-protected routes, Flyway V1–V3 migrations, database-backed JWT logout revocation, a public database-readiness probe, an authenticated AI proxy, and protected analysis history. MySQL 8.4 and platform-api are running on Ubuntu; Flyway schema version 3 is up to date and one platform user exists. The last recorded Maven run passed 12 H2-backed tests.
 - A source-only Git checkpoint exists on the Ubuntu host on branch main (initial commit c5fa200). No remote is configured, so the checkpoint is not an off-machine backup.
