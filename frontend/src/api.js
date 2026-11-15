@@ -41,6 +41,44 @@ export async function loadDemoEvents(limit = 8) {
   return (await http.get("/api/v1/demo/events", { params: { limit } })).data;
 }
 
+export async function loadIncidents(accessToken, limit = 100, status) {
+  if (!accessToken) throw new Error("Sign in to view incidents.");
+  return (await platformHttp.get("/api/v1/platform/incidents", {
+    params: { limit, ...(status ? { status } : {}) },
+    headers: { Authorization: "Bearer " + accessToken },
+  })).data;
+}
+
+export async function createIncident(accessToken, payload) {
+  return (await platformHttp.post("/api/v1/platform/incidents", payload, {
+    headers: { Authorization: "Bearer " + accessToken },
+  })).data;
+}
+
+export async function loadIncident(accessToken, id) {
+  return (await platformHttp.get("/api/v1/platform/incidents/" + id, {
+    headers: { Authorization: "Bearer " + accessToken },
+  })).data;
+}
+
+export async function changeIncidentStatus(accessToken, id, status) {
+  return (await platformHttp.patch("/api/v1/platform/incidents/" + id + "/status", { status }, {
+    headers: { Authorization: "Bearer " + accessToken },
+  })).data;
+}
+
+export async function addIncidentNote(accessToken, id, note) {
+  return (await platformHttp.post("/api/v1/platform/incidents/" + id + "/notes", { note }, {
+    headers: { Authorization: "Bearer " + accessToken },
+  })).data;
+}
+
+export async function linkAlertToIncident(accessToken, incidentId, alertId) {
+  return (await platformHttp.post("/api/v1/platform/incidents/" + incidentId + "/alerts/" + alertId, null, {
+    headers: { Authorization: "Bearer " + accessToken },
+  })).data;
+}
+
 export async function loadAlerts(accessToken, limit = 100, status) {
   if (!accessToken) throw new Error("Sign in to view review alerts.");
   return (await platformHttp.get("/api/v1/platform/alerts", {

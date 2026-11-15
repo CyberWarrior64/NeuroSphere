@@ -2,7 +2,7 @@
 
 ## Status and rules
 
-Current platform persistence: MySQL 8.4 with Flyway V1–V5 backs platform users/roles, flow-analysis result summaries, revoked JWT access-token IDs, authenticated case records/activity, and analyst-promoted alert snapshots/activity. The AI engine still loads model artifacts locally and does not use MySQL.
+Current platform persistence: MySQL 8.4 with Flyway V1–V6 backs platform users/roles, flow-analysis result summaries, revoked JWT access-token IDs, authenticated case records/activity, analyst-promoted alert snapshots/activity, and incidents with linked alerts. The AI engine still loads model artifacts locally and does not use MySQL.
 
 Use UTC timestamps, stable generated IDs, foreign keys, migrations, least-privilege DB accounts, and documented retention. Preserve provenance and model/schema versions. Store detector signals separately from analyst-confirmed incidents. Do not persist full flow vectors or raw PCAP by default; first agree on purpose, privacy, access, and retention. Keep credentials out of ordinary tables.
 
@@ -13,6 +13,7 @@ Use UTC timestamps, stable generated IDs, foreign keys, migrations, least-privil
 - revoked_access_tokens (Flyway V3): JWT ID (jti), expiration timestamp, and revocation timestamp. Revoked IDs are retained only until their tokens expire; bearer tokens are never stored.
 - platform_cases and platform_case_activity (Flyway V4): manually reviewed case records and append-only status/note activity, tied to authenticated usernames. No packet features or network addresses are stored in these tables.
 - platform_alerts and platform_alert_activity (Flyway V5): authenticated analyst-promoted snapshots of verified recent flagged capture predictions, with analyst-selected severity, rationale, model fields, lifecycle status, and status activity. The API checks the prediction against AI-engine history before storing it; raw features, IP addresses, and packet payloads are excluded.
+- platform_incidents, platform_incident_activity, and platform_incident_alerts (Flyway V6): manually opened incident records, status/note history, and deduplicated links to persisted review alerts. Incident creation and alert linking are analyst actions; there is no automatic correlation or response execution.
 
 The flow-analysis table currently has no automated retention policy. Define and implement retention before treating this as a production store.
 

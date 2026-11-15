@@ -1,6 +1,6 @@
 # NeuroSphere Platform API (Phase 1 slice)
 
-This is a separate Java 21 / Spring Boot 3.5.16 service. It adds an authenticated platform boundary and proxies flow analysis to the existing Python AI engine. It does not replace ai-engine. It persists successful flow-analysis metadata, authenticated analyst cases, and analyst-promoted review alerts; raw flow features, packet payloads, and IP addresses are not stored.
+This is a separate Java 21 / Spring Boot 3.5.16 service. It adds an authenticated platform boundary and proxies flow analysis to the existing Python AI engine. It does not replace ai-engine. It persists successful flow-analysis metadata, authenticated analyst cases, analyst-promoted review alerts, and incidents linked to those alerts; raw flow features, packet payloads, and IP addresses are not stored.
 
 ## API
 
@@ -21,6 +21,11 @@ This is a separate Java 21 / Spring Boot 3.5.16 service. It adds an authenticate
 - POST /api/v1/platform/alerts/from-capture/{predictionId} — bearer token required; Spring looks up the prediction in recent AI-engine history, rejects missing/unflagged records, and stores the analyst-provided title, rationale, and severity with a model-metadata snapshot. Duplicate source predictions are rejected.
 - GET /api/v1/platform/alerts/{id} — bearer token required; returns the alert and its activity history.
 - PATCH /api/v1/platform/alerts/{id}/status — bearer token required; records an analyst status transition.
+- GET /api/v1/platform/incidents?limit=50&status=OPEN — bearer token required; returns up to 100 recent incidents.
+- POST /api/v1/platform/incidents — bearer token required; manually opens an incident and records activity.
+- GET /api/v1/platform/incidents/{id} — bearer token required; returns incident, linked review alerts, and activity history.
+- PATCH /api/v1/platform/incidents/{id}/status and POST /api/v1/platform/incidents/{id}/notes — bearer token required; record status transitions and analyst notes.
+- POST /api/v1/platform/incidents/{id}/alerts/{alertId} — bearer token required; links an existing review alert once and records the actor.
 
 Invalid credentials return the same 401 message. Access tokens use HS256, include issuer, expiry, and unique token ID claims, and last 15 minutes. Logout records the token ID until expiry; subsequent requests with that token return 401. There are no refresh tokens.
 
@@ -54,8 +59,8 @@ Before starting the local Ubuntu Compose stack, package the JAR from the project
 
 Compose mounts platform-api/target/platform-api-0.1.0.jar read-only and runs it from the Maven/Temurin image, avoiding a separate API image build. The Compose service uses Linux host networking, keeps the app bound to 127.0.0.1, and reaches the existing AI engine and loopback-published MySQL port. Do not run the service with missing DB/JWT configuration. This host-network setup is specific to Linux, not Docker Desktop on Windows/macOS.
 
-The existing integration tests use H2 and a test-only signing secret. The 12 tests cover login/security behavior, token revocation, protected history reads, and score-only analysis metadata against a mocked AI response; they predate the case-management feature and do not cover its endpoints or connect to production MySQL/AI. The current case/alert package was compiled with tests skipped. All authenticated accounts share this demo workspace; tenant isolation and per-role case assignment are not implemented.
+The existing integration tests use H2 and a test-only signing secret. The 12 tests cover login/security behavior, token revocation, protected history reads, and score-only analysis metadata against a mocked AI response; they predate the case-management feature and do not cover its endpoints or connect to production MySQL/AI. The case/alert/incident packages were compiled with tests skipped. All authenticated accounts share this demo workspace; tenant isolation and per-role assignment are not implemented.
 
 ## Current boundary
 
-This slice provides authentication, migration-backed users and flow-result history, an authenticated AI proxy, and shared MySQL-backed cases and analyst-promoted alerts with activity history. The React dashboard uses the platform session for flow submissions, case management, and alert review. It does not include user registration, password reset, account recovery, refresh tokens, formal retention, a general authentication audit log, tenant isolation, incident correlation and external alert-source integrations, or production deployment.
+This slice provides authentication, migration-backed users and flow-result history, an authenticated AI proxy, and shared MySQL-backed cases, analyst-promoted alerts, and incidents linked by analysts with activity history. The React dashboard uses the platform session for flow submissions, case management, and alert review. It does not include user registration, password reset, account recovery, refresh tokens, formal retention, a general authentication audit log, tenant isolation, incident correlation and external alert-source integrations, or production deployment.

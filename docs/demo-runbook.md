@@ -11,7 +11,7 @@ This runbook separates the fictional SOC presentation from actual model analysis
 | Browser flow analysis | Authenticated JSON sent to Spring POST /api/v1/platform/flows/analyze, then forwarded to FastAPI | Real model inference over supplied values. Spring stores result metadata only. Outputs remain experimental research signals. |
 | Terminal capture runner | Live interface or offline PCAP, converted into candidate flow features and posted to the CICFlowMeter adapter | Real packets are processed on Ubuntu. Experimental predictions print in the terminal and their metadata, including a generated runner session UUID, is stored in local SQLite and displayed under “Stored detection records.” The UUID links a prediction to its runner session without storing the interface name. This view is prediction history, not the simulated SOC alert table. |
 | Alerts | Capture history plus authenticated Spring API/MySQL | Flagged predictions are separate from persisted review alerts. An analyst may promote a recent server-verified prediction with a selected severity and rationale; no attack is confirmed and no response action is sent. |
-| Incidents | Fixed browser demo scenarios | Three fictional examples support a walkthrough of incident triage controls. Status changes last only until page refresh; no real incident or response action is created. |
+| Incidents | Authenticated Spring API/MySQL or fixed browser demo scenarios | Persistent incidents are manually created and can link analyst-reviewed alerts with status/note history. The separate demo tab contains three fictional scenarios with page-memory status only. No response action is executed. |
 | Case Management | Authenticated Spring API and MySQL | Manually created cases persist with status changes and analyst notes in the activity history. Cases are not automatically generated from model predictions. |
 | SIEM Search and Reports | GET /api/v1/demo/events metadata history | Search filters up to 250 saved prediction summaries. Reports summarizes the same window and exports metadata-only CSV. These pages are not connected to a SIEM, alert queue, or incident store. |
 
@@ -73,10 +73,11 @@ The file path above is an example and must exist on the host. Use the readiness 
 
 ## Spring Boot platform API and MySQL
 
-The Java 21 / Spring Boot 3.5.16 API is running on Ubuntu with MySQL 8.4. Flyway reports schema version 5 up to date; V1 through V5 are successful. One platform user is provisioned. The public platform status route checks MySQL with `SELECT 1` and the dashboard polls it every 30 seconds. Logout revokes the current access token in MySQL; refresh tokens are not implemented. The API binds to loopback on port 8081. The earlier 12 H2-backed tests predate the case and alert workflows; the current package was built with tests skipped, and H2 does not establish full MySQL compatibility.
+The Java 21 / Spring Boot 3.5.16 API is running on Ubuntu with MySQL 8.4. Flyway reports schema version 6 up to date; V1 through V6 are successful. One platform user is provisioned. The public platform status route checks MySQL with `SELECT 1` and the dashboard polls it every 30 seconds. Logout revokes the current access token in MySQL; refresh tokens are not implemented. The API binds to loopback on port 8081. The earlier 12 H2-backed tests predate the case, alert, and incident workflows; the current package was built with tests skipped, and H2 does not establish full MySQL compatibility.
 
 The FastAPI research engine remains unauthenticated and loopback-bound. The dashboard reads AI health/model metadata from FastAPI; login, flow analysis, and saved history use the authenticated Spring platform API.
 Case Management requires signing in. Cases are manually opened and retain status changes/analyst notes in MySQL activity history. Alerts can be promoted only from a model-flagged record that Spring confirms in the latest capture-history window; the analyst supplies the title, rationale, and severity. These are review records, not confirmed attacks.
+Incidents requires signing in. An analyst can open an incident, link one or more already-persisted review alerts, and add status changes/notes. This is manual correlation; no automated response is sent. The separate Demo scenarios tab remains fictional and resets on page refresh.
 
 Compose uses host networking for platform-api so the Linux container can reach the existing loopback AI service on 127.0.0.1:8000. This is Linux-only; use the Ubuntu host, not Docker Desktop on Windows or macOS. Platform API binds to 127.0.0.1:8081 and MySQL is published at 127.0.0.1:3307.
 
@@ -84,7 +85,7 @@ On Ubuntu, from the repository root, create a private infra/.env from infra/.env
 
 Admin bootstrap is optional and has no default credentials. To create the first admin, set both NS_BOOTSTRAP_USERNAME and NS_BOOTSTRAP_PASSWORD before first startup. Username rules are documented in platform-api/README.md; password length is at least 16 characters. Remove both variables after the first admin is created.
 
-The live MySQL database has applied Flyway V1 through V5 and is at schema version 5. Startup logs advise that this Flyway version has not tested MySQL 8.4 (its documented support range ends at 8.1).
+The live MySQL database has applied Flyway V1 through V6 and is at schema version 6. Startup logs advise that this Flyway version has not tested MySQL 8.4 (its documented support range ends at 8.1).
 
 To create a private database backup, run infra/backup-mysql.sh from Ubuntu. It writes a compressed logical dump and SHA-256 sidecar under /mnt/neurosphere/backups/mysql. Restore is destructive: infra/restore-mysql.sh requires the exact typed database confirmation and first creates a backup of the current database. Never test restore against the demo database.
 
