@@ -48,9 +48,9 @@ Exit criteria: versioned input contract; independent holdout evidence; repeatabl
 
 ### Phase 4 — Digital Twin — Partial
 
-Implemented: an isolated in-browser preview with four virtual assets and three deterministic scenarios. Runs create ephemeral, visibly simulated timeline events; they cannot access live telemetry, invoke model inference, or trigger production actions.
+Implemented: an isolated in-browser preview with four virtual assets and three deterministic scenarios. Runs create visibly simulated timeline events; the latest 10 reports persist in browser storage and can be exported as JSON. They cannot access live telemetry, invoke model inference, or trigger production actions.
 
-Outstanding: versioned topology and scenario contracts, server-side run persistence, repeatable scenario state snapshots, and validation of isolation boundaries.
+Outstanding: versioned topology and scenario contracts, shared server-side run persistence, importable state snapshots, and validation of isolation boundaries.
 
 Exit criteria: reproducible isolated scenarios, provenance labels, and enforced separation from production endpoints.
 

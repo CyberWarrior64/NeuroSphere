@@ -33,7 +33,7 @@ The simulation toggle on the dashboard only shows or hides the fictional SOC exa
 
 ## Run an isolated Digital Twin scenario
 
-Open **Digital Twin** from the sidebar. Select External reconnaissance, Credential spray, or Suspicious data movement, then choose **Run scenario**. The page animates events across four virtual assets and keeps the run only in browser memory. All events are fictional. The runner makes no network requests, does not call the AI engine, and does not perform security actions. Use the separate Flow Analysis page for real model inference and the capture runner for authorized packet analysis.
+Open **Digital Twin** from the sidebar. Select External reconnaissance, Credential spray, or Suspicious data movement, then choose **Run scenario**. The page animates events across four virtual assets and saves up to 10 completed run reports in that browser’s local storage. Use Export JSON to download a report; runs are not shared across devices. All events are fictional. The runner makes no network requests, does not call the AI engine, and does not perform security actions. Use the separate Flow Analysis page for real model inference and the capture runner for authorized packet analysis.
 
 ## Analyze one real flow in the browser
 

@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { Activity, ArrowRight, Box, Clock3, Play, RotateCcw, ShieldCheck, Waypoints } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Activity, ArrowRight, Box, Clock3, Download, Play, RotateCcw, ShieldCheck, Waypoints } from "lucide-react";
 import "./twin-lab.css";
 
 const ASSETS = [
@@ -27,11 +27,25 @@ const SCENARIOS = [
   ]},
 ];
 
+const HISTORY_KEY = "neurosphere-twin-runs-v1";
+
+function loadSavedRuns() {
+  try {
+    const saved = JSON.parse(window.localStorage.getItem(HISTORY_KEY) || "[]");
+    return Array.isArray(saved) ? saved.slice(0, 10) : [];
+  } catch {
+    return [];
+  }
+}
+
 export default function TwinLab() {
   const [scenarioId, setScenarioId] = useState("recon");
   const [step, setStep] = useState(0);
   const [running, setRunning] = useState(false);
   const [runNumber, setRunNumber] = useState(0);
+  const [runId, setRunId] = useState(null);
+  const [history, setHistory] = useState(loadSavedRuns);
+  const savedRun = useRef(null);
   const scenario = SCENARIOS.find((item) => item.id === scenarioId) || SCENARIOS[0];
   const visibleEvents = useMemo(() => scenario.events.slice(0, step), [scenario, step]);
   const complete = step === scenario.events.length && step > 0;
@@ -45,15 +59,50 @@ export default function TwinLab() {
     return () => window.clearTimeout(timer);
   }, [running, scenario, step]);
 
+  useEffect(() => {
+    if (!complete || !runId) return;
+    const runKey = runId;
+    if (savedRun.current === runKey) return;
+    savedRun.current = runKey;
+    const report = {
+      run_id: runKey,
+      run_number: runNumber,
+      scenario_id: scenario.id,
+      scenario: scenario.name,
+      created_at: new Date().toISOString(),
+      simulation_only: true,
+      assets: ASSETS,
+      events: scenario.events,
+    };
+    setHistory((current) => {
+      const next = [report, ...current].slice(0, 10);
+      try { window.localStorage.setItem(HISTORY_KEY, JSON.stringify(next)); } catch { /* keep the current run visible if storage is unavailable */ }
+      return next;
+    });
+  }, [complete, runId, runNumber, scenario]);
+
   function startRun() {
     setStep(0);
     setRunNumber((value) => value + 1);
+    setRunId(window.crypto.randomUUID());
     setRunning(true);
   }
 
   function resetRun() {
     setRunning(false);
     setStep(0);
+  }
+
+  function exportRun(report) {
+    const blob = new Blob([JSON.stringify(report, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "neurosphere-twin-" + report.run_id + ".json";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
   return <div className="page twin-page">
@@ -84,6 +133,14 @@ export default function TwinLab() {
       {!visibleEvents.length ? <div className="twin-empty"><Clock3 size={17}/><b>Ready to simulate</b><span>Choose a scenario and run it to create a local, repeatable event sequence.</span></div> :
         <div className="twin-event-list">{visibleEvents.map((event, index) => <article className="twin-event" key={scenario.id + "-" + runNumber + "-" + index}>
           <span className="twin-event-time">{event.offset}</span><span className={"twin-event-marker " + event.kind}><Activity size={12}/></span><div><b>{event.title}</b><small>{event.path}</small><p>{event.detail}</p></div><span className="twin-event-source">SIMULATED</span>
+        </article>)}</div>}
+    </section>
+    <section className="panel twin-history">
+      <div className="panel-head"><div><h2>Saved scenario runs</h2><p>Stored only in this browser · latest 10 · exportable JSON</p></div><span className="range">LOCAL HISTORY</span></div>
+      {!history.length ? <div className="twin-empty"><Clock3 size={17}/><b>No saved runs yet</b><span>Completed scenarios will appear here. This history is not sent to NeuroSphere services.</span></div> :
+        <div className="twin-history-list">{history.map((report) => <article className="twin-history-row" key={report.run_id}>
+          <div><b>{report.scenario}</b><small>{new Date(report.created_at).toLocaleString()} · {report.events.length} simulated events · {report.assets.length} virtual assets</small></div>
+          <button className="secondary-btn small" onClick={() => exportRun(report)}><Download size={12}/>Export JSON</button>
         </article>)}</div>}
     </section>
   </div>;
