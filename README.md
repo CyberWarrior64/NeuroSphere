@@ -9,6 +9,7 @@ NeuroSphere currently has a research demo plus an early, optional Java platform 
 - The live/PCAP capture runner processes traffic on Ubuntu and prints experimental model results. The separate metadata store keeps up to 1000 prediction records and displays the runner-reported capture mode without raw features, packet payloads, IP addresses, or interface names. The mode is client-reported, not independently attested; predictions are not alerts.
 - The Spring Boot 3.5 / Java 21 platform API has JWT/RBAC login, Flyway migrations V1–V3, database-backed JWT logout revocation, an authenticated AI proxy, and protected recent-analysis history. Maven build and tests pass (12/12).
 - MySQL and the platform API are running on the Ubuntu host. The AI launcher redirects temporary files to /mnt/neurosphere; the 16 GB root filesystem remains full, which can still block unrelated system builds or updates.
+- A source-only Git checkpoint exists on the Ubuntu host on branch `main` (commit `c5fa200`). No remote is configured, so it is not an off-machine backup.
 
 The existing FastAPI research demo remains unauthenticated and does not require the optional platform API. It is bound to loopback; do not expose it publicly.
 
