@@ -361,7 +361,11 @@ def detect_cicflowmeter_python_record(traffic: Dict[str, Any] = Body(...)):
             + " This endpoint is experimental and must not be used for automatic blocking."
         )
     try:
-        record_prediction(result["input_source"], result, capture_mode)
+        saved_event = record_prediction(
+            result["input_source"], result, capture_mode, traffic.get("_capture_session_id")
+        )
+        result["capture_session_id"] = saved_event["capture_session_id"]
     except sqlite3.Error:
         logger.exception("Could not save metadata-only demo prediction history.")
+        result["capture_session_id"] = None
     return result

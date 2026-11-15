@@ -32,7 +32,7 @@ Exit criteria: clean setup; authenticated access; role enforcement; secrets exte
 
 ### Phase 2 — Network and system data collection — Partial
 
-Implemented: experimental CLI for live interface capture and offline PCAP/PCAPNG replay. It emits candidate flow records for analysis and records the runner-reported mode (live or PCAP) in metadata-only history. A bounded local session registry reports manual runner start, heartbeat, stop, and 45-second stale state to the dashboard without retaining interface names. Legacy sample records were backfilled as PCAP after confirming they came from the archived reference replay.
+Implemented: experimental CLI for live interface capture and offline PCAP/PCAPNG replay. It emits candidate flow records for analysis and records runner-reported mode (live or PCAP) and a session UUID in metadata-only history, linking predictions to a lifecycle record. A bounded local session registry reports manual runner start, heartbeat, stop, and 45-second stale state to the dashboard without retaining interface names. Legacy sample records were backfilled as PCAP after confirming they came from the archived reference replay.
 
 Outstanding: multi-source registry and ownership, independently attested collector health, complete event provenance, managed capture lifecycle, and a production retention/migration policy. The dashboard now displays the current bounded SQLite prediction history under “Stored detection records.” These are demo-only model results, not an alert feed. Do not describe the fictional map or alert cards as network telemetry.
 

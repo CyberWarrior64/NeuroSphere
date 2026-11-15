@@ -77,21 +77,24 @@ class CaptureStatusReporter:
 class PredictionWriter:
     """Post completed flow records and print compact model results."""
 
-    def __init__(self, url: str, capture_mode: str) -> None:
+    def __init__(self, url: str, capture_mode: str, capture_session_id: str | None = None) -> None:
         self.url = url
         self.capture_mode = capture_mode
+        self.capture_session_id = capture_session_id or str(uuid.uuid4())
         self._print_lock = threading.Lock()
 
     def write(self, data: dict) -> None:
         try:
             payload = _json_compatible(data)
             payload["_capture_mode"] = self.capture_mode
+            payload["_capture_session_id"] = self.capture_session_id
             response = requests.post(self.url, json=payload, timeout=5)
             response.raise_for_status()
             result = response.json()
             summary = {
                 "input_source": result.get("input_source"),
                 "capture_mode": result.get("capture_mode"),
+                "capture_session_id": result.get("capture_session_id"),
                 "packet_level_reference_features": result.get(
                     "packet_level_reference_features"
                 ),
@@ -140,8 +143,9 @@ def main() -> int:
             fields=None,
             verbose=False,
         )
-    session.output_writer = PredictionWriter(args.url, "pcap" if args.file else "live")
-    capture_status = CaptureStatusReporter(args.url, "pcap" if args.file else "live")
+    capture_mode = "pcap" if args.file else "live"
+    capture_status = CaptureStatusReporter(args.url, capture_mode)
+    session.output_writer = PredictionWriter(args.url, capture_mode, capture_status.session_id)
     if args.file:
         print(f"Processing {args.file}; completed flows will be posted to {args.url}.")
     else:

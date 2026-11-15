@@ -12,7 +12,7 @@ The current service lives in ai-engine/ and normally binds to 127.0.0.1:8000.
 | GET /api/v1/capture/cicflowmeter-python/readiness | Experimental adapter readiness and known parity blockers |
 | POST /api/v1/detect/cicflowmeter-python | Experimental CICFlowMeter record input |
 
-The capture runner may add _capture_mode with pcap or live; the API stores it as non-feature metadata and returns it in stored history. Missing or invalid values become unspecified. This mode is client-reported and not independently attested. The API stores prediction summaries only; it does not retain raw feature vectors, packet payloads, IP addresses, or interface names.
+The capture runner may add _capture_mode with pcap or live and a generated _capture_session_id UUID; the API stores both as non-feature metadata and returns them in stored history. Missing or invalid values become unspecified or null. Both are client-reported and not independently attested. The session UUID links a prediction to a runner lifecycle record. The API stores prediction summaries only; it does not retain raw feature vectors, packet payloads, IP addresses, or interface names.
 
 Detection returns separate RF class/probability/threshold/flag and IF class/anomaly-score/threshold/flag, agreement/category, automatic_blocking=false, and a caution. Missing/extra fields are rejected with 422; unloaded models return 503. Scores are not guarantees of safety. Raw-packet parity and external generalization remain unresolved.
 

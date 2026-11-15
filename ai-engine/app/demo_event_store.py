@@ -43,6 +43,7 @@ def initialize_store() -> None:
                 recorded_at TEXT NOT NULL,
                 input_source TEXT NOT NULL,
                 capture_mode TEXT NOT NULL DEFAULT 'unspecified',
+                capture_session_id TEXT,
                 model_version TEXT NOT NULL,
                 rf_classification TEXT NOT NULL,
                 rf_probability REAL NOT NULL,
@@ -60,23 +61,30 @@ def initialize_store() -> None:
             connection.execute(
                 "ALTER TABLE prediction_events ADD COLUMN capture_mode TEXT NOT NULL DEFAULT 'unspecified'"
             )
+        if "capture_session_id" not in columns:
+            connection.execute("ALTER TABLE prediction_events ADD COLUMN capture_session_id TEXT")
         connection.execute(
             "CREATE INDEX IF NOT EXISTS idx_prediction_events_recorded_at "
             "ON prediction_events(recorded_at DESC)"
         )
 
 
-def record_prediction(input_source: str, result: dict[str, Any], capture_mode: str = "unspecified") -> dict[str, Any]:
+def record_prediction(input_source: str, result: dict[str, Any], capture_mode: str = "unspecified", capture_session_id: str | None = None) -> dict[str, Any]:
     detection = result["detection"]
     rf = detection["random_forest"]
     isolation = detection["isolation_forest"]
     if not isinstance(capture_mode, str) or capture_mode not in {"live", "pcap"}:
         capture_mode = "unspecified"
+    try:
+        capture_session_id = str(uuid.UUID(capture_session_id)) if isinstance(capture_session_id, str) else None
+    except ValueError:
+        capture_session_id = None
     event = {
         "id": str(uuid.uuid4()),
         "recorded_at": datetime.now(timezone.utc).isoformat(),
         "input_source": input_source,
         "capture_mode": capture_mode,
+        "capture_session_id": capture_session_id,
         "model_version": str(result.get("model_version", "unknown")),
         "rf_classification": str(rf["classification"]),
         "rf_probability": float(rf["attack_probability"]),
@@ -92,12 +100,12 @@ def record_prediction(input_source: str, result: dict[str, Any], capture_mode: s
     with _connect() as connection:
         connection.execute("""
             INSERT INTO prediction_events (
-                id, recorded_at, input_source, capture_mode, model_version,
+                id, recorded_at, input_source, capture_mode, capture_session_id, model_version,
                 rf_classification, rf_probability, rf_threshold, rf_flagged,
                 if_classification, if_score, if_threshold, if_flagged,
                 detector_agreement
             ) VALUES (
-                :id, :recorded_at, :input_source, :capture_mode, :model_version,
+                :id, :recorded_at, :input_source, :capture_mode, :capture_session_id, :model_version,
                 :rf_classification, :rf_probability, :rf_threshold, :rf_flagged,
                 :if_classification, :if_score, :if_threshold, :if_flagged,
                 :detector_agreement
@@ -117,7 +125,7 @@ def recent_predictions(limit: int = 100) -> list[dict[str, Any]]:
     bounded_limit = max(1, min(int(limit), 250))
     with _connect() as connection:
         rows = connection.execute("""
-            SELECT id, recorded_at, input_source, capture_mode, model_version,
+            SELECT id, recorded_at, input_source, capture_mode, capture_session_id, model_version,
                    rf_classification, rf_probability, rf_threshold, rf_flagged,
                    if_classification, if_score, if_threshold, if_flagged,
                    detector_agreement
@@ -179,11 +187,11 @@ def stop_capture_session(session_id: str) -> bool:
 def capture_runner_status() -> dict[str, Any]:
     with _connect() as connection:
         rows = connection.execute("""
-            SELECT capture_mode, started_at, last_heartbeat_at, stopped_at
+            SELECT session_id, capture_mode, started_at, last_heartbeat_at, stopped_at
             FROM capture_sessions ORDER BY started_at DESC LIMIT 100
         """).fetchall()
     if not rows:
-        return {"status": "idle", "capture_mode": None, "last_heartbeat_at": None, "source": "runner-reported"}
+        return {"status": "idle", "capture_mode": None, "capture_session_id": None, "last_heartbeat_at": None, "source": "runner-reported"}
     now = datetime.now(timezone.utc)
     candidates = []
     for stored in rows:
@@ -203,6 +211,7 @@ def capture_runner_status() -> dict[str, Any]:
         "status": status,
         "active_sessions": len(running),
         "capture_mode": row["capture_mode"],
+        "capture_session_id": row["session_id"],
         "started_at": row["started_at"],
         "last_heartbeat_at": row["last_heartbeat_at"],
         "stopped_at": row["stopped_at"],
