@@ -41,6 +41,26 @@ export async function loadDemoEvents(limit = 8) {
   return (await http.get("/api/v1/demo/events", { params: { limit } })).data;
 }
 
+export async function loadAlerts(accessToken, limit = 100, status) {
+  if (!accessToken) throw new Error("Sign in to view review alerts.");
+  return (await platformHttp.get("/api/v1/platform/alerts", {
+    params: { limit, ...(status ? { status } : {}) },
+    headers: { Authorization: "Bearer " + accessToken },
+  })).data;
+}
+
+export async function createAlertFromCapture(accessToken, predictionId, payload) {
+  return (await platformHttp.post("/api/v1/platform/alerts/from-capture/" + encodeURIComponent(predictionId), payload, {
+    headers: { Authorization: "Bearer " + accessToken },
+  })).data;
+}
+
+export async function changeAlertStatus(accessToken, id, status) {
+  return (await platformHttp.patch("/api/v1/platform/alerts/" + id + "/status", { status }, {
+    headers: { Authorization: "Bearer " + accessToken },
+  })).data;
+}
+
 export async function loadCases(accessToken, limit = 50, status) {
   if (!accessToken) throw new Error("Sign in to view cases.");
   return (await platformHttp.get("/api/v1/platform/cases", {

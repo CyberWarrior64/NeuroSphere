@@ -26,6 +26,7 @@ The feature body is strict. Example shape only (not a valid full request):
 - GET /api/v1/platform/flows/recent?limit=10 requires a bearer session and returns at most 50 stored summaries. It never returns raw input features.
 - GET /api/v1/platform/status is public and checks database readiness with a lightweight SELECT 1; it reports no user or configuration details.
 - GET/POST /api/v1/platform/cases, GET /api/v1/platform/cases/{id}, PATCH /api/v1/platform/cases/{id}/status, and POST /api/v1/platform/cases/{id}/notes require a bearer token. Case writes include the authenticated actor and append activity entries. List results are bounded to 100; notes are bounded to 2,000 characters.
+- GET /api/v1/platform/alerts and GET /api/v1/platform/alerts/{id}, POST /api/v1/platform/alerts/from-capture/{predictionId}, and PATCH /api/v1/platform/alerts/{id}/status require a bearer token. Spring fetches the candidate from loopback FastAPI history and verifies that a non-simulated model flag exists before creating an alert snapshot. Severity and rationale are analyst-selected; alert activity is stored in MySQL.
 - The React flow screen keeps the short-lived access token in memory and clears it on refresh or expiry. Explicit logout calls POST /api/v1/auth/logout; Spring stores the token ID until expiration and rejects further use. If logout cannot reach the API, the UI still clears local state and warns that the token may remain valid until expiry. The demo dashboard remains available without login.
 
 ## Target browser-to-platform contract
