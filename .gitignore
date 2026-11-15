@@ -1,0 +1,67 @@
+# Secrets and local configuration. Keep only templates in source control.
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# Python environments, bytecode, test and packaging caches.
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Java/Maven and common IDE output.
+target/
+.gradle/
+.idea/
+.vscode/
+*.iml
+
+# Frontend dependencies and generated builds.
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+
+# Runtime databases, SQLite sidecars, and logs.
+*.sqlite
+*.sqlite3
+*.sqlite-wal
+*.sqlite-shm
+*.db
+*.log
+
+# Large generated datasets and packet captures; retain preparation/evaluation code.
+**/datasets/
+*.pcap
+*.pcapng
+*.cap
+
+# Trained model/checkpoint binaries. Store these as separate release artifacts.
+*.joblib
+*.pkl
+*.pickle
+*.onnx
+*.pt
+*.pth
+*.h5
+*.keras
+
+# Local editor files and clearly identified backups/snapshots.
+*~
+*.swp
+*.swo
+*.orig
+*.rej
+*.bak
+*.backup
+*.before
+*.before-*
+*.before_*
+*.before*

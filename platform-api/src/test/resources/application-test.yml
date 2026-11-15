@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:neurosphere-test;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE
+    username: sa
+    password: ""
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  flyway:
+    enabled: false
+
+neurosphere:
+  jwt:
+    secret-base64: MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=
+    issuer: neurosphere-platform
+    access-token-minutes: 15
+  ai:
+    base-url: http://127.0.0.1:65535
+  cors:
+    allowed-origins: http://127.0.0.1:8765

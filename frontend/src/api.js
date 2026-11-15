@@ -1,0 +1,37 @@
+import axios from "axios";
+export const AI_API_URL = import.meta.env.VITE_AI_API_URL || "http://127.0.0.1:8000";
+const http = axios.create({ baseURL: AI_API_URL, timeout: 6000 });
+export const PLATFORM_API_URL = import.meta.env.VITE_PLATFORM_API_URL || "http://127.0.0.1:8081";
+const platformHttp = axios.create({ baseURL: PLATFORM_API_URL, timeout: 20000 });
+
+export async function loginToPlatform(username, password) {
+  return (await platformHttp.post("/api/v1/auth/login", { username, password })).data;
+}
+export async function logoutFromPlatform(accessToken) {
+  if (!accessToken) return;
+  await platformHttp.post("/api/v1/auth/logout", null, {
+    headers: { Authorization: "Bearer " + accessToken },
+  });
+}
+export async function loadEngineStatus() {
+  const results = await Promise.allSettled([http.get("/health"), http.get("/api/v1/models/v2"), http.get("/gpu")]);
+  return { health: results[0].status === "fulfilled" ? results[0].value.data : null, models: results[1].status === "fulfilled" ? results[1].value.data : null, gpu: results[2].status === "fulfilled" ? results[2].value.data : null };
+}
+export async function analyzeFlow(features, accessToken) {
+  if (!accessToken) throw new Error("Sign in to use platform flow analysis.");
+  return (await platformHttp.post("/api/v1/platform/flows/analyze", features, {
+    headers: { Authorization: "Bearer " + accessToken },
+  })).data;
+}
+
+export async function loadDemoEvents(limit = 8) {
+  return (await http.get("/api/v1/demo/events", { params: { limit } })).data;
+}
+
+export async function loadRecentAnalyses(accessToken, limit = 10) {
+  if (!accessToken) throw new Error("Sign in to view stored analyses.");
+  return (await platformHttp.get("/api/v1/platform/flows/recent", {
+    params: { limit },
+    headers: { Authorization: "Bearer " + accessToken },
+  })).data;
+}
