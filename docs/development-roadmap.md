@@ -34,7 +34,7 @@ Exit criteria: clean setup; authenticated access; role enforcement; secrets exte
 
 Implemented: experimental CLI for live interface capture and offline PCAP/PCAPNG replay. It emits candidate flow records for analysis and records runner-reported mode (live or PCAP) and a session UUID in metadata-only history, linking predictions to a lifecycle record. A bounded local session registry reports manual runner start, heartbeat, stop, and 45-second stale state to the dashboard without retaining interface names. Legacy sample records were backfilled as PCAP after confirming they came from the archived reference replay.
 
-Outstanding: multi-source registry and ownership, independently attested collector health, complete event provenance, managed capture lifecycle, and a production retention/migration policy. The dashboard now displays the current bounded SQLite prediction history under “Stored detection records.” These are demo-only model results, not an alert feed. Do not describe the fictional map or alert cards as network telemetry.
+Outstanding: multi-source registry and ownership, independently attested collector health, complete event provenance, managed capture lifecycle, and a production retention/migration policy. The dashboard displays bounded SQLite prediction history under “Stored detection records” and the Real-time Monitor view. Both show completed model predictions, not an alert feed; Monitor polls every 10 seconds and supports live/PCAP filtering. Do not describe the fictional map or alert cards as network telemetry.
 
 Exit criteria: approved source is identified; capture records carry time/source provenance; replay is idempotent; dashboard reflects actual source status.
 
