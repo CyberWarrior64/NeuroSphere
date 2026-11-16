@@ -38,7 +38,7 @@ dist/
 *.log
 
 # Large generated datasets and packet captures; retain preparation/evaluation code.
-**/datasets/
+**/datasets/**
 *.pcap
 *.pcapng
 *.cap
@@ -66,10 +66,11 @@ dist/
 *.before_*
 *.before*
 
-
-# Runtime model binaries and compact evaluation metadata required by the demo.
+# Track runtime models and compact metadata; keep raw and processed datasets ignored.
 !ai-engine/saved_models/**/*.joblib
+**/datasets/**
 !ai-engine/datasets/
 !ai-engine/datasets/processed/
+!ai-engine/datasets/processed/**/
 !ai-engine/datasets/processed/**/*.joblib
 !ai-engine/datasets/processed/**/*.json
