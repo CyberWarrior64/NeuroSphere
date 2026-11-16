@@ -11,6 +11,7 @@ import AlertSignals from "./AlertSignals.jsx";
 import IncidentManagement from "./IncidentManagement.jsx";
 import CaseManagement from "./CaseManagement.jsx";
 import { analyzeFlow, loadCaptureRunnerStatus, loadDemoEvents, loadEngineStatus, loadPlatformStatus, loadRecentAnalyses, loginToPlatform, logoutFromPlatform, PLATFORM_API_URL } from "./api.js";
+import "./settings.css";
 
 const nav = [["Overview","/",LayoutDashboard],["Real-time Monitor","/monitor",Activity],["SIEM Search","/search",FileSearch],["Alerts","/alerts",Bell],["Incidents","/incidents",ShieldAlert],["Endpoint Security","/endpoints",Cpu],["Network Watch","/network",Network],["Digital Twin","/twin",Blocks],["Threat Intelligence","/threat-intel",Globe2],["Vulnerability Mgmt","/vulnerabilities",Bug],["Case Management","/cases",Archive],["Reports","/reports",FileBarChart2],["Playbooks","/playbooks",BookOpenCheck],["Settings","/settings",Settings]];
 const topNav = [["Dashboard","/",LayoutDashboard],["Alerts","/alerts",Bell],["Incidents","/incidents",Shield],["Threat Intel","/threat-intel",Radar],["Reports","/reports",FileBarChart2],["Cases","/cases",Archive],["Playbooks","/playbooks",Blocks],["Sign in","/login",LogIn]];
@@ -168,8 +169,45 @@ function LoginPage({session,onLogin,onSignOut,logoutWarning}){
 
 function ModulePage({title,icon:Icon,text}){return <div className="page"><PageHead kicker="Security operations" title={title} subtitle={text}/><section className="panel module-empty"><Empty icon={Icon} title={title+" is not connected yet"} text="The current workspace has no platform API or source for this module. It stays empty until the relevant integration is implemented."/></section></div>;}
 
+function SettingsPage({engine,platformStatus,captureStatus,demoMode,setDemoMode,session,onSignOut}){
+  const engineOnline=engine?.health?.status==="healthy"&&Boolean(engine?.models);
+  const platformOnline=platformStatus?.status==="healthy"&&platformStatus?.database==="connected";
+  const captureState=captureStatus?.status||"checking";
+  const captureLabel=captureState==="running"?"Running":captureState==="stale"?"Stale":captureState==="stopped"?"Stopped":captureState==="idle"?"Not started":captureState==="unavailable"?"Unavailable":"Checking";
+  const services=[
+    {name:"AI detection engine",detail:"FastAPI · model readiness",state:engineOnline?"Operational":"Unavailable",ok:engineOnline},
+    {name:"Platform API and database",detail:"Spring Boot · MySQL",state:platformOnline?"Operational":platformStatus?.status==="healthy"?"Database unavailable":"Unavailable",ok:platformOnline},
+    {name:"Capture runner",detail:captureStatus?.capture_mode==="live"?"Live capture · experimental":captureStatus?.capture_mode==="pcap"?"PCAP replay · experimental":"Manual runner · no source configured",state:captureLabel,ok:captureState==="running"},
+    {name:"Endpoint telemetry",detail:"No endpoint collector configured",state:"Not connected",ok:false},
+    {name:"Threat intelligence",detail:"No external feed configured",state:"Not connected",ok:false},
+  ];
+  return <div className="page settings-page">
+    <PageHead kicker="Workspace configuration" title="Settings" subtitle="Review service connections, demo display options, and the current analyst session."/>
+    <div className="settings-grid">
+      <section className="panel settings-card">
+        <div className="settings-card-head"><span className="settings-icon"><LayoutDashboard size={16}/></span><div><h2>Dashboard display</h2><p>Choose whether the overview includes clearly labeled fictional SOC activity.</p></div></div>
+        <div className="settings-option"><div><b>Simulation data</b><small>Sample alert counts and the illustrative attack map are fictional. They are not observed network events.</small></div><button type="button" role="switch" aria-checked={demoMode} className={"settings-switch "+(demoMode?"on":"")} onClick={()=>setDemoMode(!demoMode)}><span/>{demoMode?"On":"Off"}</button></div>
+        <div className="settings-note"><span className="settings-dot"/>{demoMode?"Simulation is visible on the Overview page.":"Only connected service data and empty states are shown."} This preference is saved in this browser.</div>
+      </section>
+      <section className="panel settings-card">
+        <div className="settings-card-head"><span className="settings-icon"><Activity size={16}/></span><div><h2>Service connections</h2><p>Status is read from the existing health checks. Disconnected sources stay clearly marked.</p></div></div>
+        <div className="settings-services">{services.map(service=><div className="settings-service" key={service.name}><span className={"settings-dot "+(service.ok?"healthy":"")}/><div><b>{service.name}</b><small>{service.detail}</small></div><strong className={service.ok?"healthy":""}>{service.state}</strong></div>)}</div>
+        <small className="settings-footnote">Engine and platform status refresh every 30 seconds. Capture runner status refreshes every 10 seconds.</small>
+      </section>
+      <section className="panel settings-card settings-session-card">
+        <div className="settings-card-head"><span className="settings-icon"><LockKeyhole size={16}/></span><div><h2>Analyst session</h2><p>Session tokens stay hidden and are never displayed in this panel.</p></div></div>
+        {session?<><div className="settings-session"><div><small>Signed in as</small><b>{session.username}</b></div><div><small>Roles</small><b>{session.roles?.join(", ")||"User"}</b></div><div><small>Expires</small><b>{new Date(session.expiresAt).toLocaleString()}</b></div></div><button type="button" className="secondary-btn settings-signout" onClick={onSignOut}><LogOut size={13}/>Sign out</button></>:<div className="settings-option"><div><b>No analyst session</b><small>Sign in to use persistent alerts, cases, incidents, and flow analysis.</small></div><NavLink className="secondary-btn" to="/login"><LogIn size={13}/>Sign in</NavLink></div>}
+      </section>
+      <section className="panel settings-card settings-data-card">
+        <div className="settings-card-head"><span className="settings-icon"><Database size={16}/></span><div><h2>Data handling</h2><p>Current demo boundaries</p></div></div>
+        <ul className="settings-data-list"><li>Capture predictions store model summaries and session metadata; raw packet payloads and flow features are not retained.</li><li>Dashboard simulation values are fictional and remain separate from stored model results.</li><li>Model predictions are research signals. The platform does not block traffic or execute response actions.</li></ul>
+      </section>
+    </div>
+  </div>;
+}
+
 export default function App(){
-  const [engine,setEngine]=useState(null),[platformStatus,setPlatformStatus]=useState(null),[captureStatus,setCaptureStatus]=useState(null),[detections,setDetections]=useState([]),[demoMode,setDemoMode]=useState(true),[session,setSession]=useState(null),[logoutWarning,setLogoutWarning]=useState(""),location=useLocation();
+  const [engine,setEngine]=useState(null),[platformStatus,setPlatformStatus]=useState(null),[captureStatus,setCaptureStatus]=useState(null),[detections,setDetections]=useState([]),[demoMode,setDemoMode]=useState(()=>{try{return window.localStorage.getItem("neurosphere-demo-mode")!=="off";}catch{return true;}}),[session,setSession]=useState(null),[logoutWarning,setLogoutWarning]=useState(""),location=useLocation();
   async function signOut(){
     const token=session?.accessToken;
     setSession(null);
@@ -180,9 +218,10 @@ export default function App(){
   useEffect(()=>{let active=true;const refresh=async()=>{const status=await loadEngineStatus();if(active)setEngine(status);};refresh();const id=setInterval(refresh,30000);return()=>{active=false;clearInterval(id);};},[]);
   useEffect(()=>{let active=true;const refresh=async()=>{try{const status=await loadPlatformStatus();if(active)setPlatformStatus(status);}catch{if(active)setPlatformStatus({status:"unavailable",database:"unavailable"});}};refresh();const id=setInterval(refresh,30000);return()=>{active=false;clearInterval(id);};},[]);
   useEffect(()=>{let active=true;const refresh=async()=>{try{const status=await loadCaptureRunnerStatus();if(active)setCaptureStatus(status);}catch{if(active)setCaptureStatus({status:"unavailable"});}};refresh();const id=setInterval(refresh,10000);return()=>{active=false;clearInterval(id);};},[]);
+  useEffect(()=>{try{window.localStorage.setItem("neurosphere-demo-mode",demoMode?"on":"off");}catch{}},[demoMode]);
   const online=Boolean(engine?.health?.status==="healthy"&&engine?.models);
   useEffect(()=>{if(!session)return;const remaining=session.expiresAt-Date.now();if(remaining<=0){setSession(null);return;}const timer=setTimeout(()=>setSession(null),remaining);return()=>clearTimeout(timer);},[session]);
   const title=[...nav,["Flow analysis","/detection",Activity]].find(n=>n[1]===location.pathname)?.[0]||"Overview";
-  const modules=[["/endpoints","Endpoint Security",Cpu,"No endpoint telemetry source is linked."],["/threat-intel","Threat Intelligence",Globe2,"No threat-intelligence feed is configured."],["/vulnerabilities","Vulnerability Management",Bug,"No asset inventory or vulnerability source is connected."],["/playbooks","Playbooks",BookOpenCheck,"Response playbooks require a reviewed approval workflow."],["/settings","Settings",Settings,"Platform configuration and user management are not implemented yet."]];
-  return <div className="app min-h-screen"><Header online={online} session={session} onSignOut={signOut}/><div className="workspace"><Sidebar online={online} captureStatus={captureStatus}/><main className="main"><div className="mobile-title">{title}<span><Dot state={online?"online":"offline"}/>{online?"Engine online":"Engine offline"}</span></div><Routes><Route path="/" element={<Dashboard engine={engine} platformStatus={platformStatus} captureStatus={captureStatus} detections={detections} demoMode={demoMode} setDemoMode={setDemoMode} session={session}/>}/><Route path="/detection" element={<Detection engine={engine} detections={detections} setDetections={setDetections} session={session}/>}/><Route path="/twin" element={<TwinLab/>}/><Route path="/monitor" element={<CaptureMonitor/>}/><Route path="/network" element={<NetworkWatch/>}/><Route path="/alerts" element={<AlertSignals session={session}/>}/><Route path="/incidents" element={<IncidentManagement session={session}/>}/><Route path="/cases" element={<CaseManagement session={session}/>}/><Route path="/search" element={<CaptureSearch/>}/><Route path="/reports" element={<Reports/>}/><Route path="/login" element={<LoginPage session={session} onLogin={value=>{setLogoutWarning("");setSession(value);}} onSignOut={signOut} logoutWarning={logoutWarning}/>}/>{modules.map(([path,name,Icon,description])=><Route key={path} path={path} element={<ModulePage title={name} icon={Icon} text={description}/>}/>)}<Route path="*" element={<Dashboard engine={engine} platformStatus={platformStatus} captureStatus={captureStatus} detections={detections} demoMode={demoMode} setDemoMode={setDemoMode} session={session}/>}/></Routes></main></div></div>;
+  const modules=[["/endpoints","Endpoint Security",Cpu,"No endpoint telemetry source is linked."],["/threat-intel","Threat Intelligence",Globe2,"No threat-intelligence feed is configured."],["/vulnerabilities","Vulnerability Management",Bug,"No asset inventory or vulnerability source is connected."],["/playbooks","Playbooks",BookOpenCheck,"Response playbooks require a reviewed approval workflow."]];
+  return <div className="app min-h-screen"><Header online={online} session={session} onSignOut={signOut}/><div className="workspace"><Sidebar online={online} captureStatus={captureStatus}/><main className="main"><div className="mobile-title">{title}<span><Dot state={online?"online":"offline"}/>{online?"Engine online":"Engine offline"}</span></div><Routes><Route path="/" element={<Dashboard engine={engine} platformStatus={platformStatus} captureStatus={captureStatus} detections={detections} demoMode={demoMode} setDemoMode={setDemoMode} session={session}/>}/><Route path="/detection" element={<Detection engine={engine} detections={detections} setDetections={setDetections} session={session}/>}/><Route path="/twin" element={<TwinLab/>}/><Route path="/monitor" element={<CaptureMonitor/>}/><Route path="/network" element={<NetworkWatch/>}/><Route path="/alerts" element={<AlertSignals session={session}/>}/><Route path="/incidents" element={<IncidentManagement session={session}/>}/><Route path="/cases" element={<CaseManagement session={session}/>}/><Route path="/search" element={<CaptureSearch/>}/><Route path="/reports" element={<Reports/>}/><Route path="/settings" element={<SettingsPage engine={engine} platformStatus={platformStatus} captureStatus={captureStatus} demoMode={demoMode} setDemoMode={setDemoMode} session={session} onSignOut={signOut}/>}/><Route path="/login" element={<LoginPage session={session} onLogin={value=>{setLogoutWarning("");setSession(value);}} onSignOut={signOut} logoutWarning={logoutWarning}/>}/>{modules.map(([path,name,Icon,description])=><Route key={path} path={path} element={<ModulePage title={name} icon={Icon} text={description}/>}/>)}<Route path="*" element={<Dashboard engine={engine} platformStatus={platformStatus} captureStatus={captureStatus} detections={detections} demoMode={demoMode} setDemoMode={setDemoMode} session={session}/>}/></Routes></main></div></div>;
 }
