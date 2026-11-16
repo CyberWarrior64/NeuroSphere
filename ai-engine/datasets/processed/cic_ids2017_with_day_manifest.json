@@ -1,0 +1,45 @@
+{
+  "source_repository": "hf://datasets/Ariasyah/cic-ids-2017",
+  "revision": "main",
+  "source_status": "unofficial mirror; each downloaded file was checked against its listed SHA-256",
+  "rows": 2830743,
+  "model_feature_count": 67,
+  "capture_day_counts": {
+    "Friday": 703245,
+    "Monday": 529918,
+    "Thursday": 458968,
+    "Tuesday": 445909,
+    "Wednesday": 692703
+  },
+  "label_counts": {
+    "BENIGN": 2273097,
+    "Bot": 1966,
+    "DDoS": 128027,
+    "DoS GoldenEye": 10293,
+    "DoS Hulk": 231073,
+    "DoS Slowhttptest": 5499,
+    "DoS slowloris": 5796,
+    "FTP-Patator": 7938,
+    "Heartbleed": 11,
+    "Infiltration": 36,
+    "PortScan": 158930,
+    "SSH-Patator": 5897,
+    "Web Attack \ufffd Brute Force": 1507,
+    "Web Attack \ufffd Sql Injection": 21,
+    "Web Attack \ufffd XSS": 652
+  },
+  "source_file_rows": {
+    "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv.parquet": 225745,
+    "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv.parquet": 286467,
+    "Friday-WorkingHours-Morning.pcap_ISCX.csv.parquet": 191033,
+    "Monday-WorkingHours.pcap_ISCX.csv.parquet": 529918,
+    "Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv.parquet": 288602,
+    "Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv.parquet": 170366,
+    "Tuesday-WorkingHours.pcap_ISCX.csv.parquet": 445909,
+    "Wednesday-workingHours.pcap_ISCX.csv.parquet": 692703
+  },
+  "output": "datasets/processed/cic_ids2017_with_day.parquet",
+  "parquet_rows": 2830743,
+  "existing_validated_rows": 2830743,
+  "row_count_matches_existing_validated": true
+}

@@ -1,0 +1,71 @@
+{
+  "status": "candidate only; active model and production thresholds unchanged",
+  "candidate_id": "rf-50-tree-20261112T031525Z",
+  "candidate_model": "saved_models/candidates/rf-50-tree-20261112T031525Z/random_forest_50_trees.joblib",
+  "candidate_model_bytes": 794881,
+  "training_data": "datasets/processed/hybrid_v2_training",
+  "training_records": 300000,
+  "validation_records": 433433,
+  "feature_count": 67,
+  "candidate_parameters": {
+    "n_estimators": 50,
+    "max_depth": 25,
+    "min_samples_leaf": 2,
+    "class_weight": "balanced",
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "training_time_seconds": 5.286,
+  "threshold_source": "datasets/processed/hybrid_v2_results/rf_v2_selected_threshold.json",
+  "threshold_frozen_before_candidate_evaluation": 0.27,
+  "candidate_threshold_selected_on_thursday": 0.2555555555555556,
+  "validation_day": "Thursday",
+  "active_100_tree_validation_metrics": {
+    "threshold": 0.27,
+    "accuracy": 0.9977389815726998,
+    "precision": 0.748792270531401,
+    "recall": 0.8393501805054152,
+    "f1": 0.7914893617021277,
+    "roc_auc": 0.9945993989063396,
+    "pr_auc": 0.5698373704971205,
+    "tn": 430593,
+    "fp": 624,
+    "fn": 356,
+    "tp": 1860,
+    "false_positive_rate": 0.0014470672538420331
+  },
+  "candidate_50_tree_metrics_at_active_threshold": {
+    "threshold": 0.27,
+    "accuracy": 0.9955817854201227,
+    "precision": 0.6030116358658453,
+    "recall": 0.39756317689530685,
+    "f1": 0.47919499592058745,
+    "roc_auc": 0.9740020021120812,
+    "pr_auc": 0.5838117899986361,
+    "tn": 430637,
+    "fp": 580,
+    "fn": 1335,
+    "tp": 881,
+    "false_positive_rate": 0.0013450304603018898
+  },
+  "candidate_50_tree_validation_metrics_at_own_thursday_threshold": {
+    "threshold": 0.2555555555555556,
+    "accuracy": 0.9977112956327737,
+    "precision": 0.7426645519429025,
+    "recall": 0.845216606498195,
+    "f1": 0.7906289573659772,
+    "roc_auc": 0.9740020021120812,
+    "pr_auc": 0.5838117899986361,
+    "tn": 430568,
+    "fp": 649,
+    "fn": 343,
+    "tp": 1873,
+    "false_positive_rate": 0.0015050427047171146
+  },
+  "limitations": [
+    "The candidate threshold and its calibrated metrics were selected on the existing Thursday validation split, not an external capture.",
+    "Friday was not used to train or select the candidate; a single frozen-threshold evaluation was run separately afterward.",
+    "A shorter tree count may reduce training time but can change model quality.",
+    "The candidate is not wired into the API and is not approved for operational use."
+  ]
+}

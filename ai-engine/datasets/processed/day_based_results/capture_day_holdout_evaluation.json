@@ -1,0 +1,133 @@
+{
+  "evaluation_name": "CICIDS2017 capture-day holdout",
+  "status": "experimental; separate evaluation-only model",
+  "training_days": [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday"
+  ],
+  "test_day": "Friday",
+  "model_artifact": "saved_models/random_forest_cicids2017_day_holdout.joblib",
+  "serving_model_changed": false,
+  "model_feature_count": 67,
+  "train_rows": 300000,
+  "test_rows": 703243,
+  "test_class_counts": {
+    "0": 414321,
+    "1": 288922
+  },
+  "test_attack_family_counts": {
+    "BENIGN": 414321,
+    "Bot": 1966,
+    "DDoS": 128026,
+    "PortScan": 158930
+  },
+  "threshold_0_5_metrics": {
+    "threshold": 0.5,
+    "accuracy": 0.7045686910498932,
+    "precision": 0.9965129936866833,
+    "recall": 0.28189961304435107,
+    "f1": 0.4394772483232341,
+    "false_positive_rate": 0.0006878724467260892,
+    "true_negatives": 414036,
+    "false_positives": 285,
+    "false_negatives": 207475,
+    "true_positives": 81447
+  },
+  "roc_auc": 0.8042444265916534,
+  "average_precision": 0.7787687480461034,
+  "classification_report": {
+    "NORMAL": {
+      "precision": 0.6661764634897854,
+      "recall": 0.9993121275532739,
+      "f1-score": 0.7994269340974212,
+      "support": 414321.0
+    },
+    "ATTACK": {
+      "precision": 0.9965129936866833,
+      "recall": 0.28189961304435107,
+      "f1-score": 0.4394772483232341,
+      "support": 288922.0
+    },
+    "accuracy": 0.7045686910498932,
+    "macro avg": {
+      "precision": 0.8313447285882344,
+      "recall": 0.6406058702988124,
+      "f1-score": 0.6194520912103276,
+      "support": 703243.0
+    },
+    "weighted avg": {
+      "precision": 0.8018926966802304,
+      "recall": 0.7045686910498932,
+      "f1-score": 0.6515443627625488,
+      "support": 703243.0
+    }
+  },
+  "attack_family_at_threshold_0_5": [
+    {
+      "attack_type": "BENIGN",
+      "total_records": 414321,
+      "detected": 285,
+      "missed": 414036,
+      "detection_rate": 0.0006878724467260892
+    },
+    {
+      "attack_type": "Bot",
+      "total_records": 1966,
+      "detected": 0,
+      "missed": 1966,
+      "detection_rate": 0.0
+    },
+    {
+      "attack_type": "DDoS",
+      "total_records": 128026,
+      "detected": 81151,
+      "missed": 46875,
+      "detection_rate": 0.6338634339899708
+    },
+    {
+      "attack_type": "PortScan",
+      "total_records": 158930,
+      "detected": 296,
+      "missed": 158634,
+      "detection_rate": 0.0018624551689423016
+    }
+  ],
+  "source_file_at_threshold_0_5": [
+    {
+      "source_file": "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv.parquet",
+      "total_records": 225744,
+      "attack_records": 128026,
+      "detected_attacks": 81151,
+      "false_positives": 100
+    },
+    {
+      "source_file": "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv.parquet",
+      "total_records": 286467,
+      "attack_records": 158930,
+      "detected_attacks": 296,
+      "false_positives": 91
+    },
+    {
+      "source_file": "Friday-WorkingHours-Morning.pcap_ISCX.csv.parquet",
+      "total_records": 191032,
+      "attack_records": 1966,
+      "detected_attacks": 0,
+      "false_positives": 94
+    }
+  ],
+  "max_recall_with_fpr_at_most_1_percent": {
+    "threshold": 0.09607904280314639,
+    "recall": 0.39078021057586476,
+    "false_positive_rate": 0.009355065275474812
+  },
+  "threshold_sweep_csv": "datasets/processed/day_based_results/capture_day_holdout_threshold_sweep.csv",
+  "dataset_lineage": "Day-specific flow Parquets from the checksum-verified Hugging Face mirror; same CICIDS2017 benchmark as the existing project dataset.",
+  "limitations": [
+    "This is a capture-day-disjoint evaluation of labeled flow tables, not a raw-PCAP replay through the packet adapter.",
+    "PortScan and Bot appear only in Friday test data and are not represented as labeled attack families in Monday-Thursday training data.",
+    "Feature parity with the exact CICFlowMeter build used for the training tables is not established.",
+    "Do not use for automated blocking or alert escalation."
+  ]
+}

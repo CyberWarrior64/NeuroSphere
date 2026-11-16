@@ -1,0 +1,173 @@
+{
+  "dataset": "datasets/processed/cic_ids2017_validated.parquet",
+  "evaluation_design": "300k stratified random sample; conflict patterns removed; exact feature duplicates removed; random 60/20/20 split; not capture-day-disjoint",
+  "random_state": 42,
+  "rows_after_filtering": 284963,
+  "features": [
+    "Destination Port",
+    "Flow Duration",
+    "Total Fwd Packets",
+    "Total Backward Packets",
+    "Total Length of Fwd Packets",
+    "Total Length of Bwd Packets",
+    "Fwd Packet Length Max",
+    "Fwd Packet Length Min",
+    "Fwd Packet Length Mean",
+    "Fwd Packet Length Std",
+    "Bwd Packet Length Max",
+    "Bwd Packet Length Min",
+    "Bwd Packet Length Mean",
+    "Bwd Packet Length Std",
+    "Flow Bytes/s",
+    "Flow Packets/s",
+    "Flow IAT Mean",
+    "Flow IAT Std",
+    "Flow IAT Max",
+    "Flow IAT Min",
+    "Fwd IAT Total",
+    "Fwd IAT Mean",
+    "Fwd IAT Std",
+    "Fwd IAT Max",
+    "Fwd IAT Min",
+    "Bwd IAT Total",
+    "Bwd IAT Mean",
+    "Bwd IAT Std",
+    "Bwd IAT Max",
+    "Bwd IAT Min",
+    "Fwd PSH Flags",
+    "Fwd Header Length",
+    "Bwd Header Length",
+    "Fwd Packets/s",
+    "Bwd Packets/s",
+    "Min Packet Length",
+    "Max Packet Length",
+    "Packet Length Mean",
+    "Packet Length Std",
+    "Packet Length Variance",
+    "FIN Flag Count",
+    "SYN Flag Count",
+    "RST Flag Count",
+    "PSH Flag Count",
+    "ACK Flag Count",
+    "URG Flag Count",
+    "ECE Flag Count",
+    "Down/Up Ratio",
+    "Average Packet Size",
+    "Avg Fwd Segment Size",
+    "Avg Bwd Segment Size",
+    "Subflow Fwd Packets",
+    "Subflow Fwd Bytes",
+    "Subflow Bwd Packets",
+    "Subflow Bwd Bytes",
+    "Init_Win_bytes_forward",
+    "Init_Win_bytes_backward",
+    "act_data_pkt_fwd",
+    "min_seg_size_forward",
+    "Active Mean",
+    "Active Std",
+    "Active Max",
+    "Active Min",
+    "Idle Mean",
+    "Idle Std",
+    "Idle Max",
+    "Idle Min"
+  ],
+  "class_counts_after_filtering": {
+    "0": 233519,
+    "1": 51444
+  },
+  "split_rows": {
+    "train": 170977,
+    "validation": 56993,
+    "test": 56993
+  },
+  "rf": {
+    "threshold": 0.5,
+    "accuracy": 0.9985787728317512,
+    "precision": 0.9959191605130199,
+    "recall": 0.996209544173389,
+    "f1": 0.996064331179243,
+    "roc_auc": 0.9999469729160926,
+    "pr_auc": 0.9997600252766585,
+    "false_positive_rate": 0.0008992805755395684,
+    "confusion_matrix_tn_fp_fn_tp": [
+      46662,
+      42,
+      39,
+      10250
+    ],
+    "training_seconds": 4.975937604904175,
+    "classification_report": {
+      "BENIGN": {
+        "precision": 0.9991649001092053,
+        "recall": 0.9991007194244604,
+        "f1-score": 0.9991328087361491,
+        "support": 46704.0
+      },
+      "ATTACK": {
+        "precision": 0.9959191605130199,
+        "recall": 0.996209544173389,
+        "f1-score": 0.996064331179243,
+        "support": 10289.0
+      },
+      "accuracy": 0.9985787728317512,
+      "macro avg": {
+        "precision": 0.9975420303111127,
+        "recall": 0.9976551317989247,
+        "f1-score": 0.997598569957696,
+        "support": 56993.0
+      },
+      "weighted avg": {
+        "precision": 0.9985789436811325,
+        "recall": 0.9985787728317512,
+        "f1-score": 0.9985788535910786,
+        "support": 56993.0
+      }
+    }
+  },
+  "isolation_forest": {
+    "target_validation_fpr": 0.01,
+    "actual_validation_fpr": 0.010020554984583761,
+    "threshold": 0.5583749033727002,
+    "accuracy": 0.8700542171845665,
+    "precision": 0.8816521048451151,
+    "recall": 0.3236466128875498,
+    "f1": 0.47348215555239587,
+    "roc_auc": 0.7959558973484057,
+    "false_positive_rate": 0.009570914696813978,
+    "confusion_matrix_tn_fp_fn_tp": [
+      46257,
+      447,
+      6959,
+      3330
+    ],
+    "training_seconds": 1.545081377029419,
+    "classification_report": {
+      "BENIGN": {
+        "precision": 0.8692310583283223,
+        "recall": 0.9904290853031861,
+        "f1-score": 0.9258807045636509,
+        "support": 46704.0
+      },
+      "ATTACK": {
+        "precision": 0.8816521048451151,
+        "recall": 0.3236466128875498,
+        "f1-score": 0.47348215555239587,
+        "support": 10289.0
+      },
+      "accuracy": 0.8700542171845665,
+      "macro avg": {
+        "precision": 0.8754415815867187,
+        "recall": 0.6570378490953679,
+        "f1-score": 0.6996814300580234,
+        "support": 56993.0
+      },
+      "weighted avg": {
+        "precision": 0.8714734415615488,
+        "recall": 0.8700542171845665,
+        "f1-score": 0.8442087681718694,
+        "support": 56993.0
+      }
+    }
+  }
+}

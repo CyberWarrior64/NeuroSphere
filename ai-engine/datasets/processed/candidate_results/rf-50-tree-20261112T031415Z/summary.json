@@ -1,0 +1,56 @@
+{
+  "status": "candidate only; active model and production thresholds unchanged",
+  "candidate_id": "rf-50-tree-20261112T031415Z",
+  "candidate_model": "saved_models/candidates/rf-50-tree-20261112T031415Z/random_forest_50_trees.joblib",
+  "candidate_model_bytes": 794881,
+  "training_data": "datasets/processed/hybrid_v2_training",
+  "training_records": 300000,
+  "validation_records": 433433,
+  "feature_count": 67,
+  "candidate_parameters": {
+    "n_estimators": 50,
+    "max_depth": 25,
+    "min_samples_leaf": 2,
+    "class_weight": "balanced",
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "training_time_seconds": 5.504,
+  "threshold_source": "datasets/processed/hybrid_v2_results/rf_v2_selected_threshold.json",
+  "threshold_frozen_before_candidate_evaluation": 0.27,
+  "validation_day": "Thursday",
+  "active_100_tree_validation_metrics": {
+    "threshold": 0.27,
+    "accuracy": 0.9977389815726998,
+    "precision": 0.748792270531401,
+    "recall": 0.8393501805054152,
+    "f1": 0.7914893617021277,
+    "roc_auc": 0.9945994161733962,
+    "pr_auc": 0.5698127022779557,
+    "tn": 430593,
+    "fp": 624,
+    "fn": 356,
+    "tp": 1860,
+    "false_positive_rate": 0.0014470672538420331
+  },
+  "candidate_50_tree_validation_metrics": {
+    "threshold": 0.27,
+    "accuracy": 0.9955817854201227,
+    "precision": 0.6030116358658453,
+    "recall": 0.39756317689530685,
+    "f1": 0.47919499592058745,
+    "roc_auc": 0.9740020021120813,
+    "pr_auc": 0.5838117899986361,
+    "tn": 430637,
+    "fp": 580,
+    "fn": 1335,
+    "tp": 881,
+    "false_positive_rate": 0.0013450304603018898
+  },
+  "limitations": [
+    "Validation metrics are for the existing Thursday validation split, not an external capture.",
+    "The Friday holdout was intentionally not rerun or used to select this candidate.",
+    "A shorter tree count may reduce training time but can change model quality.",
+    "The candidate is not wired into the API and is not approved for operational use."
+  ]
+}

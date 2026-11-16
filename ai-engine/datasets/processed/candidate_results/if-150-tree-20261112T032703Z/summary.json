@@ -1,0 +1,66 @@
+{
+  "status": "isolated candidate; active model and API artifacts unchanged",
+  "candidate_id": "if-150-tree-20261112T032703Z",
+  "training_rows": 200000,
+  "validation_normal_rows": 431276,
+  "friday_rows": 703245,
+  "feature_count": 67,
+  "candidate_parameters": {
+    "n_estimators": 150,
+    "max_samples": 4096,
+    "contamination": "auto",
+    "max_features": 1.0,
+    "bootstrap": false,
+    "n_jobs": -1,
+    "random_state": 42
+  },
+  "candidate_fit_time_seconds": 1.021,
+  "candidate_model": "saved_models/candidates/if-150-tree-20261112T032703Z/isolation_forest_150_trees.joblib",
+  "candidate_model_bytes": 1306788,
+  "active_model_bytes": 2641482,
+  "candidate_thursday_calibration": {
+    "target_fpr": 0.01,
+    "threshold": 0.5191049717279053,
+    "actual_fpr": 0.010000556488188539
+  },
+  "active_thursday_calibration_audit": {
+    "stored_threshold": 0.5210675410782588,
+    "actual_fpr_on_regenerated_thursday_normals": 0.010007512590545265
+  },
+  "candidate_friday_metrics": {
+    "threshold": 0.5191049717279053,
+    "accuracy": 0.6430945118699742,
+    "precision": 0.7346373207635873,
+    "recall": 0.20552188645417638,
+    "f1": 0.3211882559120708,
+    "roc_auc": 0.7019358601029422,
+    "pr_auc": 0.5616018155720651,
+    "tn": 392873,
+    "fp": 21449,
+    "fn": 229543,
+    "tp": 59380,
+    "false_positive_rate": 0.05176891403304676
+  },
+  "active_friday_metrics": {
+    "threshold": 0.5210675410782588,
+    "accuracy": 0.6396518994091676,
+    "precision": 0.727651554005539,
+    "recall": 0.1964225762573419,
+    "f1": 0.3093414005968685,
+    "roc_auc": 0.7111908879422845,
+    "pr_auc": 0.561332718664072,
+    "tn": 393081,
+    "fp": 21241,
+    "fn": 232172,
+    "tp": 56751,
+    "false_positive_rate": 0.051266889037994604
+  },
+  "family_metrics_csv": "datasets/processed/candidate_results/if-150-tree-20261112T032703Z/friday_attack_family_metrics.csv",
+  "limitations": [
+    "Candidate threshold was calibrated on Thursday normal traffic and frozen before Friday scoring.",
+    "Friday comes from the CICIDS2017 benchmark; it is not an external network capture.",
+    "Model quality and feature parity limitations remain; research only, no automated blocking or alert escalation."
+  ],
+  "same_data_300_tree_fit_benchmark_seconds": 1.994,
+  "fit_time_reduction_fraction": 0.48795934351361114
+}

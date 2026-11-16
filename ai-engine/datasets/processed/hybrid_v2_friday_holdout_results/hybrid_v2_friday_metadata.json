@@ -1,0 +1,9 @@
+{
+    "evaluation": "Friday independent test",
+    "rf_threshold": 0.27,
+    "if_threshold": 0.5210675410782588,
+    "test_records": 702164,
+    "feature_count": 67,
+    "thresholds_frozen_before_friday": true,
+    "test_data_used_for_threshold_tuning": false
+}

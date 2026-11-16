@@ -1,0 +1,151 @@
+{
+  "evaluation": "CICIDS2017 Hybrid V2 capture-day holdout",
+  "status": "experimental; existing API model artifacts evaluated without modification",
+  "training_days": [
+    "Monday",
+    "Tuesday",
+    "Wednesday"
+  ],
+  "validation_day": "Thursday",
+  "test_day": "Friday",
+  "training_rows": 300000,
+  "validation_rows": 433433,
+  "test_rows": 702164,
+  "feature_count": 67,
+  "rf_threshold": 0.27,
+  "if_threshold": 0.5210675410782588,
+  "thresholds_frozen_before_friday": true,
+  "rf_threshold_selection": "Maximum Thursday validation F1",
+  "if_threshold_selection": "Thursday validation FPR target",
+  "metrics": [
+    {
+      "Detector": "Random Forest V2",
+      "Accuracy": 0.7065457642,
+      "Precision": 0.9856232118,
+      "Recall": 0.2884070255,
+      "F1": 0.4462384808,
+      "FPR": 0.0029230027,
+      "ROC_AUC": 0.8275336039,
+      "TN": 413089,
+      "FP": 1211,
+      "FN": 204842,
+      "TP": 83022
+    },
+    {
+      "Detector": "Isolation Forest V2",
+      "Accuracy": 0.6406053287,
+      "Precision": 0.727651554,
+      "Recall": 0.1971451797,
+      "F1": 0.3102368145,
+      "FPR": 0.0512696114,
+      "ROC_AUC": 0.7116615679,
+      "TN": 393059,
+      "FP": 21241,
+      "FN": 231113,
+      "TP": 56751
+    },
+    {
+      "Detector": "Hybrid OR",
+      "Accuracy": 0.6764630485,
+      "Precision": 0.7873920291,
+      "Recall": 0.2888030459,
+      "F1": 0.4226022244,
+      "FPR": 0.0541829592,
+      "ROC_AUC": null,
+      "TN": 391852,
+      "FP": 22448,
+      "FN": 204728,
+      "TP": 83136
+    },
+    {
+      "Detector": "Hybrid AND",
+      "Accuracy": 0.6706880444,
+      "Precision": 0.9999293798,
+      "Recall": 0.1967491593,
+      "F1": 0.3288021945,
+      "FPR": 9.6548e-06,
+      "ROC_AUC": null,
+      "TN": 414296,
+      "FP": 4,
+      "FN": 231227,
+      "TP": 56637
+    }
+  ],
+  "detector_agreement": [
+    {
+      "Category": "BOTH_FLAGGED",
+      "Total": 56641,
+      "Attacks": 56637,
+      "Benign": 4,
+      "Attack_Rate": 0.9999293798
+    },
+    {
+      "Category": "RF_ONLY",
+      "Total": 27592,
+      "Attacks": 26385,
+      "Benign": 1207,
+      "Attack_Rate": 0.9562554364
+    },
+    {
+      "Category": "IF_ONLY",
+      "Total": 21351,
+      "Attacks": 114,
+      "Benign": 21237,
+      "Attack_Rate": 0.0053393284
+    },
+    {
+      "Category": "NEITHER_FLAGGED",
+      "Total": 596580,
+      "Attacks": 204728,
+      "Benign": 391852,
+      "Attack_Rate": 0.3431693989
+    }
+  ],
+  "attack_family_metrics": [
+    {
+      "Attack_Family": "Bot",
+      "Total_Attacks": 1966,
+      "RF_Detected": 0,
+      "IF_Detected": 44,
+      "OR_Detected": 44,
+      "AND_Detected": 0,
+      "RF_Recall": 0.0,
+      "IF_Recall": 0.022380468,
+      "OR_Recall": 0.022380468,
+      "AND_Recall": 0.0
+    },
+    {
+      "Attack_Family": "DDoS",
+      "Total_Attacks": 128021,
+      "RF_Detected": 82475,
+      "IF_Detected": 56626,
+      "OR_Detected": 82476,
+      "AND_Detected": 56625,
+      "RF_Recall": 0.6442302435,
+      "IF_Recall": 0.4423180572,
+      "OR_Recall": 0.6442380547,
+      "AND_Recall": 0.442310246
+    },
+    {
+      "Attack_Family": "PortScan",
+      "Total_Attacks": 157877,
+      "RF_Detected": 547,
+      "IF_Detected": 81,
+      "OR_Detected": 616,
+      "AND_Detected": 12,
+      "RF_Recall": 0.0034647225,
+      "IF_Recall": 0.0005130576,
+      "OR_Recall": 0.0039017716,
+      "AND_Recall": 7.60085e-05
+    }
+  ],
+  "source_dataset": "Checksum-verified day-specific flow Parquets from the same CICIDS2017 benchmark.",
+  "active_model_artifacts_modified": false,
+  "limitations": [
+    "Evaluation uses derived flow tables and does not replay raw PCAP through the live packet adapter.",
+    "This is the same CICIDS2017 benchmark, not an external network capture.",
+    "PortScan and Bot occur only on the Friday test day; generalization to those families is poor.",
+    "Feature parity with the exact CICFlowMeter training build remains unresolved.",
+    "Do not use for automated blocking or alert escalation."
+  ]
+}

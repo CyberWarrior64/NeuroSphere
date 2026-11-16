@@ -43,7 +43,7 @@ dist/
 *.pcapng
 *.cap
 
-# Trained model/checkpoint binaries. Store these as separate release artifacts.
+# Trained model/checkpoint binaries; runtime models and compact evaluation artifacts are tracked below.
 *.joblib
 *.pkl
 *.pickle
@@ -65,3 +65,11 @@ dist/
 *.before-*
 *.before_*
 *.before*
+
+
+# Runtime model binaries and compact evaluation metadata required by the demo.
+!ai-engine/saved_models/**/*.joblib
+!ai-engine/datasets/
+!ai-engine/datasets/processed/
+!ai-engine/datasets/processed/**/*.joblib
+!ai-engine/datasets/processed/**/*.json

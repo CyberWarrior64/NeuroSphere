@@ -1,0 +1,41 @@
+{
+  "status": "one-pass held-out Friday evaluation; no Friday threshold selection or tuning",
+  "candidate_id": "rf-50-tree-20261112T031525Z",
+  "test_day": "Friday",
+  "test_rows": 702164,
+  "feature_count": 67,
+  "active_100_tree_metrics": {
+    "threshold_frozen_from_thursday": 0.27,
+    "accuracy": 0.7065457642374147,
+    "precision": 0.9856232118053494,
+    "recall": 0.28840702553983827,
+    "f1": 0.4462384808262362,
+    "roc_auc": 0.8275336058186594,
+    "pr_auc": 0.7971405606944095,
+    "tn": 413089,
+    "fp": 1211,
+    "fn": 204842,
+    "tp": 83022,
+    "false_positive_rate": 0.0029230026550808594
+  },
+  "candidate_50_tree_metrics": {
+    "threshold_frozen_from_thursday": 0.2555555555555556,
+    "accuracy": 0.7063834090041643,
+    "precision": 0.9846818305865044,
+    "recall": 0.2882889142094878,
+    "f1": 0.44600059654487656,
+    "roc_auc": 0.7589870291745567,
+    "pr_auc": 0.7289824038375605,
+    "tn": 413009,
+    "fp": 1291,
+    "fn": 204876,
+    "tp": 82988,
+    "false_positive_rate": 0.0031160994448467295
+  },
+  "attack_family_report": "datasets/processed/candidate_results/rf-50-tree-20261112T031525Z/friday_attack_family_metrics.csv",
+  "limitations": [
+    "The held-out data is from CICIDS2017, the same benchmark family as training.",
+    "This is not an independent network capture or proof of CICFlowMeter feature parity.",
+    "Do not use the candidate for automated blocking or alert escalation."
+  ]
+}
