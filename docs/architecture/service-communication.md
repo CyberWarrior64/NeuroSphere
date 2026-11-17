@@ -40,6 +40,8 @@ Java validates session, schema version, and request size, then calls private AI.
 
 Use private HTTP with bounded payloads/timeouts, service identity, network isolation, and X-Request-ID. Validate all 67 names against model metadata. Translate FastAPI errors into safe platform errors; do not leak traces. The current proxy stores model version and the RF/IF scores, classifications, flags, and agreement. Thresholds and raw features are not stored. The private AI endpoint itself still has no service-auth token or request envelope. The manual capture runner reports lifecycle to GET /api/v1/capture/runner/status and POST /api/v1/capture/runner/session; it sends only a generated session ID, live/PCAP mode, and lifecycle action. The runner controls these client-reported values, and stale status means no heartbeat for 45 seconds.
 
+The AI Engine exposes GET /api/v1/endpoint/telemetry for the Linux host on which it runs. The route reads local CPU/load, memory, root filesystem free space, uptime, and at most 500 SSH service journal records from the prior 24 hours. It returns aggregate failed/successful SSH login counts only; raw journal messages, usernames, and addresses are neither returned nor stored. The dashboard polls this endpoint every 30 seconds. This is read-only host telemetry, not an endpoint detection/response agent.
+
 ## Target asynchronous events
 
 RabbitMQ is not configured today. Define durable exchanges/queues, routing keys, retries, dead-letter policy, ownership, and retention before use. Proposed versioned envelope:

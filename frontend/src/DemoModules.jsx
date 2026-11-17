@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Activity, AlertTriangle, BookOpenCheck, Check, ClipboardCheck, Copy, Cpu, FileSearch, Globe2, Search, Server, ShieldAlert, ShieldCheck } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import { loadEndpointTelemetry } from "./api.js";
 import "./demo-modules.css";
 
 function ModuleHead({title,icon:Icon,description}){
@@ -25,8 +26,19 @@ const endpointRows=[
 ];
 export function EndpointSecurity(){
   const [query,setQuery]=useState(""),[filter,setFilter]=useState("All"),[reviewed,setReviewed]=useState([]);
+  const [telemetry,setTelemetry]=useState(null),[telemetryError,setTelemetryError]=useState(false);
+  useEffect(()=>{let active=true;const refresh=async()=>{try{const data=await loadEndpointTelemetry();if(active){setTelemetry(data);setTelemetryError(false);}}catch{if(active)setTelemetryError(true);}};refresh();const timer=setInterval(refresh,30000);return()=>{active=false;clearInterval(timer);};},[]);
   const rows=useMemo(()=>endpointRows.filter(row=>(filter==="All"||row.status===filter)&&`${row.id} ${row.name} ${row.platform} ${row.owner}`.toLowerCase().includes(query.toLowerCase())),[filter,query]);
-  return <div className="page demo-module-page"><ModuleHead title="Endpoint Security" icon={Cpu} description="A small endpoint response walkthrough using an isolated fictional inventory."/><SimulationNotice>These sample hosts are not connected to endpoint telemetry. Review marks stay in this page and do not change a real device.</SimulationNotice>
+  const gib=value=>Number.isFinite(value)?`${(value/1024**3).toFixed(1)} GiB`:`—`;
+  const auth=telemetry?.ssh_authentication_24h;
+  return <div className="page demo-module-page"><ModuleHead title="Endpoint Security" icon={Cpu} description="Live, read-only telemetry from the Ubuntu host running NeuroSphere."/>
+    {telemetryError&&<SimulationNotice>The host telemetry endpoint is unavailable. Check that the AI Engine is online and refresh this page.</SimulationNotice>}
+    <section className="panel demo-module-panel" style={{marginBottom:10}}><div className="demo-module-toolbar"><div><h2>{telemetry?.hostname||"Connecting to Linux host…"}</h2><p>{telemetry?.operating_system||"Waiting for host telemetry"} · {telemetry?.status==="connected"?"Connected":"Checking connection"}</p></div><small>Read-only · refreshes every 30 seconds</small></div>
+      <div className="demo-module-stats"><DemoStat icon={Activity} label="CPU load · 1 min" value={Number.isFinite(telemetry?.cpu?.load_average_1m)?telemetry.cpu.load_average_1m.toFixed(2):"—"} detail={`${telemetry?.cpu?.logical_cores??"—"} logical cores`}/><DemoStat icon={Server} label="Memory available" value={gib(telemetry?.memory?.available_bytes)} detail={`of ${gib(telemetry?.memory?.total_bytes)} total`}/><DemoStat icon={Server} label="Root disk free" value={gib(telemetry?.root_disk?.free_bytes)} detail={`of ${gib(telemetry?.root_disk?.total_bytes)} total`}/></div>
+      <div className="demo-module-stats"><DemoStat icon={ShieldCheck} label="SSH login failures · 24h" value={auth?.available?auth.failed_logins_24h:"Unavailable"} detail="Aggregate count; no usernames or IPs shown"/><DemoStat icon={Check} label="SSH logins · 24h" value={auth?.available?auth.successful_logins_24h:"Unavailable"} detail="Aggregate count from the local system journal"/><DemoStat icon={Activity} label="Host uptime" value={telemetry?`${Math.floor(telemetry.uptime_seconds/86400)}d ${Math.floor(telemetry.uptime_seconds%86400/3600)}h`:"—"} detail={telemetry?.collected_at?`Updated ${new Date(telemetry.collected_at).toLocaleTimeString()}`:"Waiting for first reading"}/></div>
+      <div className="demo-table-foot">Only aggregate SSH authentication counts are read. Raw journal entries, usernames, addresses, and process data are not returned or stored. No response action is enabled.</div>
+    </section>
+    <SimulationNotice>The inventory below is a separate fictional training scenario; it does not represent connected hosts.</SimulationNotice>
     <div className="demo-module-stats"><DemoStat icon={Server} label="Training endpoints" value="5" detail="Fictional inventory"/><DemoStat icon={ShieldCheck} label="Online in scenario" value="3" detail="Sample state only"/><DemoStat icon={AlertTriangle} label="Needs analyst review" value="1" detail="No live host alert"/></div>
     <section className="panel demo-module-panel"><div className="demo-module-toolbar"><div><h2>Endpoint inventory</h2><p>Use the filters to walk through an analyst review.</p></div><LocalSearch value={query} onChange={setQuery} placeholder="Search name, host ID, or owner"/></div><div className="demo-module-filters">{["All","Online","Review","Offline"].map(value=><button key={value} className={filter===value?"active":""} onClick={()=>setFilter(value)}>{value}</button>)}</div>
       <div className="demo-table-wrap"><table className="demo-table"><thead><tr><th>Endpoint</th><th>Platform / owner</th><th>Scenario state</th><th>Risk</th><th>Last seen</th><th>Analyst review</th></tr></thead><tbody>{rows.map(row=><tr key={row.id}><td><b>{row.name}</b><small>{row.id}</small></td><td>{row.platform}<small>{row.owner}</small></td><td><span className={`demo-pill ${row.status.toLowerCase()}`}>{row.status}</span></td><td><span className={`demo-risk ${row.risk.toLowerCase()}`}>{row.risk}</span></td><td>{row.seen}</td><td><button className="demo-row-action" onClick={()=>setReviewed(current=>current.includes(row.id)?current.filter(id=>id!==row.id):[...current,row.id])}>{reviewed.includes(row.id)?<><Check size={12}/>Reviewed</>:"Mark reviewed"}</button></td></tr>)}</tbody></table></div>
