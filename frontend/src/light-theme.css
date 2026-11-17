@@ -41,6 +41,35 @@ body {
   backdrop-filter: blur(14px);
 }
 
+.toplink {
+  border-radius: 6px 6px 0 0;
+  color: #40536b;
+  font-weight: 600;
+  transition: color 140ms ease, background-color 140ms ease, border-color 140ms ease;
+}
+
+.toplink:hover {
+  background: #edf4ff;
+  color: #1d4ed8;
+}
+
+.toplink.selected {
+  border-color: #2563eb;
+  background: linear-gradient(180deg, #eff5ff 0%, #ffffff 100%);
+  color: #174ea6;
+}
+
+.toplink.selected svg {
+  color: #2563eb;
+}
+
+.toplink:focus-visible,
+.iconbtn:focus-visible,
+.analyst:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
 .brand {
   color: #14243a;
 }
@@ -73,6 +102,24 @@ body {
 
 .analyst {
   border-color: #dce4ee;
+  border-radius: 8px;
+  color: #15243a;
+  padding: 4px 7px 4px 9px;
+  text-decoration: none;
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+
+.analyst:hover {
+  background: #f2f6fc;
+  border-color: #c6d5e6;
+}
+
+.analyst b {
+  color: #17283e;
+}
+
+.analyst > svg {
+  color: #526b8a;
 }
 
 .analyst > span {
