@@ -1,6 +1,7 @@
 import axios from "axios";
 export const AI_API_URL = import.meta.env.VITE_AI_API_URL || "http://127.0.0.1:8000";
 const http = axios.create({ baseURL: AI_API_URL, timeout: 6000 });
+const threatFeedHttp = axios.create({ baseURL: AI_API_URL, timeout: 15000 });
 export const PLATFORM_API_URL = import.meta.env.VITE_PLATFORM_API_URL || "http://127.0.0.1:8081";
 const platformHttp = axios.create({ baseURL: PLATFORM_API_URL, timeout: 20000 });
 const platformStatusHttp = axios.create({ baseURL: PLATFORM_API_URL, timeout: 5000 });
@@ -43,6 +44,14 @@ export async function loadEndpointTelemetry() {
 
 export async function loadCowrieStatus() {
   return (await http.get("/api/v1/deception/cowrie/status")).data;
+}
+
+export async function loadThreatFeedStatus() {
+  return (await threatFeedHttp.get("/api/v1/threat-intel/status")).data;
+}
+
+export async function loadThreatIndicators(limit = 200) {
+  return (await threatFeedHttp.get("/api/v1/threat-intel/indicators", { params: { limit } })).data;
 }
 
 export async function loadDemoEvents(limit = 8) {

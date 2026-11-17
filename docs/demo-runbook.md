@@ -10,6 +10,7 @@ This runbook separates the fictional SOC presentation from actual model analysis
 | Engine health and Hybrid V2 model metadata | Running FastAPI service | Live service/model availability and 67-feature schema. |
 | Browser flow analysis | Authenticated JSON sent to Spring POST /api/v1/platform/flows/analyze, then forwarded to FastAPI | Real model inference over supplied values. Spring stores result metadata only. Outputs remain experimental research signals. |
 | Endpoint Security host card | GET /api/v1/endpoint/telemetry on the Ubuntu AI Engine | Live read-only Linux host metrics and aggregate SSH authentication counts for the prior 24 hours. Raw journal messages, usernames, and addresses are not returned or stored. The separate inventory below it remains fictional. |
+| Threat Intelligence | GET /api/v1/threat-intel/status and /api/v1/threat-intel/indicators | Public Emerging Threats compromised-host IPv4 list fetched by Ubuntu over HTTPS and cached in memory for 15 minutes. The list is shown as third-party context only; the system does not match local traffic or block entries. |
 | Terminal capture runner | Live interface or offline PCAP, converted into candidate flow features and posted to the CICFlowMeter adapter | Real packets are processed on Ubuntu. Experimental predictions print in the terminal and their metadata, including a generated runner session UUID, is stored in local SQLite and displayed under “Stored detection records.” The UUID links a prediction to its runner session without storing the interface name. This view is prediction history, not the simulated SOC alert table. |
 | Alerts | Capture history plus authenticated Spring API/MySQL | Flagged predictions are separate from persisted review alerts. An analyst may promote a recent server-verified prediction with a selected severity and rationale; no attack is confirmed and no response action is sent. |
 | Incidents | Authenticated Spring API/MySQL or fixed browser demo scenarios | Persistent incidents are manually created and can link analyst-reviewed alerts with status/note history. The separate demo tab contains three fictional scenarios with page-memory status only. No response action is executed. |
@@ -52,6 +53,14 @@ Stop it with:
     PATH=/mnt/neurosphere/cowrie/cowrie-env/bin:$PATH ./cowrie-env/bin/cowrie stop
 
 The source card changes to **Connected** only while Cowrie is running with the localhost-only listener. Its event counts are local audit totals, not detections or alerts. Raw Cowrie logs are stored under `/mnt/neurosphere/cowrie/var/log/cowrie/`; the dashboard API does not expose their raw credential, client-address, or command fields. See the [official Cowrie installation guide](https://docs.cowrie.org/en/latest/INSTALL.html) and [Cowrie configuration](https://github.com/cowrie/cowrie/blob/main/src/cowrie/data/etc/cowrie.cfg.dist).
+
+## External threat feed
+
+The Threat Intelligence page reads the public [Emerging Threats compromised-host IP list](https://rules.emergingthreats.net/blockrules/compromised-ips.txt). The Ubuntu API fetches it on demand and caches it for 15 minutes; up to 500 validated globally routable IPv4 entries appear in the UI. Check service state and count with:
+
+    curl -fsS http://127.0.0.1:8000/api/v1/threat-intel/status
+
+The feed provider's entries are intelligence leads, not evidence of compromise in this network. The dashboard does not query, block, or otherwise contact listed IPs. The source may be stale or contain false positives; the UI shows the last successful fetch time and stale/unavailable state.
 
 ## Run an isolated Digital Twin scenario
 

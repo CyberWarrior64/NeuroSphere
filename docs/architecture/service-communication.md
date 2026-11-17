@@ -44,6 +44,8 @@ The AI Engine exposes GET /api/v1/endpoint/telemetry for the Linux host on which
 
 The AI Engine exposes GET /api/v1/deception/cowrie/status for the local Cowrie sensor. It verifies the Cowrie PID and loopback-only SSH configuration, then reads a bounded tail of the Cowrie JSON audit log and returns 24-hour aggregate counts and event-type totals. It never returns raw Cowrie records, credential fields, client addresses, or command text. Cowrie is bound to 127.0.0.1:2222; Telnet is disabled. Raw audit logs remain on the Ubuntu data volume and have no configured retention schedule yet.
 
+The AI Engine exposes GET /api/v1/threat-intel/status and GET /api/v1/threat-intel/indicators?limit=200 for the public Emerging Threats compromised-host IPv4 list. It fetches the fixed HTTPS source on demand, caches successful results in process memory for 15 minutes, retries failed fetches no more than once every five minutes, caps response size at 1 MB, filters to globally routable IPv4 addresses, and returns at most 500 indicators. A failed refresh preserves the last successful in-memory result and marks it stale. The outbound request sends no analyst, host, or traffic data. This feed is contextual intelligence only: the engine does not correlate it with observed traffic or make blocking/response decisions.
+
 ## Target asynchronous events
 
 RabbitMQ is not configured today. Define durable exchanges/queues, routing keys, retries, dead-letter policy, ownership, and retention before use. Proposed versioned envelope:

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { Activity, AlertTriangle, BookOpenCheck, Check, ClipboardCheck, Copy, Cpu, FileSearch, Globe2, Search, Server, ShieldAlert, ShieldCheck } from "lucide-react";
+import { Activity, AlertTriangle, BookOpenCheck, Check, ClipboardCheck, Clock, Copy, Cpu, FileSearch, Globe2, Search, Server, ShieldAlert, ShieldCheck } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import { loadEndpointTelemetry } from "./api.js";
+import { loadEndpointTelemetry, loadThreatIndicators } from "./api.js";
 import "./demo-modules.css";
 
 function ModuleHead({title,icon:Icon,description}){
@@ -47,22 +47,22 @@ export function EndpointSecurity(){
     </section></div>;
 }
 
-const indicators=[
-  {value:"203.0.113.42",type:"IPv4 address",label:"Repeated login attempts",severity:"Critical",confidence:"High",source:"Training feed A"},
-  {value:"198.51.100.23",type:"IPv4 address",label:"Unusual outbound connection",severity:"High",confidence:"Medium",source:"Training feed A"},
-  {value:"malware-lab.example",type:"Domain",label:"Sample payload hosting",severity:"High",confidence:"High",source:"Training feed B"},
-  {value:"phish-login.example",type:"Domain",label:"Credential collection exercise",severity:"Medium",confidence:"Medium",source:"Training feed B"},
-  {value:"192.0.2.77",type:"IPv4 address",label:"Port-scan exercise",severity:"Low",confidence:"Low",source:"Training feed A"},
-];
 export function ThreatIntelligence(){
-  const [query,setQuery]=useState(""),[filter,setFilter]=useState("All"),[copied,setCopied]=useState("");
-  const rows=useMemo(()=>indicators.filter(item=>(filter==="All"||item.type===filter)&&`${item.value} ${item.label} ${item.source}`.toLowerCase().includes(query.toLowerCase())),[filter,query]);
+  const [query,setQuery]=useState(""),[filter,setFilter]=useState("All"),[copied,setCopied]=useState(""),[feed,setFeed]=useState(null),[loading,setLoading]=useState(true);
+  useEffect(()=>{let active=true;const refresh=async()=>{try{const data=await loadThreatIndicators(500);if(active)setFeed(data);}catch{if(active)setFeed(previous=>previous?{...previous,status:"stale"}:{status:"unavailable",indicators:[],indicator_count:0});}finally{if(active)setLoading(false);}};refresh();const timer=setInterval(refresh,300000);return()=>{active=false;clearInterval(timer);};},[]);
+  const indicators=feed?.indicators||[];
+  const rows=useMemo(()=>indicators.filter(item=>(filter==="All"||item.type===filter)&&`${item.value} ${item.classification} ${item.source}`.toLowerCase().includes(query.toLowerCase())),[indicators,query,filter]);
   async function copy(value){try{await navigator.clipboard.writeText(value);setCopied(value);setTimeout(()=>setCopied(""),1400);}catch{setCopied("unavailable");setTimeout(()=>setCopied(""),1400);}}
-  return <div className="page demo-module-page"><ModuleHead title="Threat Intelligence" icon={Globe2} description="Explore sample indicators and practice an IOC review workflow."/><SimulationNotice>All indicators and source names below are fabricated training records. No external threat feed is configured or queried.</SimulationNotice>
-    <div className="demo-module-stats"><DemoStat icon={Globe2} label="Training indicators" value={indicators.length} detail="Local sample list"/><DemoStat icon={AlertTriangle} label="High / critical" value="3" detail="Scenario labels"/><DemoStat icon={Activity} label="Feed connections" value="0" detail="No external feed"/></div>
-    <section className="panel demo-module-panel"><div className="demo-module-toolbar"><div><h2>Indicator review</h2><p>Search the local sample list or copy an indicator for a training pivot.</p></div><LocalSearch value={query} onChange={setQuery}/></div><div className="demo-module-filters">{["All","IPv4 address","Domain"].map(value=><button key={value} className={filter===value?"active":""} onClick={()=>setFilter(value)}>{value}</button>)}</div>
-      <div className="demo-table-wrap"><table className="demo-table"><thead><tr><th>Indicator</th><th>Type</th><th>Scenario context</th><th>Severity</th><th>Confidence</th><th>Source</th><th/></tr></thead><tbody>{rows.map(item=><tr key={item.value}><td><code>{item.value}</code></td><td>{item.type}</td><td>{item.label}</td><td><span className={`demo-risk ${item.severity.toLowerCase()}`}>{item.severity}</span></td><td>{item.confidence}</td><td>{item.source}</td><td><button className="demo-copy" onClick={()=>copy(item.value)} aria-label={`Copy ${item.value}`} title="Copy indicator">{copied===item.value?<Check size={13}/>:<Copy size={13}/>}</button></td></tr>)}</tbody></table></div>
-      {!rows.length&&<div className="demo-table-empty">No training indicators match this search.</div>}<div className="demo-table-foot">{copied==="unavailable"?"Clipboard access is unavailable in this browser.":"Indicator values use reserved documentation addresses and example domains."}</div>
+  const fetchedAt=feed?.last_successful_fetch_at?new Date(feed.last_successful_fetch_at).toLocaleString():"Not fetched";
+  const feedState=feed?.status==="connected"?"Connected":feed?.status==="stale"?"Stale":feed?.status==="unavailable"?"Unavailable":"Loading";
+  return <div className="page demo-module-page"><div className="page-head demo-module-head"><div className="demo-module-title"><span><Globe2 size={18}/></span><div><div className="kicker">External threat intelligence</div><h1>Threat Intelligence</h1><p>Review current IP indicators from the Emerging Threats feed.</p></div></div><span className={`demo-source-badge ${feed?.status==="connected"?"live":""}`}><i/>{feed?.status==="connected"?"LIVE FEED":feed?.status==="stale"?"STALE CACHE":feed?.status==="unavailable"?"FEED OFFLINE":"CONNECTING"}</span></div>
+    <div className="demo-source-notice feed-notice"><ShieldCheck size={14}/><span><b>Read-only feed.</b> Ubuntu fetches this public list over HTTPS every 15 minutes. Indicators are third-party leads, not proof of compromise; no traffic matching or blocking is performed.</span></div>
+    <div className="demo-module-stats"><DemoStat icon={Globe2} label="Feed indicators" value={feed?.indicator_count?.toLocaleString()??"—"} detail="Emerging Threats compromised-host IPs"/><DemoStat icon={Activity} label="Feed status" value={feedState} detail="15-minute cache refresh"/><DemoStat icon={Clock} label="Last successful fetch" value={fetchedAt} detail="Ubuntu AI Engine"/></div>
+    <section className="panel demo-module-panel"><div className="demo-module-toolbar"><div><h2>Indicator review</h2><p>Search or copy a listed IP for analyst enrichment.</p></div><LocalSearch value={query} onChange={setQuery} placeholder="Search IP indicators"/></div><div className="demo-module-filters">{["All","IPv4 address"].map(value=><button key={value} className={filter===value?"active":""} onClick={()=>setFilter(value)}>{value}</button>)}</div>
+      {feed?.status==="stale"&&<div className="feed-inline-state">The provider could not be refreshed. Showing the last cached copy when available.</div>}
+      {feed?.status==="unavailable"&&!loading&&<div className="feed-inline-state">The public feed is unavailable. Check outbound HTTPS access from the Ubuntu host.</div>}
+      <div className="demo-table-wrap"><table className="demo-table"><thead><tr><th>Indicator</th><th>Type</th><th>Provider context</th><th>Source</th><th/></tr></thead><tbody>{rows.map(item=><tr key={item.value}><td><code>{item.value}</code></td><td>{item.type}</td><td>{item.classification}</td><td>{item.source}</td><td><button className="demo-copy" onClick={()=>copy(item.value)} aria-label={`Copy ${item.value}`} title="Copy indicator">{copied===item.value?<Check size={13}/>:<Copy size={13}/>}</button></td></tr>)}</tbody></table></div>
+      {!rows.length&&<div className="demo-table-empty">{loading?"Loading indicators…":query?"No indicators match this search.":feed?.status==="connected"?"The provider returned no current indicators.":"No indicator data is available."}</div>}<div className="demo-table-foot">Showing {rows.length.toLocaleString()} of {(feed?.indicator_count||0).toLocaleString()} indicators · last fetched {fetchedAt}. Provider data can be incomplete or contain false positives. <a href={feed?.source_url||"https://rules.emergingthreats.net/blockrules/compromised-ips.txt"} target="_blank" rel="noreferrer noopener">Open feed source</a>{copied==="unavailable"?" · Clipboard access is unavailable in this browser.":copied?" · Indicator copied.":""}</div>
     </section></div>;
 }
 
