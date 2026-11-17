@@ -1,0 +1,1125 @@
+:root {
+  color-scheme: light;
+  --bg: #f3f6fb;
+  --panel: #ffffff;
+  --line: #dce4ee;
+  --muted: #63748a;
+  --text-primary: #15243a;
+  --text-secondary: #42536a;
+  --text-tertiary: #66778d;
+  --cyan: #0e9488;
+  --blue: #2563eb;
+  --red: #c93649;
+  --violet: #7542c8;
+  --green: #087a55;
+  color: var(--text-primary);
+  background: var(--bg);
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  background: var(--bg);
+}
+
+body {
+  color: var(--text-primary);
+}
+
+.app {
+  color: var(--text-primary);
+  background:
+    radial-gradient(ellipse at 96% 0%, #e7f0ff 0, transparent 30%),
+    linear-gradient(180deg, #f9fbff 0%, #f1f5fa 100%);
+}
+
+.topbar {
+  background: rgb(255 255 255 / 96%);
+  border-color: #d8e2ee;
+  box-shadow: 0 2px 12px rgb(24 43 68 / 5%);
+  backdrop-filter: blur(14px);
+}
+
+.brand {
+  color: #14243a;
+}
+
+.brand-mark {
+  border-color: #b9dedc;
+  background: #e8f6f4;
+  color: #087e78;
+}
+
+.brand small,
+.analyst small {
+  color: #60728a;
+}
+
+.mode {
+  border-color: #cbd8e6;
+  background: #f7f9fc;
+  color: #52647a;
+}
+
+.iconbtn {
+  color: #5a6c83;
+}
+
+.iconbtn:hover {
+  color: #173453;
+  background: #edf3fa;
+}
+
+.analyst {
+  border-color: #dce4ee;
+}
+
+.analyst > span {
+  background: #e8effa;
+  color: #244a7a;
+}
+
+.sidebar {
+  background: #fbfcfe;
+  border-color: #dce4ee;
+  box-shadow: 2px 0 12px rgb(24 43 68 / 3%);
+}
+
+.workspace-switch {
+  border-color: #e1e8f0 !important;
+}
+
+.workspace-switch > span {
+  background: #eaf1ff;
+  color: #2b65c8;
+}
+
+.workspace-switch small,
+.nav-caption,
+.side-foot {
+  color: #687a90;
+}
+
+.sidelink {
+  color: #40536b;
+}
+
+.sidelink svg {
+  color: #71839a;
+}
+
+.sidelink:hover {
+  background: #eef3f9;
+  color: #173a67;
+}
+
+.sidelink.selected {
+  background: #eaf1ff;
+  color: #1f57ae;
+  box-shadow: inset 2px 0 #3478df;
+}
+
+.sidelink.selected svg {
+  color: #2868c8;
+}
+
+.sources {
+  background: #ffffff;
+  border-color: #dce4ee;
+  box-shadow: 0 3px 10px rgb(24 43 68 / 4%);
+}
+
+.sources-head {
+  color: #53657c;
+}
+
+.sources-head button,
+.source > svg {
+  color: #6d7f96;
+}
+
+.source {
+  border-color: #e8edf3;
+}
+
+.source b {
+  color: #17283e;
+}
+
+.source small,
+.source > span:last-child,
+.sources-foot {
+  color: #586b82;
+}
+
+.secure-note {
+  border: 1px solid #cce8e0;
+  background: #eff9f6;
+  color: #355d57;
+}
+
+.secure-note svg {
+  color: #07805f;
+}
+
+.side-foot {
+  border-color: #e1e8f0;
+}
+
+.main,
+.page {
+  color: var(--text-primary);
+}
+
+.page-head h1 {
+  color: #14243a;
+}
+
+.page-head p,
+.kicker {
+  color: #5c6f86;
+}
+
+.panel,
+.metric,
+.detector,
+.agreement,
+.report-panel,
+.case-list-item,
+.case-activity article,
+.incident-card,
+.capture-record,
+.capture-stat,
+.network-watch-stat,
+.twin-stat,
+.stored-event,
+.alert-persisted,
+.alert-promote-form,
+.playbook-choice,
+.playbook-step,
+.settings-card,
+.settings-option,
+.settings-session-card {
+  border-color: #dce4ee;
+  background: #ffffff;
+  box-shadow: 0 3px 12px rgb(29 47 71 / 5%);
+}
+
+.panel,
+.metric {
+  border-radius: 11px;
+}
+
+.metric {
+  background: linear-gradient(145deg, #ffffff 0%, #f9fbfe 100%);
+}
+
+.metric.red { color: #c93649; }
+.metric.purple { color: #7542c8; }
+.metric.blue { color: #2563b8; }
+.metric.green { color: #087a55; }
+
+.metric-label,
+.panel-head p,
+.metric > small {
+  color: #52647a;
+}
+
+.metric > b {
+  color: #15243a;
+}
+
+.metric-row > span {
+  background: color-mix(in srgb, currentColor 12%, white);
+}
+
+.metric-state {
+  background: #edf1f6;
+  color: #596b82;
+}
+
+.metric-state.online,
+.demo-pill.online,
+.record-status.online,
+.class-tag.ok,
+.result-tag.ok,
+.login-notice,
+.login-session {
+  border-color: #bde5d2;
+  background: #eaf7f0;
+  color: #086443;
+}
+
+.metric-state.offline,
+.record-status.offline,
+.class-tag.flag,
+.result-tag.flag,
+.login-error {
+  border-color: #f0c4c8;
+  background: #fff0f1;
+  color: #a92c3c;
+}
+
+.dash-grid .panel,
+.sys-panel {
+  background: #ffffff;
+}
+
+.panel-head h2,
+.empty > b,
+.sys-row b,
+.stored-event-meta b,
+.stored-model > span,
+.capture-record-origin b,
+.capture-record-model b,
+.demo-module-stat > b,
+.capture-stat b,
+.network-watch-stat > b,
+.twin-stat b,
+.report-stat b,
+.incident-title b,
+.case-list-item b,
+.settings-service b {
+  color: #17283e;
+}
+
+.panel-head p,
+.empty,
+.empty p,
+.sys-row small,
+.panel-foot,
+.integrity,
+.footnote,
+.form-foot,
+.capture-record-origin small,
+.capture-record-model small,
+.capture-record-model span,
+.capture-agreement,
+.demo-table-foot,
+.settings-footnote,
+.stored-foot,
+.settings-service small,
+.settings-note,
+.settings-data-list {
+  color: #586b82;
+}
+
+.sys-row,
+.panel-foot,
+.integrity,
+.capture-runner-details,
+.capture-record,
+.capture-record-list > *,
+.demo-table th,
+.demo-table td,
+.settings-service,
+.settings-session,
+.settings-data-list {
+  border-color: #e5ebf2;
+}
+
+.dot.online,
+.settings-dot.healthy,
+.source .dot.online {
+  background: #07885f;
+  box-shadow: 0 0 0 3px rgb(8 136 95 / 12%);
+}
+
+.green,
+.settings-service strong.healthy {
+  color: #087a55;
+}
+
+.muted-text {
+  color: #64758b;
+}
+
+.text-btn,
+.demo-table-foot a,
+.network-watch-footer a {
+  color: #1c5db9;
+}
+
+.primary-btn {
+  border-color: #147c76;
+  background: #0f827b;
+  color: #ffffff;
+  box-shadow: 0 2px 5px rgb(15 130 123 / 14%);
+}
+
+.primary-btn:hover {
+  background: #0b6f69;
+}
+
+.secondary-btn,
+.logout-btn,
+.twin-controls select,
+.alert-filter select,
+.alert-status-select select {
+  border-color: #cad6e4;
+  background: #f8fafc;
+  color: #2b3e55;
+}
+
+.secondary-btn:hover,
+.logout-btn:hover {
+  border-color: #9fb4cc;
+  background: #eef3f9;
+}
+
+input,
+select,
+textarea,
+.json-input,
+.login-form input,
+.capture-search,
+.demo-module-search,
+.alert-promote-form input,
+.alert-promote-form textarea,
+.alert-promote-form select {
+  border-color: #cbd6e3;
+  background: #ffffff;
+  color: #17283e;
+}
+
+input::placeholder,
+textarea::placeholder,
+.json-input::placeholder,
+.capture-search input::placeholder,
+.demo-module-search input::placeholder,
+.login-form input::placeholder {
+  color: #718198;
+}
+
+.json-input,
+.capture-command,
+.incident-timeline,
+.network-comparison-grid > div,
+.twin-asset,
+.capture-record,
+.stored-event,
+.case-list-item,
+.alert-promote-form,
+.alert-persisted,
+.demo-table-wrap {
+  border-color: #dce4ee;
+  background: #f8fafd;
+  color: #23364d;
+}
+
+.json-input:focus,
+.login-form input:focus,
+.alert-promote-form input:focus,
+.alert-promote-form textarea:focus,
+.alert-promote-form select:focus {
+  border-color: #4f88d8;
+  box-shadow: 0 0 0 3px rgb(59 130 246 / 14%);
+}
+
+.warning,
+.capture-monitor-warning,
+.twin-boundary,
+.network-watch-boundary,
+.incident-simulation-banner,
+.simulation-banner,
+.feed-inline-state {
+  border-color: #efd8a8;
+  background: #fff8e9;
+  color: #684b17;
+}
+
+.warning svg,
+.capture-monitor-warning svg,
+.twin-boundary svg,
+.network-watch-boundary svg,
+.incident-simulation-banner svg {
+  color: #a56a0b;
+}
+
+.warning b,
+.capture-monitor-warning b,
+.twin-boundary b,
+.network-watch-boundary b,
+.incident-simulation-banner b,
+.simulation-banner {
+  color: #654710;
+}
+
+.simulation-banner small {
+  color: #765a28;
+}
+
+.capture-guide {
+  border-color: #bde1d8;
+  background: linear-gradient(145deg, #effaf7, #f9fcff);
+}
+
+.capture-guide h2 {
+  color: #183d43;
+}
+
+.capture-guide p,
+.capture-guide li {
+  color: #45636a;
+}
+
+.capture-guide code {
+  background: #e4f1ef;
+  color: #175c56;
+}
+
+.capture-command {
+  background: #f4f8fa;
+  color: #25445a;
+}
+
+.capture-caution {
+  color: #75591f !important;
+}
+
+.capture-caution svg {
+  color: #a56a0b;
+}
+
+.network-safe-use {
+  border-color: #c88c35;
+  background: #fff8e9;
+  color: #6c501c;
+}
+
+.network-feature-list li,
+.network-blockers li,
+.network-watch-stat > div,
+.network-runner-meta span {
+  color: #43576e;
+}
+
+.twin-actor {
+  border-color: #dfd1f4;
+  background: #f7f1ff;
+}
+
+.twin-actor > span,
+.twin-asset-icon {
+  background: #eaf1fb;
+  color: #2865b6;
+}
+
+.twin-actor > span {
+  background: #efe6fc;
+  color: #7542c8;
+}
+
+.twin-actor b,
+.twin-asset b,
+.twin-summary b,
+.twin-event > div b,
+.twin-history-row b {
+  color: #23344b;
+}
+
+.twin-actor small,
+.twin-asset small,
+.twin-summary span,
+.twin-event > div small,
+.twin-event > div p,
+.twin-history-row small,
+.twin-empty {
+  color: #586b82;
+}
+
+.twin-event,
+.twin-history-row {
+  border-color: #e3e9f0;
+}
+
+.twin-event-time,
+.twin-address,
+.twin-asset-state {
+  color: #526780 !important;
+}
+
+.twin-asset.observed {
+  border-color: #e6ce9e;
+  background: #fffaf0;
+}
+
+.twin-asset.observed .twin-asset-icon {
+  background: #fff0cd;
+  color: #8b5a00;
+}
+
+.demo-source-badge {
+  border-color: #ead9b7;
+  background: #fff8e9;
+  color: #795616;
+}
+
+.demo-source-badge.live {
+  border-color: #bce2d0;
+  background: #eaf7f0;
+  color: #086443;
+}
+
+.demo-source-notice {
+  border-color: #ead9b7;
+  background: #fff8e9;
+  color: #665126;
+}
+
+.demo-source-notice svg,
+.demo-source-notice b {
+  color: #865c13;
+}
+
+.demo-source-notice.feed-notice {
+  border-color: #bde3d6;
+  background: #eff9f5;
+  color: #365e54;
+}
+
+.demo-source-notice.feed-notice svg,
+.demo-source-notice.feed-notice b {
+  color: #087a55;
+}
+
+.demo-module-title > span,
+.demo-module-stat > span {
+  border-color: #d8e4f2;
+  background: #eff5fd;
+  color: #2865b6;
+}
+
+.demo-row-action,
+.demo-copy {
+  border-color: #d6e1ed;
+  background: #f2f6fb;
+  color: #315473;
+}
+
+.demo-pill.offline {
+  border-color: #d6dde6;
+  background: #f0f3f7;
+  color: #586b82;
+}
+
+.demo-module-stat > small,
+.demo-module-stat > em,
+.demo-module-toolbar p,
+.demo-module-search {
+  color: #596c83;
+}
+
+.demo-module-stat > b,
+.demo-module-toolbar h2 {
+  color: #17283e;
+}
+
+.demo-module-search,
+.capture-search {
+  border-color: #cbd6e3;
+  background: #ffffff;
+}
+
+.demo-module-search input,
+.capture-search input {
+  color: #17283e;
+}
+
+.demo-module-filters button,
+.capture-filters button {
+  color: #51647b;
+}
+
+.demo-module-filters button.active,
+.capture-filters button.selected {
+  border-color: #bfd2ee;
+  background: #edf4ff;
+  color: #1f56a5;
+}
+
+.demo-table th {
+  border-color: #dce4ee;
+  color: #52647a;
+}
+
+.demo-table td,
+.demo-table td:first-child b,
+.demo-table td code,
+.demo-table-foot {
+  border-color: #e5ebf2;
+  color: #344960;
+}
+
+.demo-table td:first-child b {
+  color: #17283e;
+}
+
+.demo-table td code,
+.capture-mode-tag,
+.incident-timeline {
+  background: #f0f4f8;
+  color: #29435d;
+}
+
+.demo-table-foot a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.demo-pill,
+.incident-status,
+.capture-mode-tag,
+.record-status,
+.twin-event-source,
+.settings-service strong {
+  background: #eef2f7;
+  color: #4b5f76;
+}
+
+.demo-pill.review,
+.incident-status.investigating,
+.capture-mode-tag.pcap {
+  background: #edf4ff;
+  color: #235ba8;
+}
+
+.capture-mode-tag.live,
+.incident-status.resolved-in-demo {
+  background: #eaf7f0;
+  color: #087a55;
+}
+
+.severity.critical,
+.demo-risk.critical,
+.case-priority.critical,
+.incident-severity.high,
+.capture-record-model b.flagged {
+  border-color: #f0bcc2;
+  background: #ffebed;
+  color: #b42335;
+}
+
+.severity.high,
+.demo-risk.high,
+.case-priority.high {
+  border-color: #ffd4b7;
+  background: #fff1e7;
+  color: #a84608;
+}
+
+.severity.medium,
+.demo-risk.medium,
+.case-priority.medium,
+.incident-severity.medium {
+  border-color: #f0df9f;
+  background: #fff8dc;
+  color: #785600;
+}
+
+.severity.low,
+.demo-risk.low,
+.case-priority.low,
+.incident-severity.low {
+  border-color: #c5d8f5;
+  background: #edf4ff;
+  color: #245aa9;
+}
+
+.severity-legend,
+.demo-alert > b,
+.demo-cases b,
+.demo-alert > em,
+.demo-cases small,
+.demo-alert > small,
+.capture-empty,
+.network-watch-footer,
+.incident-title small,
+.incident-age,
+.case-activity,
+.settings-data-list {
+  color: #4f6279;
+}
+
+.severity-legend b,
+.donut-wrap > span b {
+  color: #182a40;
+}
+
+.severity-legend > div,
+.demo-cases > div,
+.demo-alert {
+  border-color: #e5ebf2;
+}
+
+.demo-alert > b,
+.demo-cases b {
+  color: #263a52;
+}
+
+.donut-wrap > span small {
+  color: #60738a;
+}
+
+.capture-stat small,
+.capture-stat span,
+.network-watch-stat > div small,
+.network-watch-stat > span,
+.twin-stat small,
+.twin-stat span,
+.report-stat span,
+.incident-stat small,
+.incident-stat span,
+.settings-session small,
+.settings-session b {
+  color: #52657c;
+}
+
+.capture-record-origin b,
+.capture-record-model b,
+.capture-record-model span {
+  color: #243951;
+}
+
+.capture-empty b,
+.twin-empty b {
+  color: #243951;
+}
+
+.capture-empty svg,
+.twin-empty svg {
+  color: #527aa7;
+}
+
+.capture-agreement,
+.agreement-tag {
+  color: #586b82;
+}
+
+.agreement-tag {
+  border-color: #dce4ee;
+  background: #f2f5f9;
+}
+
+.settings-icon {
+  border-color: #d9e5f2;
+  background: #edf4fc;
+  color: #2865b6;
+}
+
+.settings-switch {
+  border-color: #cbd6e3;
+  background: #e9eef5;
+}
+
+.settings-switch.on {
+  border-color: #8cc9b1;
+  background: #dbf2e8;
+}
+
+.settings-switch.on span {
+  background: #07885f;
+}
+
+.settings-option,
+.settings-session,
+.settings-data-list,
+.settings-service {
+  border-color: #e2e8f0;
+}
+
+.settings-option b,
+.settings-session b {
+  color: #1c2e45;
+}
+
+.settings-option small,
+.settings-session small,
+.settings-note,
+.settings-data-list {
+  color: #53667d;
+}
+
+.settings-dot.healthy {
+  background: #07885f;
+  box-shadow: 0 0 0 3px rgb(8 136 95 / 12%);
+}
+
+.login-card h1 {
+  color: #14243a;
+}
+
+.login-intro,
+.login-foot,
+.login-form label {
+  color: #52657c;
+}
+
+.login-foot {
+  border-color: #e2e8f0;
+}
+
+.sys-row > small.green,
+.source .dot.online {
+  color: #087a55;
+}
+
+.mobile-title {
+  color: #1b2d43;
+}
+
+.mobile-title span {
+  color: #53677e;
+}
+
+.telemetry-body:before {
+  opacity: .55;
+  background-image:
+    linear-gradient(#dbe5ef 1px, transparent 1px),
+    linear-gradient(90deg, #dbe5ef 1px, transparent 1px);
+}
+
+.orbit {
+  border-color: #bdcfe1;
+}
+
+.orbit-two {
+  border-color: #d2deeb;
+}
+
+.telemetry-core {
+  border-color: #9ed8d1;
+  background: #e8f7f5;
+  color: #087e78;
+  box-shadow: 0 4px 20px rgb(14 148 136 / 12%);
+}
+
+.telemetry-empty b {
+  color: #263b54;
+}
+
+.telemetry-empty p {
+  color: #52677f;
+}
+
+.trend-chart .recharts-cartesian-grid line {
+  stroke: #e3e9f1;
+}
+
+.trend-chart .recharts-cartesian-axis-tick text {
+  fill: #60728a;
+}
+
+.trend-chart .recharts-tooltip-wrapper .recharts-default-tooltip {
+  border-color: #d5dfeb !important;
+  background: #ffffff !important;
+  box-shadow: 0 5px 18px rgb(24 43 68 / 12%);
+}
+
+.app hr {
+  border-color: #e2e8f0;
+}
+
+/* Keep secondary SOC workflows consistent with the light overview. */
+.alert-login-note,
+.alert-promote-form,
+.case-list-item.selected,
+.playbook-choice.selected,
+.playbook-choice > span,
+.playbook-step,
+.playbook-step.complete,
+.case-filter select,
+.case-status-control select,
+.case-form input,
+.case-form textarea,
+.case-form select,
+.case-note-form textarea,
+.history-mode,
+.history-mode option,
+.history-flag-toggle,
+.report-alignment > div,
+.incident-view-switch,
+.incident-link-form select,
+.network-comparison-grid > div,
+.twin-controls select {
+  border-color: #dce4ee;
+  background: #f8fafd;
+  color: #263a52;
+}
+
+.alert-login-note,
+.case-notice,
+.history-warning {
+  border-color: #d6e3f1;
+  background: #f1f6fc;
+  color: #40566f;
+}
+
+.alert-filter label,
+.alert-status-select,
+.alert-promote-form label,
+.case-filter label,
+.case-status-control,
+.twin-controls label,
+.history-mode,
+.history-flag-toggle {
+  color: #52657c;
+}
+
+.alert-persisted-main > b,
+.case-list-item,
+.case-list-item b,
+.playbook-choice,
+.playbook-choice b,
+.playbook-step,
+.playbook-step b,
+.case-stats b,
+.incident-view-switch button,
+.history-mode,
+.report-bar-label,
+.report-alignment > div,
+.twin-event-source {
+  color: #263a52;
+}
+
+.alert-persisted-main > small,
+.alert-persisted-main > p,
+.case-list-item small,
+.case-list-item p,
+.playbook-choice small,
+.playbook-step small,
+.case-filter,
+.case-activity,
+.history-mode option,
+.history-flag-toggle,
+.report-bar-row > div,
+.network-comparison-grid small {
+  color: #586b82;
+}
+
+.alert-persisted,
+.alert-signal-wrap,
+.case-filter,
+.case-list-item,
+.case-activity article,
+.playbook-choice,
+.playbook-step,
+.incident-view-switch,
+.history-flag-toggle,
+.report-bar-row,
+.report-alignment > div {
+  border-color: #e2e8f0;
+}
+
+.playbook-step.complete {
+  background: #eff8f3;
+}
+
+.playbook-step.complete .playbook-check {
+  background: #d8f0e4;
+  color: #087a55;
+}
+
+.case-priority,
+.incident-severity,
+.incident-status,
+.history-flag-toggle.selected,
+.history-mode:focus,
+.incident-view-switch button.selected {
+  border-color: #cbd9e8;
+  background: #edf4fb;
+  color: #315473;
+}
+
+.case-priority.critical,
+.incident-severity.high {
+  border-color: #f0bcc2;
+  background: #ffebed;
+  color: #b42335;
+}
+
+.case-priority.high {
+  border-color: #ffd4b7;
+  background: #fff1e7;
+  color: #a84608;
+}
+
+.case-priority.medium,
+.incident-severity.medium {
+  border-color: #f0df9f;
+  background: #fff8dc;
+  color: #785600;
+}
+
+.case-priority.low,
+.incident-severity.low {
+  border-color: #c5d8f5;
+  background: #edf4ff;
+  color: #245aa9;
+}
+
+.report-bar-row > div {
+  background: #e9eff6;
+}
+
+.report-bar-row i {
+  background: linear-gradient(90deg, #3988e8, #13a39a);
+}
+
+.network-blocker-count {
+  border-color: #efd8a8;
+  background: #fff7e6;
+  color: #805609;
+}
+
+.twin-mode,
+.twin-event-source {
+  border-color: #ead9b7;
+  background: #fff7e6;
+  color: #795616;
+}
+
+.twin-event-marker {
+  background: #edf4fc;
+  color: #2865b6;
+}
+
+.twin-event-marker.decoy,
+.twin-event-marker.state {
+  background: #fff1d6;
+  color: #8b5a00;
+}
+
+.twin-event-marker.auth {
+  background: #f5edff;
+  color: #7542c8;
+}
+
+.twin-event-marker.data {
+  background: #e8f7f4;
+  color: #087e78;
+}
+
+.case-form input:focus,
+.case-form textarea:focus,
+.case-form select:focus,
+.case-note-form textarea:focus,
+.case-filter select:focus,
+.case-status-control select:focus,
+.incident-link-form select:focus,
+.twin-controls select:focus {
+  outline: 0;
+  border-color: #4f88d8;
+  box-shadow: 0 0 0 3px rgb(59 130 246 / 14%);
+}
+
+@media (max-width: 680px) {
+  .sidebar {
+    background: #fbfcfe;
+  }
+
+  .mobile-title {
+    color: #1b2d43;
+  }
+}

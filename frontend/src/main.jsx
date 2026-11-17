@@ -10,4 +10,5 @@ import "@fontsource/ibm-plex-mono/latin-400.css";
 import "@fontsource/ibm-plex-mono/latin-500.css";
 import "./index.css";
 import "./soc-theme.css";
+import "./light-theme.css";
 createRoot(document.getElementById("root")).render(<React.StrictMode><HashRouter><App /></HashRouter></React.StrictMode>);
