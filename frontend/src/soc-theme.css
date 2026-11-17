@@ -1,0 +1,241 @@
+:root {
+  color-scheme: dark;
+  color: #f8fafc;
+  background: #0f172a;
+  --bg: #0f172a;
+  --panel: #1e293b;
+  --line: #334155;
+  --muted: #94a3b8;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #94a3b8;
+  --cyan: #5eead4;
+  --blue: #3b82f6;
+  --red: #ef4444;
+  --violet: #a78bfa;
+  --green: #10b981;
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+  font-synthesis: none;
+  font-optical-sizing: auto;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+body {
+  color: var(--text-primary);
+  background: var(--bg);
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+}
+
+.app,
+.app button,
+.app input,
+.app select,
+.app textarea {
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+}
+
+code,
+pre,
+kbd,
+samp,
+.twin-address,
+.capture-command,
+.demo-alert > small,
+.demo-table td code {
+  font-family: "IBM Plex Mono", Consolas, monospace;
+  font-variant-ligatures: none;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+table,
+th,
+td,
+.metric > b,
+.demo-module-stat > b,
+.capture-stat b,
+.network-watch-stat b,
+.twin-stat b,
+.demo-alert .demo-time,
+.demo-cases em,
+.sys-row > small {
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.app {
+  color: var(--text-primary);
+  background: radial-gradient(ellipse at 50% -35%, #1e3a5f 0, transparent 50%), var(--bg);
+}
+
+.topbar {
+  background: rgb(15 23 42 / 97%);
+  border-color: var(--line);
+}
+
+.sidebar {
+  background: #111c30;
+  border-color: var(--line);
+}
+
+.panel,
+.metric,
+.detector,
+.agreement,
+.report-panel,
+.case-list-item,
+.case-activity article,
+.incident-card,
+.capture-record,
+.capture-stat,
+.network-watch-stat,
+.twin-stat,
+.stored-event,
+.alert-persisted,
+.alert-promote-form,
+.playbook-choice,
+.playbook-step,
+.settings-card {
+  background-color: var(--panel);
+  border-color: var(--line);
+}
+
+.app h1,
+.app h2,
+.app h3,
+.app h4,
+.app b,
+.app strong,
+.app th,
+.app td {
+  color: var(--text-primary);
+}
+
+.app p,
+.app small,
+.app label,
+.app time,
+.app em,
+.panel-head p,
+.metric-label,
+.metric > small {
+  color: var(--text-secondary);
+}
+
+.nav-caption,
+.side-foot,
+.panel-foot,
+.demo-table-foot,
+.settings-footnote,
+.stored-foot {
+  color: var(--text-tertiary);
+}
+
+.metric-state.online,
+.demo-pill.online,
+.record-status.online,
+.class-tag.ok,
+.result-tag.ok {
+  border-color: #10b981;
+  background: #064e3b;
+  color: #a7f3d0;
+}
+
+.severity.critical,
+.demo-risk.critical,
+.case-priority.critical,
+.incident-severity.high {
+  border-color: #ef4444;
+  background: #7f1d1d;
+  color: #fecaca;
+}
+
+.severity.high,
+.demo-risk.high,
+.case-priority.high {
+  border-color: #f97316;
+  background: #7c2d12;
+  color: #fed7aa;
+}
+
+.severity.medium,
+.demo-risk.medium,
+.case-priority.medium,
+.incident-severity.medium {
+  border-color: #eab308;
+  background: #713f12;
+  color: #fef08a;
+}
+
+.severity.low,
+.demo-risk.low,
+.case-priority.low,
+.incident-severity.low {
+  border-color: #3b82f6;
+  background: #1e3a8a;
+  color: #bfdbfe;
+}
+
+.dot.online,
+.settings-dot.healthy,
+.source .dot.online {
+  background: #10b981;
+}
+
+.main {
+  font-size: 14px;
+}
+
+.toplink,
+.sidelink,
+.source b,
+.metric-label,
+.panel-head p,
+.main th,
+.main td,
+.main button,
+.main label,
+.main input,
+.main select,
+.main textarea {
+  font-size: max(12px, 0.88em);
+}
+
+.main small,
+.sidebar small {
+  font-size: max(11px, 0.78em);
+}
+
+.main p {
+  font-size: max(12px, 0.9em);
+  line-height: 1.5;
+}
+
+.toplink,
+.sidelink,
+.source,
+.demo-table th,
+.demo-table td,
+.sys-row,
+.stored-event,
+.metric,
+.panel {
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+input,
+select,
+textarea {
+  color: var(--text-primary);
+  background-color: #0f172a;
+  border-color: var(--line);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-tertiary);
+}
+
+@media (max-width: 680px) {
+  .sidebar {
+    background: #111c30;
+  }
+}

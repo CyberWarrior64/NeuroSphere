@@ -5,6 +5,7 @@ NeuroSphere currently has a research demo plus an early, optional Java platform 
 ## Current capabilities
 
 - React SOC dashboard serves clearly labeled fictional simulation data alongside real AI and platform/database readiness status and model outputs. The browser preview is available at 127.0.0.1:8765 through the SSH tunnel.
+- SOC interface uses bundled IBM Plex Sans and IBM Plex Mono fonts, tabular numerals for changing values, and a high-contrast slate dark palette for dense operational data.
 - Authenticated flow analysis sends the 67-feature request through Spring Boot; the API calls the private FastAPI service and stores only model scores, classifications, flags, model version, timestamp, and submitting username in MySQL. Raw feature vectors are not retained.
 - The Digital Twin Lab runs three deterministic scenarios against four virtual assets entirely in the browser; it saves the latest 10 run reports in browser storage and exports JSON. It is isolated from live capture, AI inference, and response actions.
 - Endpoint Security shows live read-only telemetry from the Ubuntu host running the AI Engine (host health plus aggregate SSH authentication counts); its separate sample inventory remains fictional. Threat Intelligence, Vulnerability Management, and Playbooks remain interactive training views. No endpoint response agent, external feed, vulnerability scanner, or response automation is connected.
