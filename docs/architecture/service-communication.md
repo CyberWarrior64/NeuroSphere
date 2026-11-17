@@ -42,6 +42,8 @@ Use private HTTP with bounded payloads/timeouts, service identity, network isola
 
 The AI Engine exposes GET /api/v1/endpoint/telemetry for the Linux host on which it runs. The route reads local CPU/load, memory, root filesystem free space, uptime, and at most 500 SSH service journal records from the prior 24 hours. It returns aggregate failed/successful SSH login counts only; raw journal messages, usernames, and addresses are neither returned nor stored. The dashboard polls this endpoint every 30 seconds. This is read-only host telemetry, not an endpoint detection/response agent.
 
+The AI Engine exposes GET /api/v1/deception/cowrie/status for the local Cowrie sensor. It verifies the Cowrie PID and loopback-only SSH configuration, then reads a bounded tail of the Cowrie JSON audit log and returns 24-hour aggregate counts and event-type totals. It never returns raw Cowrie records, credential fields, client addresses, or command text. Cowrie is bound to 127.0.0.1:2222; Telnet is disabled. Raw audit logs remain on the Ubuntu data volume and have no configured retention schedule yet.
+
 ## Target asynchronous events
 
 RabbitMQ is not configured today. Define durable exchanges/queues, routing keys, retries, dead-letter policy, ownership, and retention before use. Proposed versioned envelope:

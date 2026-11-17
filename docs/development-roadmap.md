@@ -22,7 +22,7 @@ Verified demo components:
 - Java 21 / Spring Boot 3.5.16 provides login, JWT-protected routes, Flyway V1–V6, database-backed JWT logout revocation, a public database-readiness probe, an authenticated AI proxy, protected analysis history, authenticated case management, analyst-promoted review alerts, and manually correlated incidents linked to review alerts with MySQL activity history. MySQL 8.4 and platform-api are running on Ubuntu; Flyway schema version 6 is up to date. The earlier 12 H2-backed tests predate case, alert, and incident workflows; the current package build skipped tests. Alert/case/incident endpoints remain without dedicated automated coverage.
 - A source-only Git checkpoint exists on the Ubuntu host on branch main (initial commit c5fa200). No remote is configured, so the checkpoint is not an off-machine backup.
 
-The dashboard uses Spring for authenticated flow analysis, saved history, and manually created cases; engine status/model metadata come from FastAPI. Both services bind to loopback and are reached through SSH tunneling. The case feature is a basic shared analyst workflow, not a multi-tenant incident-management system. No production deployment, external alert/source integrations beyond analyst-promoted capture events, managed collector, persistent server-side digital twin, Cowrie analytics, RabbitMQ, WebSocket, or approved response system is implemented. The live runner is a separate CLI workflow; its metadata prediction results appear in the dashboard section named “Stored detection records,” separate from the simulated alert, case, and asset examples. Refer to docs/demo-runbook.md.
+The dashboard uses Spring for authenticated flow analysis, saved history, and manually created cases; engine status/model metadata come from FastAPI. Both services bind to loopback and are reached through SSH tunneling. The case feature is a basic shared analyst workflow, not a multi-tenant incident-management system. No production deployment, external alert/source integrations beyond analyst-promoted capture events, managed collector, persistent server-side digital twin, network-facing deception deployment, RabbitMQ, WebSocket, or approved response system is implemented. The live runner is a separate CLI workflow; its metadata prediction results appear in the dashboard section named “Stored detection records,” separate from the simulated alert, case, and asset examples. Refer to docs/demo-runbook.md.
 
 ## Phases and current status
 
@@ -58,9 +58,9 @@ Outstanding: versioned topology and scenario contracts, shared server-side run p
 
 Exit criteria: reproducible isolated scenarios, provenance labels, and enforced separation from production endpoints.
 
-### Phase 5 — Deception Analytics — Not started
+### Phase 5 — Deception Analytics — Local lab slice
 
-No Cowrie deployment or honeypot event ingestion currently exists.
+Cowrie 3.1.1 runs as a loopback-only SSH honeypot on 127.0.0.1:2222. The AI Engine reports service status and aggregate event counts from the local JSON audit log; raw credentials, addresses, and command text are not returned to the dashboard. Telnet is disabled. There is no external network exposure, long-term retention policy, or production sensor management.
 
 Exit criteria: approved and isolated decoy deployment, parsed and sourced events, retention, containment, and operational ownership documented.
 

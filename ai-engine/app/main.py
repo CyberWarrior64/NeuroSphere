@@ -22,6 +22,7 @@ from app.api.detection_v2 import (
 from app.api.demo_events import router as demo_events_router
 from app.api.capture_status import router as capture_status_router
 from app.api.endpoint_telemetry import router as endpoint_telemetry_router
+from app.api.deception_status import router as deception_status_router
 
 from app.api.detection_validated import (
     router as validated_router,
@@ -70,6 +71,7 @@ app.include_router(validated_router)
 app.include_router(demo_events_router)
 app.include_router(capture_status_router)
 app.include_router(endpoint_telemetry_router)
+app.include_router(deception_status_router)
 
 
 FRONTEND_DIST = Path(__file__).resolve().parents[2] / "frontend" / "dist"

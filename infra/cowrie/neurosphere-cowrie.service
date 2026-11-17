@@ -1,0 +1,18 @@
+[Unit]
+Description=NeuroSphere loopback Cowrie SSH honeypot
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/mnt/neurosphere/cowrie
+ExecStart=/mnt/neurosphere/cowrie/cowrie-env/bin/twistd --umask=0022 --nodaemon --pidfile=/mnt/neurosphere/cowrie/var/run/cowrie.pid --logger cowrie.python.logfile.stdoutLogger cowrie
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/mnt/neurosphere/cowrie
+
+[Install]
+WantedBy=default.target

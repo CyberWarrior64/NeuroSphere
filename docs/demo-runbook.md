@@ -36,6 +36,23 @@ Keep the SSH terminal open and browse to http://127.0.0.1:8765/. If model status
 
 The simulation toggle on the dashboard only shows or hides the fictional SOC examples. It does not start/stop capture or change model inference.
 
+## Local Cowrie deception sensor
+
+The Ubuntu demo runs Cowrie 3.1.1 on loopback SSH port 2222. It is isolated from LAN and Internet clients; Telnet and SSH forwarding are disabled. Check sensor state and aggregate counts with:
+
+    curl -fsS http://127.0.0.1:8000/api/v1/deception/cowrie/status
+
+To start the locally installed service after a host restart:
+
+    cd /mnt/neurosphere/cowrie
+    PATH=/mnt/neurosphere/cowrie/cowrie-env/bin:$PATH ./cowrie-env/bin/cowrie start
+
+Stop it with:
+
+    PATH=/mnt/neurosphere/cowrie/cowrie-env/bin:$PATH ./cowrie-env/bin/cowrie stop
+
+The source card changes to **Connected** only while Cowrie is running with the localhost-only listener. Its event counts are local audit totals, not detections or alerts. Raw Cowrie logs are stored under `/mnt/neurosphere/cowrie/var/log/cowrie/`; the dashboard API does not expose their raw credential, client-address, or command fields. See the [official Cowrie installation guide](https://docs.cowrie.org/en/latest/INSTALL.html) and [Cowrie configuration](https://github.com/cowrie/cowrie/blob/main/src/cowrie/data/etc/cowrie.cfg.dist).
+
 ## Run an isolated Digital Twin scenario
 
 Open **Digital Twin** from the sidebar. Select External reconnaissance, Credential spray, or Suspicious data movement, then choose **Run scenario**. The page animates events across four virtual assets and saves up to 10 completed run reports in that browser’s local storage. Use Export JSON to download a report; runs are not shared across devices. All events are fictional. The runner makes no network requests, does not call the AI engine, and does not perform security actions. Use the separate Flow Analysis page for real model inference and the capture runner for authorized packet analysis.

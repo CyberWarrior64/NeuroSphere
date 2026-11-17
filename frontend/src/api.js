@@ -41,6 +41,10 @@ export async function loadEndpointTelemetry() {
   return (await http.get("/api/v1/endpoint/telemetry")).data;
 }
 
+export async function loadCowrieStatus() {
+  return (await http.get("/api/v1/deception/cowrie/status")).data;
+}
+
 export async function loadDemoEvents(limit = 8) {
   return (await http.get("/api/v1/demo/events", { params: { limit } })).data;
 }
