@@ -921,6 +921,28 @@ textarea::placeholder,
   border-color: #e2e8f0;
 }
 
+.recent-cases {
+  grid-column: 2;
+  grid-row: 2 / 4;
+}
+
+.recent-cases .demo-cases {
+  margin-top: 10px;
+}
+
+.recent-cases .empty {
+  min-height: 255px;
+}
+
+.case-preview-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
 /* Keep secondary SOC workflows consistent with the light overview. */
 .alert-login-note,
 .alert-promote-form,
@@ -1117,6 +1139,15 @@ textarea::placeholder,
 @media (max-width: 680px) {
   .sidebar {
     background: #fbfcfe;
+  }
+
+  .recent-cases {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .recent-cases .empty {
+    min-height: 150px;
   }
 
   .mobile-title {
