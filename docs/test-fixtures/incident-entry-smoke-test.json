@@ -1,0 +1,5 @@
+{
+  "title": "Smoke test — simulated incident workflow",
+  "description": "QA record only. Use this text to verify incident creation, status updates, and analyst notes. No real alert is linked and no security response is triggered.",
+  "severity": "LOW"
+}

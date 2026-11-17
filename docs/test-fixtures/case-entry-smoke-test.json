@@ -1,0 +1,6 @@
+{
+  "title": "Smoke test — synthetic flow review",
+  "description": "QA record only. Use this text to verify case creation, status updates, notes, and the dashboard Recent Cases panel. It is not based on observed network activity.",
+  "priority": "LOW",
+  "sourceType": "MANUAL"
+}

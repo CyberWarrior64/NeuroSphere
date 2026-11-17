@@ -82,4 +82,8 @@ Simulation values are fictional and are not observed network events. Detection o
 
 The Java API remains an early platform slice. Production gaps include account recovery and refresh tokens, a general audit log, tenant isolation and case ownership, multi-source feed governance and IOC-to-traffic correlation, incident correlation beyond analyst-promoted capture signals, managed collectors, persistent server-side digital twin, network-facing Cowrie operations and retention, RabbitMQ/WebSocket orchestration, approved response workflows, security review, restore/rollback rehearsal, and repeatable production deployment.
 
+## Smoke-test files
+
+Use the [smoke-test guide and fixtures](docs/test-fixtures/README.md) to check flow analysis, offline PCAP replay, cases, incidents, and the demo modules. The full pack is also available as [a ZIP download](docs/neurosphere-smoke-test-pack.zip).
+
 See [the demo runbook](docs/demo-runbook.md), [the phased roadmap](docs/development-roadmap.md), [the platform API notes](platform-api/README.md), and [architecture documents](docs/architecture/).
