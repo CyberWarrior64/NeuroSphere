@@ -30,6 +30,9 @@ public class PlatformUser {
     @Column(nullable = false)
     private boolean enabled = true;
 
+    @Column(name = "credential_version", nullable = false)
+    private int credentialVersion;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
@@ -50,10 +53,13 @@ public class PlatformUser {
     public String getUsername() { return username; }
     public String getPasswordHash() { return passwordHash; }
     public boolean isEnabled() { return enabled; }
+    public int getCredentialVersion() { return credentialVersion; }
     public Instant getCreatedAt() { return createdAt; }
     public Set<String> getRoles() { return Set.copyOf(roles); }
 
     public void setEnabled(boolean enabled) { this.enabled = enabled; }
+    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+    public void incrementCredentialVersion() { this.credentialVersion++; }
 
     @jakarta.persistence.PrePersist
     void beforeInsert() {

@@ -6,6 +6,8 @@ This is a separate Java 21 / Spring Boot 3.5.16 service. It adds an authenticate
 
 - `POST /api/v1/auth/login` — public username/password login. Returns `access_token`, `token_type`, `expires_in` (900 seconds), and `roles`.
 - `POST /api/v1/auth/logout` — authenticated; revokes the presented access token immediately. Returns 204.
+- `POST /api/v1/auth/change-password` — authenticated; requires the current password and a new password of at least 16 characters. Changing a password invalidates every existing session for that account.
+- `POST /api/v1/auth/password-reset` — public; accepts a one-time server-issued recovery code and a new password of at least 16 characters. Codes expire after 30 minutes and can be used once.
 - `GET /api/v1/platform/status` — public readiness probe; checks MySQL with `SELECT 1` and returns 503 if the database is unavailable.
 - `GET /api/v1/platform/health` — bearer token required.
 - `GET /api/v1/platform/me` — bearer token required; returns the authenticated username and roles.
@@ -45,6 +47,8 @@ Generate a signing secret outside source control, for example with `openssl rand
 
 An initial admin account is created only if both `NS_BOOTSTRAP_USERNAME` and `NS_BOOTSTRAP_PASSWORD` are supplied and the user table is empty. The username must be 3–64 lowercase letters, digits, dot, underscore, or hyphen; the password must be at least 16 characters. The password is stored as BCrypt. Remove the bootstrap variables after the first start.
 
+Password recovery uses an offline administrator-issued code because this demo has no email delivery service. From the project root on Ubuntu, run `bash infra/issue-password-reset-code.sh demo-admin` and give the displayed code to the account owner through a trusted channel. The script replaces any previous code for that account. The code is shown once, stored only as a SHA-256 digest, and expires after 30 minutes. Do not paste recovery codes into source files or commit them.
+
 Flyway owns schema changes; Hibernate validates the MySQL schema. The service listens on loopback by default. Keep it behind the existing SSH tunnel; do not publish it to a public interface.
 
 ## Build and test
@@ -59,8 +63,8 @@ Before starting the local Ubuntu Compose stack, package the JAR from the project
 
 Compose mounts platform-api/target/platform-api-0.1.0.jar read-only and runs it from the Maven/Temurin image, avoiding a separate API image build. The Compose service uses Linux host networking, keeps the app bound to 127.0.0.1, and reaches the existing AI engine and loopback-published MySQL port. Do not run the service with missing DB/JWT configuration. This host-network setup is specific to Linux, not Docker Desktop on Windows/macOS.
 
-The existing integration tests use H2 and a test-only signing secret. The 12 tests cover login/security behavior, token revocation, protected history reads, and score-only analysis metadata against a mocked AI response; they predate the case-management feature and do not cover its endpoints or connect to production MySQL/AI. The case/alert/incident packages were compiled with tests skipped. All authenticated accounts share this demo workspace; tenant isolation and per-role assignment are not implemented.
+The integration tests use H2 and a test-only signing secret. The 14 tests cover login/security behavior, token revocation, password changes and one-time recovery, protected history reads, and score-only analysis metadata against a mocked AI response; they do not connect to production MySQL/AI. The case/alert/incident packages have no dedicated endpoint tests. All authenticated accounts share this demo workspace; tenant isolation and per-role assignment are not implemented.
 
 ## Current boundary
 
-This slice provides authentication, migration-backed users and flow-result history, an authenticated AI proxy, and shared MySQL-backed cases, analyst-promoted alerts, and incidents linked by analysts with activity history. The React dashboard uses the platform session for flow submissions, case management, and alert review. It does not include user registration, password reset, account recovery, refresh tokens, formal retention, a general authentication audit log, tenant isolation, incident correlation and external alert-source integrations, or production deployment.
+This slice provides authentication, migration-backed users and flow-result history, password change and one-time recovery codes, an authenticated AI proxy, and shared MySQL-backed cases, analyst-promoted alerts, and incidents linked by analysts with activity history. The React dashboard uses the platform session for flow submissions, case management, and alert review. It does not include user registration, email-based recovery, refresh tokens, formal retention, a general authentication audit log, tenant isolation, incident correlation and external alert-source integrations, or production deployment.

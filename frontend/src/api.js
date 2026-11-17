@@ -13,6 +13,14 @@ export async function loadPlatformStatus() {
 export async function loginToPlatform(username, password) {
   return (await platformHttp.post("/api/v1/auth/login", { username, password })).data;
 }
+export async function changePlatformPassword(accessToken, currentPassword, newPassword) {
+  await platformHttp.post("/api/v1/auth/change-password", { currentPassword, newPassword }, {
+    headers: { Authorization: "Bearer " + accessToken },
+  });
+}
+export async function resetPlatformPassword(recoveryCode, newPassword) {
+  await platformHttp.post("/api/v1/auth/password-reset", { recoveryCode, newPassword });
+}
 export async function logoutFromPlatform(accessToken) {
   if (!accessToken) return;
   await platformHttp.post("/api/v1/auth/logout", null, {

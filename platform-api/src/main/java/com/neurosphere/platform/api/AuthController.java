@@ -2,6 +2,7 @@ package com.neurosphere.platform.api;
 
 import com.neurosphere.platform.security.JwtTokenService;
 import com.neurosphere.platform.security.TokenRevocationService;
+import com.neurosphere.platform.users.PasswordCredentialService;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Locale;
@@ -26,17 +27,32 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenService tokens;
     private final TokenRevocationService revocations;
+    private final PasswordCredentialService credentials;
 
     public AuthController(AuthenticationManager authenticationManager, JwtTokenService tokens,
-                          TokenRevocationService revocations) {
+                          TokenRevocationService revocations, PasswordCredentialService credentials) {
         this.authenticationManager = authenticationManager;
         this.tokens = tokens;
         this.revocations = revocations;
+        this.credentials = credentials;
     }
 
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@AuthenticationPrincipal Jwt token) {
         revocations.revoke(token.getId(), token.getExpiresAt());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<Void> changePassword(@AuthenticationPrincipal Jwt token,
+                                               @Valid @RequestBody ChangePasswordRequest request) {
+        credentials.changePassword(token.getSubject(), request.currentPassword(), request.newPassword());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/password-reset")
+    public ResponseEntity<Void> resetPassword(@Valid @RequestBody PasswordResetRequest request) {
+        credentials.resetPassword(request.recoveryCode(), request.newPassword());
         return ResponseEntity.noContent().build();
     }
 

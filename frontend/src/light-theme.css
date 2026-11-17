@@ -907,6 +907,29 @@ textarea::placeholder,
   border-color: #e2e8f0;
 }
 
+.password-recovery-link {
+  justify-self: center;
+  color: #2863a6;
+  font-size: 9px;
+  text-decoration: none;
+}
+
+.password-recovery-link:hover {
+  color: #174d8c;
+  text-decoration: underline;
+}
+
+.reset-signin-link {
+  display: block;
+  margin-top: 7px;
+}
+
+.password-change-note {
+  color: #60738a;
+  font-size: 8px;
+  line-height: 1.5;
+}
+
 .sys-row > small.green,
 .source .dot.online {
   color: #087a55;

@@ -7,9 +7,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.neurosphere.platform.flows.FlowAnalysisRecord;
 import com.neurosphere.platform.flows.FlowAnalysisRepository;
+import com.neurosphere.platform.users.PlatformPasswordResetToken;
+import com.neurosphere.platform.users.PlatformPasswordResetTokenRepository;
 import com.neurosphere.platform.users.PlatformUser;
 import com.neurosphere.platform.users.PlatformUserRepository;
 import java.time.Instant;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HexFormat;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,12 +38,14 @@ import org.springframework.test.web.servlet.MockMvc;
 class PlatformApiSecurityTest {
     @Autowired MockMvc mvc;
     @Autowired PlatformUserRepository users;
+    @Autowired PlatformPasswordResetTokenRepository resetTokens;
     @Autowired FlowAnalysisRepository analyses;
     @Autowired PasswordEncoder passwords;
     @Autowired JwtEncoder jwtEncoder;
 
     @BeforeEach
     void seedUsers() {
+        resetTokens.deleteAll();
         users.deleteAll();
         users.save(new PlatformUser("analyst", passwords.encode("correct horse battery"), Set.of("ANALYST")));
         users.save(new PlatformUser("admin", passwords.encode("correct horse battery"), Set.of("ADMIN")));
@@ -73,6 +81,54 @@ class PlatformApiSecurityTest {
         mvc.perform(get("/api/v1/platform/me").header("Authorization", "Bearer " + token))
                 .andExpect(status().isUnauthorized());
         mvc.perform(get("/api/v1/platform/me").header("Authorization", "Bearer " + otherToken))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void passwordChangeVerifiesCurrentPasswordAndInvalidatesAllSessionsForThatUser() throws Exception {
+        String firstToken = login("analyst", "correct horse battery");
+        String secondToken = login("analyst", "correct horse battery");
+        String adminToken = login("admin", "correct horse battery");
+        mvc.perform(post("/api/v1/auth/change-password")
+                        .header("Authorization", "Bearer " + firstToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"currentPassword\":\"wrong password\",\"newPassword\":\"a much longer replacement phrase\"}"))
+                .andExpect(status().isBadRequest());
+        mvc.perform(post("/api/v1/auth/change-password")
+                        .header("Authorization", "Bearer " + firstToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"currentPassword\":\"correct horse battery\",\"newPassword\":\"a much longer replacement phrase\"}"))
+                .andExpect(status().isNoContent());
+        mvc.perform(get("/api/v1/platform/me").header("Authorization", "Bearer " + firstToken))
+                .andExpect(status().isUnauthorized());
+        mvc.perform(get("/api/v1/platform/me").header("Authorization", "Bearer " + secondToken))
+                .andExpect(status().isUnauthorized());
+        mvc.perform(get("/api/v1/platform/me").header("Authorization", "Bearer " + adminToken))
+                .andExpect(status().isOk());
+        String newToken = login("analyst", "a much longer replacement phrase");
+        mvc.perform(get("/api/v1/platform/me").header("Authorization", "Bearer " + newToken))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void oneTimeRecoveryCodeResetsPasswordAndCannotBeReused() throws Exception {
+        String previousToken = login("analyst", "correct horse battery");
+        String recoveryCode = "ab".repeat(32);
+        PlatformUser analyst = users.findByUsername("analyst").orElseThrow();
+        resetTokens.save(new PlatformPasswordResetToken(sha256(recoveryCode), analyst.getId(), Instant.now().plusSeconds(1800)));
+
+        mvc.perform(post("/api/v1/auth/password-reset")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"recoveryCode\":\"" + recoveryCode + "\",\"newPassword\":\"new recovery password phrase\"}"))
+                .andExpect(status().isNoContent());
+        mvc.perform(get("/api/v1/platform/me").header("Authorization", "Bearer " + previousToken))
+                .andExpect(status().isUnauthorized());
+        mvc.perform(post("/api/v1/auth/password-reset")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"recoveryCode\":\"" + recoveryCode + "\",\"newPassword\":\"another replacement password\"}"))
+                .andExpect(status().isBadRequest());
+        String newToken = login("analyst", "new recovery password phrase");
+        mvc.perform(get("/api/v1/platform/me").header("Authorization", "Bearer " + newToken))
                 .andExpect(status().isOk());
     }
 
@@ -149,5 +205,10 @@ class PlatformApiSecurityTest {
                 .andExpect(jsonPath("$.roles[0]").exists())
                 .andReturn().getResponse().getContentAsString();
         return new com.fasterxml.jackson.databind.ObjectMapper().readTree(response).get("access_token").asText();
+    }
+
+    private String sha256(String value) throws NoSuchAlgorithmException {
+        return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
+                .digest(value.getBytes(StandardCharsets.UTF_8)));
     }
 }

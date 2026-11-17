@@ -74,7 +74,9 @@ public class SecurityConfiguration {
             .authorizeHttpRequests(auth -> auth
                 .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                 .requestMatchers("/api/v1/auth/login").permitAll()
+                .requestMatchers("/api/v1/auth/password-reset").permitAll()
                 .requestMatchers("/api/v1/auth/logout").authenticated()
+                .requestMatchers("/api/v1/auth/change-password").authenticated()
                 .requestMatchers("/api/v1/platform/status").permitAll()
                 .requestMatchers("/api/v1/platform/admin/**").hasRole("ADMIN")
                 .requestMatchers("/api/v1/platform/**").authenticated()
