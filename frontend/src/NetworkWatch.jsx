@@ -49,13 +49,13 @@ export default function NetworkWatch() {
     <div className="network-watch-boundary"><AlertTriangle size={15}/><span><b>Manual capture only.</b> No continuously connected sensor is configured. The CLI runner reports its own status; this page does not claim independent traffic monitoring.</span></div>
     {error && <div className="error network-watch-error">{error}</div>}
     <div className="network-watch-grid">
-      <article className="panel network-watch-stat"><div><Radio size={15}/><small>Capture runner</small></div><b>{runner?.status === "running" ? "Running" : runner?.status === "stale" ? "Stale" : runner?.status === "stopped" ? "Stopped" : runner?.status === "idle" ? "Not run" : "Unavailable"}</b><span>{runner?.capture_mode === "live" ? "Live interface mode" : runner?.capture_mode === "pcap" ? "PCAP replay mode" : "No active capture mode"}</span></article>
+      <article className="panel network-watch-stat"><div><Radio size={15}/><small>Network capture</small></div><b>{runner?.status === "running" ? "Running" : runner?.status === "stale" ? "Stale" : runner?.status === "stopped" ? "Stopped" : runner?.status === "idle" ? "Not run" : "Unavailable"}</b><span>{runner?.capture_mode === "live" ? "Live interface mode" : runner?.capture_mode === "pcap" ? "PCAP replay mode" : "No active capture mode"}</span></article>
       <article className="panel network-watch-stat"><div><CheckCircle2 size={15}/><small>Adapter</small></div><b>{readiness?.adapter_available ? "Available" : readiness ? "Unavailable" : "Loading"}</b><span>{readiness?.capture_tool || "CICFlowMeter adapter"}</span></article>
       <article className="panel network-watch-stat"><div><Waypoints size={15}/><small>Feature mapping</small></div><b>{readiness ? readiness.mapped_feature_count + " / " + readiness.model_feature_count : "Loading"}</b><span>Named model features mapped</span></article>
       <article className="panel network-watch-stat"><div><ShieldCheck size={15}/><small>Parity certification</small></div><b>{readiness?.feature_parity_verified ? "Verified" : readiness ? "Unverified" : "Loading"}</b><span>Experimental research adapter</span></article>
     </div>
     <section className="panel network-runner">
-      <div className="panel-head"><div><h2>Runner status</h2><p>Heartbeat is runner-reported; stale after 45 seconds without an update.</p></div><CaptureState status={runner?.status}/></div>
+      <div className="panel-head"><div><h2>Capture status</h2><p>Heartbeat is client-reported; stale after 45 seconds without an update.</p></div><CaptureState status={runner?.status}/></div>
       <div className="network-runner-meta"><span><Clock3 size={13}/>{runner?.last_heartbeat_at ? "Last heartbeat " + new Date(runner.last_heartbeat_at).toLocaleString() : "No heartbeat recorded"}</span><span>{runner?.active_sessions || 0} active runner session{runner?.active_sessions === 1 ? "" : "s"}</span><span>{updated ? "Readiness checked " + new Date(updated).toLocaleTimeString() : "Checking readiness"}</span></div>
     </section>
     {comparison && <section className="panel network-comparison">

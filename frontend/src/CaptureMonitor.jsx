@@ -83,7 +83,7 @@ export default function CaptureMonitor() {
       <article className="panel capture-stat"><small>Detector signals</small><b>{flaggedCount}</b><span>At least one model flagged · not confirmed incidents</span></article>
     </div>
     <section className="panel capture-runner-panel">
-      <div className="panel-head"><div><h2>Manual capture runner</h2><p>Client-reported status · no independent sensor attestation</p></div><span className={"record-status " + (runnerState === "running" ? "online" : runnerState === "stale" ? "offline" : "loading")}>{stateLabel(runnerState).toUpperCase()}</span></div>
+      <div className="panel-head"><div><h2>Network capture</h2><p>CLI session status · no independent sensor attestation</p></div><span className={"record-status " + (runnerState === "running" ? "online" : runnerState === "stale" ? "offline" : "loading")}>{stateLabel(runnerState).toUpperCase()}</span></div>
       <div className="capture-runner-details"><span><Wifi size={13}/>{runner?.capture_mode === "live" ? "Live interface mode" : runner?.capture_mode === "pcap" ? "PCAP replay mode" : "No active capture mode"}</span><span><Clock3 size={13}/>{runner?.last_heartbeat_at ? "Last heartbeat " + formatTime(runner.last_heartbeat_at) : "No heartbeat recorded"}</span><span>{runner?.active_sessions || 0} active runner session{runner?.active_sessions === 1 ? "" : "s"}</span></div>
     </section>
     <section className="panel capture-table-panel">
