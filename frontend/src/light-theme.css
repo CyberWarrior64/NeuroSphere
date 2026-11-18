@@ -1617,3 +1617,36 @@ textarea::placeholder,
     font-size: 20px;
   }
 }
+
+/* Guest profile identity and a quieter, more compact dashboard metric scale. */
+.analyst > .analyst-avatar {
+  display: grid;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 1px solid #b9dce4;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 28%, #ffffff 0, #e8f5f6 48%, #e4edf9 100%);
+  color: #087e78;
+  box-shadow: inset 0 0 0 2px rgb(255 255 255 / 68%);
+}
+
+.analyst-avatar svg {
+  stroke-width: 2;
+}
+
+.main .metric > b {
+  font-size: 20px;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+
+.main .metric > small {
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.main .metric-state {
+  font-size: 9px;
+}

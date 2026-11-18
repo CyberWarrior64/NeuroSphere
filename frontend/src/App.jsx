@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { NavLink, Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import { Activity, AlertTriangle, Archive, Bell, Blocks, BookOpenCheck, Bot, Bug, ChevronDown, ChevronRight, ClipboardList, Clock3, Cpu, Database, FileBarChart2, FileSearch, Globe2, LayoutDashboard, ListFilter, LockKeyhole, Network, Plus, Server, Settings, ShieldAlert, ShieldCheck, Siren, Upload, Wifi, LogIn, LogOut } from "lucide-react";
+import { Activity, AlertTriangle, Archive, Bell, Blocks, BookOpenCheck, Bot, BrainCircuit, Bug, ChevronDown, ChevronRight, ClipboardList, Clock3, Cpu, Database, FileBarChart2, FileSearch, Globe2, LayoutDashboard, ListFilter, LockKeyhole, Network, Plus, Server, Settings, ShieldAlert, ShieldCheck, Siren, Upload, Wifi, LogIn, LogOut } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import TwinLab from "./TwinLab.jsx";
 import CaptureMonitor from "./CaptureMonitor.jsx";
@@ -23,7 +23,7 @@ function Header({title,SectionIcon,online,session,onSignOut}){
   return <header className="topbar">
     <NavLink to="/" className="brand"><span className="brand-mark"><ShieldCheck size={21}/></span><span><b>NEUROSPHERE</b><small>SECURITY OPERATIONS</small></span></NavLink>
     <div className="header-current" aria-live="polite"><span className="header-current-icon"><SectionIcon size={15}/></span><span className="header-current-copy"><small>OPEN SECTION</small><b>{title}</b></span></div>
-    <div className="head-actions"><NavLink to={session?"/settings":"/login"} className="analyst" title={session?"Open analyst settings":"Sign in to configure analyst access"} aria-label={session?"Open analyst settings":"Sign in as analyst"}><span>{session?"AU":"NS"}</span><div><b>{session?session.username:"Local analyst"}</b><small>{session?session.roles.join(", ")||"Platform user":"Research mode"}</small></div><ChevronDown size={13}/></NavLink>{session&&<button className="logout-btn" onClick={onSignOut}><LogOut size={13}/>Sign out</button>}<NavLink to="/login" className="login-head-link">{session?"Session":"Sign in"}</NavLink><span className="online-label"><Dot state={online?"online":"offline"}/>{online?"Engine online":"Engine offline"}</span></div>
+    <div className="head-actions"><NavLink to={session?"/settings":"/login"} className="analyst" title={session?"Open analyst settings":"Sign in to configure analyst access"} aria-label={session?"Open analyst settings":"Sign in as analyst"}><span className="analyst-avatar">{session?"AU":<BrainCircuit size={16} strokeWidth={2}/>}</span><div><b>{session?session.username:"Guest"}</b><small>{session?session.roles.join(", ")||"Platform user":"Research mode"}</small></div><ChevronDown size={13}/></NavLink>{session&&<button className="logout-btn" onClick={onSignOut}><LogOut size={13}/>Sign out</button>}<NavLink to="/login" className="login-head-link">{session?"Session":"Sign in"}</NavLink><span className="online-label"><Dot state={online?"online":"offline"}/>{online?"Engine online":"Engine offline"}</span></div>
   </header>;
 }
 
