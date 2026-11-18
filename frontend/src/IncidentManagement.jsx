@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { AlertTriangle, Archive, Clock3, FilePlus2, Link2, MessageSquareText, RefreshCw, Send, ShieldAlert } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { addIncidentNote, changeIncidentStatus, createIncident, linkAlertToIncident, loadAlerts, loadIncident, loadIncidents } from "./api.js";
+import { displayUsername } from "./display.js";
 import IncidentSimulation from "./IncidentSimulation.jsx";
 import "./incident-management.css";
 
@@ -62,7 +63,7 @@ function ManagedIncidents({ session }) {
     {error&&<div className="error case-error"><AlertTriangle size={13}/>{error}</div>}
     <div className="case-stats"><article className="panel"><small>Open</small><b>{counts.open}</b></article><article className="panel"><small>Investigating</small><b>{counts.investigating}</b></article><article className="panel"><small>Resolved / closed</small><b>{counts.resolved}</b></article><article className="panel"><small>Linked alerts</small><b>{detail?.alerts?.length||0}</b></article></div>
     <div className="case-layout">
-      <section className="panel case-list-panel"><div className="panel-head"><div><h3>Incident records</h3><p>Latest 100 · {session.username}</p></div><Archive size={14}/></div>
+      <section className="panel case-list-panel"><div className="panel-head"><div><h3>Incident records</h3><p>Latest 100 · {displayUsername(session.username)}</p></div><Archive size={14}/></div>
         <div className="case-filter"><label>Status <select value={filter} onChange={e=>setFilter(e.target.value)}><option value="ALL">All statuses</option>{Object.entries(labels).map(([v,l])=><option key={v} value={v}>{l}</option>)}</select></label></div>
         {!visible.length?<div className="case-empty"><Archive size={17}/><b>{incidents.length?"No incidents match this filter":loading?"Loading incidents…":"No incident records yet"}</b><span>{incidents.length?"Choose a different status filter.":"Create an incident after analyst review."}</span></div>:<div className="case-list">{visible.map(item=><button key={item.id} className={"case-list-item"+(selectedId===item.id?" selected":"")} onClick={()=>setSelectedId(item.id)}><span className={"case-priority "+item.severity.toLowerCase()}>{item.severity}</span><b>{item.title}</b><small>{item.incidentKey} · {labels[item.status]}</small><time>{time(item.updatedAt)}</time></button>)}</div>}
       </section>
@@ -72,7 +73,7 @@ function ManagedIncidents({ session }) {
         </section>
         <section className="panel case-detail">
           {!current?<div className="case-empty"><Archive size={17}/><b>Select an incident</b><span>Details and activity history appear here.</span></div>:<>
-            <div className="panel-head"><div><span className="case-key">{current.incidentKey}</span><h3>{current.title}</h3><p>Opened by {current.createdBy} · {time(current.createdAt)}</p></div><span className={"case-priority "+current.severity.toLowerCase()}>{current.severity}</span></div>
+            <div className="panel-head"><div><span className="case-key">{current.incidentKey}</span><h3>{current.title}</h3><p>Opened by {displayUsername(current.createdBy)} · {time(current.createdAt)}</p></div><span className={"case-priority "+current.severity.toLowerCase()}>{current.severity}</span></div>
             <p className="case-description">{current.description}</p>
             <label className="case-status-control">Status<select disabled={busy} value={current.status} onChange={e=>changeStatus(e.target.value)}>{Object.entries(labels).map(([v,l])=><option key={v} value={v}>{l}</option>)}</select></label>
             <div className="incident-linked-alerts"><div className="incident-subhead"><h4>Linked review alerts</h4><span><Link2 size={11}/>{detail.alerts.length}</span></div>
@@ -80,7 +81,7 @@ function ManagedIncidents({ session }) {
               <form className="incident-link-form" onSubmit={addAlertLink}><select value={alertToLink} onChange={e=>setAlertToLink(e.target.value)}><option value="">Select an open review alert</option>{linkable.map(alert=><option key={alert.id} value={alert.id}>{alert.alertKey} · {alert.title}</option>)}</select><button className="secondary-btn small" disabled={busy||!alertToLink}><Link2 size={11}/>Link alert</button></form>
             </div>
             <div className="case-activity-head"><h4>Activity history</h4><span><Clock3 size={11}/>{detail.activity.length} entries</span></div>
-            <div className="case-activity">{detail.activity.map(item=><article key={item.id}><i/><div><b>{item.action.replaceAll("_"," ")}</b><p>{item.details}</p><small>{item.actor} · {time(item.createdAt)}</small></div></article>)}</div>
+            <div className="case-activity">{detail.activity.map(item=><article key={item.id}><i/><div><b>{item.action.replaceAll("_"," ")}</b><p>{item.details}</p><small>{displayUsername(item.actor)} · {time(item.createdAt)}</small></div></article>)}</div>
             <form className="case-note-form" onSubmit={addNote}><label><MessageSquareText size={13}/>Add analyst note</label><textarea maxLength={2000} value={note} onChange={e=>setNote(e.target.value)} placeholder="Add investigation context" required/><button className="secondary-btn" disabled={busy}><Send size={12}/>Add note</button></form>
           </>}
         </section>

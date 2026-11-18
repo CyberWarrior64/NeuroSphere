@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AlertTriangle, Clock3, Database, RefreshCw, ShieldAlert, UserCheck } from "lucide-react";
 import { loadDemoEvents, loadAlerts, createAlertFromCapture, changeAlertStatus } from "./api.js";
+import { displayUsername } from "./display.js";
 import "./capture-monitor.css";
 import "./history-pages.css";
 import "./alert-workflow.css";
@@ -127,7 +128,7 @@ export default function AlertSignals({ session }) {
       <div className="alert-filter"><label>Status<select value={alertFilter} onChange={(event) => setAlertFilter(event.target.value)}><option value="ALL">All statuses</option>{alertStatuses.map((value)=><option key={value} value={value}>{value.replaceAll("_"," ")}</option>)}</select></label></div>
       {!filteredAlerts.length ? <div className="capture-empty"><Database size={18}/><b>{alerts.length ? "No alerts match this status" : "No analyst review alerts saved"}</b><span>{alerts.length ? "Choose a different status filter." : "Choose a flagged prediction below and submit an analyst rationale to create a review alert."}</span></div> :
         <div className="alert-persisted-list">{filteredAlerts.map((alert) => <article className="alert-persisted" key={alert.id}>
-          <div className="alert-persisted-main"><span className={"case-priority " + alert.severity.toLowerCase()}>{alert.severity}</span><b>{alert.title}</b><small>{alert.alertKey} · source prediction {alert.sourceReference.slice(0,8)} · by {alert.createdBy}</small><small>{alert.rfFlagged ? "RF flagged" : "RF clear"} · {alert.ifFlagged ? "IF flagged" : "IF clear"} · capture {formatTime(alert.predictionRecordedAt)} · saved {formatTime(alert.createdAt)}</small><p>{alert.description}</p></div>
+          <div className="alert-persisted-main"><span className={"case-priority " + alert.severity.toLowerCase()}>{alert.severity}</span><b>{alert.title}</b><small>{alert.alertKey} · source prediction {alert.sourceReference.slice(0,8)} · by {displayUsername(alert.createdBy)}</small><small>{alert.rfFlagged ? "RF flagged" : "RF clear"} · {alert.ifFlagged ? "IF flagged" : "IF clear"} · capture {formatTime(alert.predictionRecordedAt)} · saved {formatTime(alert.createdAt)}</small><p>{alert.description}</p></div>
           <label className="alert-status-select">Status<select disabled={busy} value={alert.status} onChange={(event) => updateStatus(alert.id,event.target.value)}>{alertStatuses.map((value)=><option key={value} value={value}>{value.replaceAll("_"," ")}</option>)}</select></label>
         </article>)}</div>}
     </section>

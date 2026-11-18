@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { AlertTriangle, ClipboardList, Download, LockKeyhole, RefreshCw, ShieldCheck } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { loadAuditEvents } from "./api.js";
+import { displayUsername } from "./display.js";
 import "./audit-log.css";
 
 function displayTime(value) {
@@ -67,7 +68,7 @@ export default function AuditLog({ session }) {
   const actions = useMemo(() => [...new Set(events.map((event) => event.action))].sort(), [events]);
   const visibleEvents = useMemo(() => events.filter((event) =>
     (actionFilter === "ALL" || event.action === actionFilter)
-      && (!actorFilter.trim() || event.actor.toLowerCase().includes(actorFilter.trim().toLowerCase()))),
+      && (!actorFilter.trim() || event.actor.toLowerCase().includes(actorFilter.trim().toLowerCase()) || displayUsername(event.actor).toLowerCase().includes(actorFilter.trim().toLowerCase()))),
   [events, actionFilter, actorFilter]);
 
   if (!token) return <div className="page audit-page"><div className="page-head"><div><div className="kicker">Platform security</div><h1>Audit log</h1><p>Review recent analyst actions across platform workflows.</p></div></div><section className="panel audit-gate"><LockKeyhole size={19}/><b>Sign in to continue</b><p>The audit log is restricted to platform administrators.</p><NavLink to="/login" className="primary-btn">Sign in</NavLink></section></div>;
@@ -81,7 +82,7 @@ export default function AuditLog({ session }) {
     <section className="panel audit-panel">
       <div className="panel-head"><div><h2>Workflow activity</h2><p>{events.length} of the latest 200 entries</p></div><ClipboardList size={15}/></div>
       <div className="audit-filters"><label>Analyst <input type="search" value={actorFilter} onChange={(event) => setActorFilter(event.target.value)} placeholder="Filter by username"/></label><label>Action <select value={actionFilter} onChange={(event) => setActionFilter(event.target.value)}><option value="ALL">All actions</option>{actions.map((action) => <option key={action} value={action}>{action.replaceAll("_", " ")}</option>)}</select></label><span>{visibleEvents.length} shown</span></div>
-      {!visibleEvents.length ? <div className="audit-empty"><ClipboardList size={18}/><b>{loading ? "Loading audit events…" : events.length ? "No events match these filters" : "No workflow events recorded yet"}</b><span>Case, alert, and incident actions performed after this feature is deployed will appear here.</span></div> : <div className="audit-table-wrap"><table className="audit-table"><thead><tr><th>Time</th><th>Analyst</th><th>Action</th><th>Record</th><th>Summary</th></tr></thead><tbody>{visibleEvents.map((event) => <tr key={event.id}><td><time>{displayTime(event.occurredAt)}</time></td><td className="audit-actor">{event.actor}</td><td><span className="audit-action">{event.action.replaceAll("_", " ")}</span></td><td><span className="audit-target">{event.targetType} · {event.targetId}</span></td><td>{event.summary}</td></tr>)}</tbody></table></div>}
+      {!visibleEvents.length ? <div className="audit-empty"><ClipboardList size={18}/><b>{loading ? "Loading audit events…" : events.length ? "No events match these filters" : "No workflow events recorded yet"}</b><span>Case, alert, and incident actions performed after this feature is deployed will appear here.</span></div> : <div className="audit-table-wrap"><table className="audit-table"><thead><tr><th>Time</th><th>Analyst</th><th>Action</th><th>Record</th><th>Summary</th></tr></thead><tbody>{visibleEvents.map((event) => <tr key={event.id}><td><time>{displayTime(event.occurredAt)}</time></td><td className="audit-actor">{displayUsername(event.actor)}</td><td><span className="audit-action">{event.action.replaceAll("_", " ")}</span></td><td><span className="audit-target">{event.targetType} · {event.targetId}</span></td><td>{event.summary}</td></tr>)}</tbody></table></div>}
     </section>
     <p className="audit-footnote">Audit events are append-only through the application API and share the transaction of the change they describe. Database administrators can still alter database contents; use restricted database credentials and protected backups for stronger tamper resistance.</p>
   </div>;
