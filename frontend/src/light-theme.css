@@ -242,9 +242,20 @@ body {
   color: #53657c;
 }
 
-.sources-head button,
+.sources-indicator,
 .source > svg {
   color: #6d7f96;
+}
+
+.sources-indicator {
+  display: grid;
+  width: 21px;
+  height: 21px;
+  place-items: center;
+  border: 1px solid #dce6ef;
+  border-radius: 6px;
+  background: #f3f7fb;
+  color: #537393;
 }
 
 .source {

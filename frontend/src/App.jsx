@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { NavLink, Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import { Activity, AlertTriangle, Archive, Bell, Blocks, BookOpenCheck, Bot, BrainCircuit, Bug, ChevronDown, ChevronRight, ClipboardList, Clock3, Cpu, Database, FileBarChart2, FileSearch, Globe2, LayoutDashboard, ListFilter, LockKeyhole, Network, Plus, Server, Settings, ShieldAlert, ShieldCheck, Siren, Upload, Wifi, LogIn, LogOut } from "lucide-react";
+import { Activity, AlertTriangle, Archive, Bell, Blocks, BookOpenCheck, Bot, BrainCircuit, Bug, ChevronDown, ChevronRight, ClipboardList, Clock3, Cpu, Database, FileBarChart2, FileSearch, Globe2, LayoutDashboard, ListFilter, LockKeyhole, Network, Server, Settings, ShieldAlert, ShieldCheck, Siren, Upload, Wifi, LogIn, LogOut } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import TwinLab from "./TwinLab.jsx";
 import CaptureMonitor from "./CaptureMonitor.jsx";
@@ -39,7 +39,7 @@ function Sidebar({online,captureStatus,endpointTelemetry,cowrieStatus,threatFeed
   const sources=[["AI Detection Engine","Hybrid V2 · 67 features",Bot,online,online?"Online":"Offline"],["Network Capture",captureMode,Wifi,captureStatus?.status==="running",captureLabel],["Endpoint Logs",endpointOnline?endpointTelemetry.hostname:"Linux host telemetry",Server,endpointOnline,endpointOnline?"Connected":"Not linked"],["Deception Sensor",cowrieOnline?"Cowrie · loopback lab":"Cowrie honeypot",Bug,cowrieOnline,cowrieLabel],["Threat Feeds",feedNote,Globe2,feedOnline,feedLabel]];
   const visibleNav=session?.roles?.includes("ADMIN")?[...nav.slice(0,-1),["Audit log","/audit",ClipboardList],nav[nav.length-1]]:nav;
   return <aside className="sidebar"><div className="side-scroll"><div className="nav-caption">OPERATIONS</div><nav className="sidenav">{visibleNav.map(([label,path,Icon])=><NavLink key={path} to={path} end={path==="/"} className={({isActive})=>"sidelink"+(isActive?" selected":"")}><Icon size={15}/><span>{label}</span>{label==="Alerts"&&<small>—</small>}</NavLink>)}</nav>
-    <section className="sources"><div className="sources-head">DATA SOURCES<button aria-label="Add source"><Plus size={13}/></button></div>{sources.map(([name,note,Icon,ok,state])=><div className="source" key={name}><Icon size={13}/><div><b>{name}</b><small>{note}</small></div><Dot state={ok?"online":"muted"}/><span>{state}</span></div>)}<div className="sources-foot">{[online,captureStatus?.status==="running",endpointOnline,cowrieOnline,feedOnline].filter(Boolean).length} of 5 sources reporting<ChevronRight size={12}/></div></section>
+    <section className="sources"><div className="sources-head">DATA SOURCES<span className="sources-indicator" title="Source health" aria-label="Source health"><Activity size={13}/></span></div>{sources.map(([name,note,Icon,ok,state])=><div className="source" key={name}><Icon size={13}/><div><b>{name}</b><small>{note}</small></div><Dot state={ok?"online":"muted"}/><span>{state}</span></div>)}<div className="sources-foot">{[online,captureStatus?.status==="running",endpointOnline,cowrieOnline,feedOnline].filter(Boolean).length} of 5 sources reporting<ChevronRight size={12}/></div></section>
     <div className="secure-note"><LockKeyhole size={13}/>Loopback service · no public exposure</div></div></aside>;
 }
 
@@ -274,28 +274,32 @@ function SettingsPage({engine,platformStatus,captureStatus,endpointTelemetry,cow
   return <div className="page settings-page">
     <PageHead kicker="Workspace configuration" title="Settings" subtitle="Review service connections, demo display options, and the current analyst session."/>
     <div className="settings-grid">
-      <section className="panel settings-card">
-        <div className="settings-card-head"><span className="settings-icon"><LayoutDashboard size={16}/></span><div><h2>Dashboard display</h2><p>Choose whether the overview includes clearly labeled fictional SOC activity.</p></div></div>
-        <div className="settings-option"><div><b>Simulation data</b><small>Sample alert counts and the illustrative attack map are fictional. They are not observed network events.</small></div><button type="button" role="switch" aria-checked={demoMode} className={"settings-switch "+(demoMode?"on":"")} onClick={()=>setDemoMode(!demoMode)}><span/>{demoMode?"On":"Off"}</button></div>
-        <div className="settings-note"><span className="settings-dot"/>{demoMode?"Simulation is visible on the Overview page.":"Only connected service data and empty states are shown."} This preference is saved in this browser.</div>
-      </section>
-      <section className="panel settings-card">
-        <div className="settings-card-head"><span className="settings-icon"><Activity size={16}/></span><div><h2>Service connections</h2><p>Status is read from the existing health checks. Disconnected sources stay clearly marked.</p></div></div>
-        <div className="settings-services">{services.map(service=><div className="settings-service" key={service.name}><span className={"settings-dot "+(service.ok?"healthy":"")}/><div><b>{service.name}</b><small>{service.detail}</small></div><strong className={service.ok?"healthy":""}>{service.state}</strong></div>)}</div>
-        <small className="settings-footnote">Engine and platform status refresh every 30 seconds. Capture status refreshes every 10 seconds.</small>
-      </section>
-      <section className="panel settings-card settings-session-card">
-        <div className="settings-card-head"><span className="settings-icon"><LockKeyhole size={16}/></span><div><h2>Analyst session</h2><p>Session tokens stay hidden and are never displayed in this panel.</p></div></div>
-        {session?<><div className="settings-session"><div><small>Signed in as</small><b>{session.username}</b></div><div><small>Roles</small><b>{session.roles?.join(", ")||"User"}</b></div><div><small>Expires</small><b>{new Date(session.expiresAt).toLocaleString()}</b></div></div><button type="button" className="secondary-btn settings-signout" onClick={onSignOut}><LogOut size={13}/>Sign out</button></>:<div className="settings-option"><div><b>No analyst session</b><small>Sign in to use persistent alerts, cases, incidents, and flow analysis.</small></div><NavLink className="secondary-btn" to="/login"><LogIn size={13}/>Sign in</NavLink></div>}
-      </section>
-      {session&&<section className="panel settings-card settings-password-card">
-        <div className="settings-card-head"><span className="settings-icon"><LockKeyhole size={16}/></span><div><h2>Change password</h2><p>Verify your current password before choosing a new one.</p></div></div>
-        <form className="login-form settings-password-form" onSubmit={submitPasswordChange}><label>Current password<input required type="password" autoComplete="current-password" maxLength={128} value={currentPassword} onChange={e=>setCurrentPassword(e.target.value)}/></label><label>New password<input required type="password" autoComplete="new-password" minLength={16} maxLength={128} value={newPassword} onChange={e=>setNewPassword(e.target.value)} placeholder="At least 16 characters"/></label><label>Confirm new password<input required type="password" autoComplete="new-password" minLength={16} maxLength={128} value={confirmPassword} onChange={e=>setConfirmPassword(e.target.value)}/></label><button className="primary-btn login-submit" disabled={passwordBusy}>{passwordBusy?"Updating…":"Update password"}</button>{passwordError&&<div className="error login-error" role="alert"><AlertTriangle size={13}/>{passwordError}</div>}<small className="password-change-note">Updating your password signs out all current sessions.</small></form>
-      </section>}
-      <section className="panel settings-card settings-data-card">
-        <div className="settings-card-head"><span className="settings-icon"><Database size={16}/></span><div><h2>Data handling</h2><p>Current demo boundaries</p></div></div>
-        <ul className="settings-data-list"><li>Capture predictions store model summaries and session metadata; raw packet payloads and flow features are not retained.</li><li>Dashboard simulation values are fictional and remain separate from stored model results.</li><li>Model predictions are research signals. The platform does not block traffic or execute response actions.</li></ul>
-      </section>
+      <div className="settings-column">
+        <section className="panel settings-card">
+          <div className="settings-card-head"><span className="settings-icon"><LayoutDashboard size={16}/></span><div><h2>Dashboard display</h2><p>Choose whether the overview includes clearly labeled fictional SOC activity.</p></div></div>
+          <div className="settings-option"><div><b>Simulation data</b><small>Sample alert counts and the illustrative attack map are fictional. They are not observed network events.</small></div><button type="button" role="switch" aria-checked={demoMode} className={"settings-switch "+(demoMode?"on":"")} onClick={()=>setDemoMode(!demoMode)}><span/>{demoMode?"On":"Off"}</button></div>
+          <div className="settings-note"><span className="settings-dot"/>{demoMode?"Simulation is visible on the Overview page.":"Only connected service data and empty states are shown."} This preference is saved in this browser.</div>
+        </section>
+        <section className="panel settings-card settings-session-card">
+          <div className="settings-card-head"><span className="settings-icon"><LockKeyhole size={16}/></span><div><h2>Analyst session</h2><p>Session tokens stay hidden and are never displayed in this panel.</p></div></div>
+          {session?<><div className="settings-session"><div><small>Signed in as</small><b>{session.username}</b></div><div><small>Roles</small><b>{session.roles?.join(", ")||"User"}</b></div><div><small>Expires</small><b>{new Date(session.expiresAt).toLocaleString()}</b></div></div><button type="button" className="secondary-btn settings-signout" onClick={onSignOut}><LogOut size={13}/>Sign out</button></>:<div className="settings-option"><div><b>No analyst session</b><small>Sign in to use persistent alerts, cases, incidents, and flow analysis.</small></div><NavLink className="secondary-btn" to="/login"><LogIn size={13}/>Sign in</NavLink></div>}
+        </section>
+        <section className="panel settings-card settings-data-card">
+          <div className="settings-card-head"><span className="settings-icon"><Database size={16}/></span><div><h2>Data handling</h2><p>Current demo boundaries</p></div></div>
+          <ul className="settings-data-list"><li>Capture predictions store model summaries and session metadata; raw packet payloads and flow features are not retained.</li><li>Dashboard simulation values are fictional and remain separate from stored model results.</li><li>Model predictions are research signals. The platform does not block traffic or execute response actions.</li></ul>
+        </section>
+      </div>
+      <div className="settings-column">
+        <section className="panel settings-card">
+          <div className="settings-card-head"><span className="settings-icon"><Activity size={16}/></span><div><h2>Service connections</h2><p>Status is read from the existing health checks. Disconnected sources stay clearly marked.</p></div></div>
+          <div className="settings-services">{services.map(service=><div className="settings-service" key={service.name}><span className={"settings-dot "+(service.ok?"healthy":"")}/><div><b>{service.name}</b><small>{service.detail}</small></div><strong className={service.ok?"healthy":""}>{service.state}</strong></div>)}</div>
+          <small className="settings-footnote">Engine and platform status refresh every 30 seconds. Capture status refreshes every 10 seconds.</small>
+        </section>
+        {session&&<section className="panel settings-card settings-password-card">
+          <div className="settings-card-head"><span className="settings-icon"><LockKeyhole size={16}/></span><div><h2>Change password</h2><p>Verify your current password before choosing a new one.</p></div></div>
+          <form className="login-form settings-password-form" onSubmit={submitPasswordChange}><label>Current password<input required type="password" autoComplete="current-password" maxLength={128} value={currentPassword} onChange={e=>setCurrentPassword(e.target.value)}/></label><label>New password<input required type="password" autoComplete="new-password" minLength={16} maxLength={128} value={newPassword} onChange={e=>setNewPassword(e.target.value)} placeholder="At least 16 characters"/></label><label>Confirm new password<input required type="password" autoComplete="new-password" minLength={16} maxLength={128} value={confirmPassword} onChange={e=>setConfirmPassword(e.target.value)}/></label><button className="primary-btn login-submit" disabled={passwordBusy}>{passwordBusy?"Updating…":"Update password"}</button>{passwordError&&<div className="error login-error" role="alert"><AlertTriangle size={13}/>{passwordError}</div>}<small className="password-change-note">Updating your password signs out all current sessions.</small></form>
+        </section>}
+      </div>
     </div>
   </div>;
 }
