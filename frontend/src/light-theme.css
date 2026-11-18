@@ -78,6 +78,67 @@ body {
   border-color: #b9dedc;
   background: #e8f6f4;
   color: #087e78;
+  animation: brand-breathe 2s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes brand-breathe {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgb(8 126 120 / 0%);
+  }
+  50% {
+    transform: scale(1.045);
+    box-shadow: 0 0 0 4px rgb(8 126 120 / 11%);
+  }
+}
+
+.header-current {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  padding-left: 17px;
+  border-left: 1px solid #e0e7f0;
+}
+
+.header-current-icon {
+  display: grid;
+  flex: none;
+  width: 31px;
+  height: 31px;
+  place-items: center;
+  border: 1px solid #d7e4f1;
+  border-radius: 8px;
+  background: #f1f6fc;
+  color: #356a9e;
+}
+
+.header-current-copy {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.header-current-copy small {
+  color: #72849a;
+  font-size: 7px;
+  font-weight: 650;
+  letter-spacing: .12em;
+}
+
+.header-current-copy b {
+  overflow: hidden;
+  color: #263b54;
+  font-size: 11px;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header-current + .head-actions {
+  margin-left: auto;
 }
 
 .brand small,
@@ -329,6 +390,36 @@ body {
 .case-list-item b,
 .settings-service b {
   color: #17283e;
+}
+
+.empty > b {
+  color: #435a73;
+}
+
+.empty > span {
+  border-color: #dbe5ef;
+  background: linear-gradient(145deg, #f7faff, #edf3fa);
+  color: #3477b5;
+  box-shadow: 0 2px 7px rgb(35 66 102 / 7%);
+}
+
+.empty > span svg,
+.panel-head > svg {
+  color: #3f78aa;
+}
+
+.empty p {
+  color: #61758d;
+}
+
+.range {
+  border-color: #d9e3ee;
+  background: #f3f7fb;
+  color: #566b83;
+}
+
+.range svg {
+  color: #627b95;
 }
 
 .panel-head p,
@@ -1207,6 +1298,49 @@ textarea::placeholder,
 }
 
 @media (max-width: 680px) {
+  .topbar {
+    gap: 8px;
+  }
+
+  .brand {
+    gap: 6px;
+  }
+
+  .brand small {
+    display: none;
+  }
+
+  .header-current {
+    gap: 5px;
+    padding-left: 7px;
+  }
+
+  .header-current-icon {
+    display: none;
+  }
+
+  .header-current-copy small {
+    display: none;
+  }
+
+  .header-current-copy b {
+    max-width: 92px;
+    font-size: 9px;
+  }
+
+  .head-actions {
+    gap: 5px;
+  }
+
+  .online-label {
+    font-size: 0;
+  }
+
+  .login-head-link {
+    padding: 4px 5px;
+    font-size: 7px;
+  }
+
   .sidebar {
     background: #fbfcfe;
   }
@@ -1222,5 +1356,11 @@ textarea::placeholder,
 
   .mobile-title {
     color: #1b2d43;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-mark {
+    animation: none;
   }
 }
