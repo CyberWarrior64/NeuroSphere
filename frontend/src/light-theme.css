@@ -1661,3 +1661,119 @@ textarea::placeholder,
 .main .metric-state {
   font-size: 9px;
 }
+
+.range.demo-running {
+  border-color: #c9e6d9;
+  background: #edf8f3;
+  color: #137b58;
+}
+
+.range.demo-running svg {
+  color: #16875e;
+}
+
+.demo-map-readout {
+  position: absolute;
+  z-index: 4;
+  top: 10px;
+  right: 12px;
+  left: 12px;
+  display: grid;
+  grid-template-columns: 8px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 9px;
+  border: 1px solid #d8e4ee;
+  border-radius: 8px;
+  background: rgb(255 255 255 / 94%);
+  box-shadow: 0 3px 12px rgb(24 43 68 / 8%);
+  text-align: left;
+}
+
+.demo-map-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #d28a24;
+  box-shadow: 0 0 0 3px rgb(210 138 36 / 13%);
+  animation: demo-signal-pulse 1.5s ease-in-out infinite;
+}
+
+.demo-map-readout > div {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.demo-map-readout b {
+  overflow: hidden;
+  color: #263b54;
+  font-size: 11px;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.demo-map-readout small {
+  overflow: hidden;
+  color: #52677f;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.demo-map-kind {
+  padding: 3px 6px;
+  border: 1px solid #f0dfbf;
+  border-radius: 5px;
+  background: #fff7e9;
+  color: #805817;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+
+.demo-map .map-node.active {
+  transform: scale(1.25);
+  box-shadow: 0 0 0 8px rgb(239 83 104 / 14%), 0 0 24px rgb(239 83 104 / 72%);
+}
+
+.demo-map .map-node.node-b.active {
+  box-shadow: 0 0 0 8px rgb(245 163 61 / 18%), 0 0 24px rgb(245 163 61 / 78%);
+}
+
+.demo-map .map-arc.active {
+  opacity: 1;
+  animation: demo-route-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes demo-signal-pulse {
+  50% { box-shadow: 0 0 0 6px rgb(210 138 36 / 6%); }
+}
+
+@keyframes demo-route-pulse {
+  50% { opacity: .45; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-map-pulse,
+  .demo-map .map-node.active,
+  .demo-map .map-arc.active {
+    animation: none;
+  }
+}
+
+@media (max-width: 680px) {
+  .demo-map-readout {
+    right: 8px;
+    left: 8px;
+    gap: 6px;
+    padding: 6px 7px;
+  }
+
+  .demo-map-readout b { font-size: 10px; }
+  .demo-map-readout small { font-size: 8px; }
+  .demo-map-kind { padding: 3px 4px; font-size: 8px; }
+}
