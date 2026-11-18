@@ -1,5 +1,6 @@
 package com.neurosphere.platform.alerts;
 
+import com.neurosphere.platform.audit.AuditEventService;
 import java.time.Instant;
 import java.util.List;
 import java.util.Locale;
@@ -14,10 +15,12 @@ import org.springframework.web.server.ResponseStatusException;
 public class AlertService {
     private final AlertRepository alerts;
     private final AlertActivityRepository activities;
+    private final AuditEventService auditEvents;
 
-    public AlertService(AlertRepository alerts, AlertActivityRepository activities) {
+    public AlertService(AlertRepository alerts, AlertActivityRepository activities, AuditEventService auditEvents) {
         this.alerts = alerts;
         this.activities = activities;
+        this.auditEvents = auditEvents;
     }
 
     @Transactional(readOnly = true)
@@ -47,6 +50,8 @@ public class AlertService {
                 ifClassification, ifScore, ifThreshold, ifFlagged, actor, now));
         activities.save(new AlertActivity(record, actor, "PROMOTED_TO_REVIEW",
                 "Analyst promoted a flagged capture prediction for review.", now));
+        auditEvents.record(actor, "ALERT_PROMOTED", "ALERT", key,
+                "Promoted a flagged capture prediction for analyst review.", now);
         return detail(record);
     }
 
@@ -64,6 +69,8 @@ public class AlertService {
             record.changeStatus(status, now);
             activities.save(new AlertActivity(record, actor, "STATUS_CHANGED",
                     previous.name() + " → " + status.name(), now));
+            auditEvents.record(actor, "ALERT_STATUS_CHANGED", "ALERT", record.getAlertKey(),
+                    "Changed review alert status from " + previous.name() + " to " + status.name() + ".", now);
         }
         return detail(record);
     }

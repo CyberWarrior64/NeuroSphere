@@ -1,5 +1,6 @@
 package com.neurosphere.platform.incidents;
 
+import com.neurosphere.platform.audit.AuditEventService;
 import com.neurosphere.platform.alerts.AlertActivity;
 import com.neurosphere.platform.alerts.AlertRecord;
 import com.neurosphere.platform.alerts.AlertRepository;
@@ -20,13 +21,15 @@ public class IncidentService {
     private final IncidentActivityRepository activities;
     private final IncidentAlertLinkRepository links;
     private final AlertRepository alerts;
+    private final AuditEventService auditEvents;
 
     public IncidentService(IncidentRepository incidents, IncidentActivityRepository activities,
-            IncidentAlertLinkRepository links, AlertRepository alerts) {
+            IncidentAlertLinkRepository links, AlertRepository alerts, AuditEventService auditEvents) {
         this.incidents = incidents;
         this.activities = activities;
         this.links = links;
         this.alerts = alerts;
+        this.auditEvents = auditEvents;
     }
 
     @Transactional(readOnly = true)
@@ -46,6 +49,8 @@ public class IncidentService {
                 request.description().trim(), request.severity(), actor, now));
         activities.save(new IncidentActivity(incident, actor, "CREATED",
                 "Incident opened for analyst investigation.", now));
+        auditEvents.record(actor, "INCIDENT_CREATED", "INCIDENT", key,
+                "Opened an incident record for analyst investigation.", now);
         return detail(incident);
     }
 
@@ -63,6 +68,8 @@ public class IncidentService {
             incident.changeStatus(status, now);
             activities.save(new IncidentActivity(incident, actor, "STATUS_CHANGED",
                     previous.name() + " → " + status.name(), now));
+            auditEvents.record(actor, "INCIDENT_STATUS_CHANGED", "INCIDENT", incident.getIncidentKey(),
+                    "Changed incident status from " + previous.name() + " to " + status.name() + ".", now);
         }
         return detail(incident);
     }
@@ -73,6 +80,8 @@ public class IncidentService {
         Instant now = Instant.now();
         incident.touch(now);
         activities.save(new IncidentActivity(incident, actor, "NOTE_ADDED", note.trim(), now));
+        auditEvents.record(actor, "INCIDENT_NOTE_ADDED", "INCIDENT", incident.getIncidentKey(),
+                "Added an incident note. Note text is kept out of the audit log.", now);
         return detail(incident);
     }
 
@@ -88,6 +97,8 @@ public class IncidentService {
         links.save(new IncidentAlertLink(incident, alert, actor, now));
         activities.save(new IncidentActivity(incident, actor, "ALERT_LINKED",
                 "Linked review alert " + alert.getAlertKey() + " (" + alert.getSeverity().name() + ").", now));
+        auditEvents.record(actor, "INCIDENT_ALERT_LINKED", "INCIDENT", incident.getIncidentKey(),
+                "Linked review alert " + alert.getAlertKey() + " to the incident.", now);
         incident.touch(now);
         return detail(incident);
     }

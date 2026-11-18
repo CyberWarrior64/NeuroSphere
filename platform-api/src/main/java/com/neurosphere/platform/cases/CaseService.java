@@ -1,5 +1,6 @@
 package com.neurosphere.platform.cases;
 
+import com.neurosphere.platform.audit.AuditEventService;
 import java.time.Instant;
 import java.util.List;
 import java.util.Locale;
@@ -14,10 +15,12 @@ import org.springframework.web.server.ResponseStatusException;
 public class CaseService {
     private final CaseRepository cases;
     private final CaseActivityRepository activities;
+    private final AuditEventService auditEvents;
 
-    public CaseService(CaseRepository cases, CaseActivityRepository activities) {
+    public CaseService(CaseRepository cases, CaseActivityRepository activities, AuditEventService auditEvents) {
         this.cases = cases;
         this.activities = activities;
+        this.auditEvents = auditEvents;
     }
 
     @Transactional(readOnly = true)
@@ -40,6 +43,7 @@ public class CaseService {
                 request.priority(), sourceType, request.sourceReference(), actor, now));
         activities.save(new CaseActivity(record, actor, "CREATED",
                 "Case opened with " + request.priority().name().toLowerCase(Locale.ROOT) + " priority.", now));
+        auditEvents.record(actor, "CASE_CREATED", "CASE", key, "Opened a case record.", now);
         return detail(record);
     }
 
@@ -57,6 +61,8 @@ public class CaseService {
             record.changeStatus(newStatus, now);
             activities.save(new CaseActivity(record, actor, "STATUS_CHANGED",
                     previous.name() + " → " + newStatus.name(), now));
+            auditEvents.record(actor, "CASE_STATUS_CHANGED", "CASE", record.getCaseKey(),
+                    "Changed case status from " + previous.name() + " to " + newStatus.name() + ".", now);
         }
         return detail(record);
     }
@@ -67,6 +73,8 @@ public class CaseService {
         Instant now = Instant.now();
         record.touch(now);
         activities.save(new CaseActivity(record, actor, "NOTE_ADDED", note.trim(), now));
+        auditEvents.record(actor, "CASE_NOTE_ADDED", "CASE", record.getCaseKey(),
+                "Added a case note. Note text is kept out of the audit log.", now);
         return detail(record);
     }
 

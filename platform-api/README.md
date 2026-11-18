@@ -12,6 +12,7 @@ This is a separate Java 21 / Spring Boot 3.5.16 service. It adds an authenticate
 - `GET /api/v1/platform/health` — bearer token required.
 - `GET /api/v1/platform/me` — bearer token required; returns the authenticated username and roles.
 - `GET /api/v1/platform/admin/health` — requires `ADMIN`.
+- `GET /api/v1/platform/admin/audit-events?limit=100` — requires `ADMIN`; returns up to 200 latest case, alert, and incident workflow events. Note text, alert rationales, packet fields, source addresses, and authentication attempts are excluded.
 - POST /api/v1/platform/flows/analyze — bearer token required; requires exactly 67 feature keys, forwards the record to the configured AI engine, and stores model result metadata. Do not send personal or production-sensitive records to the research model.
 - GET /api/v1/platform/flows/recent?limit=10 — bearer token required; returns up to 50 recent result summaries without raw feature values.
 - GET /api/v1/platform/cases?limit=50&status=OPEN — bearer token required; returns up to 100 recent case summaries.
@@ -67,4 +68,4 @@ The integration tests use H2 and a test-only signing secret. The 14 tests cover 
 
 ## Current boundary
 
-This slice provides authentication, migration-backed users and flow-result history, password change and one-time recovery codes, an authenticated AI proxy, and shared MySQL-backed cases, analyst-promoted alerts, and incidents linked by analysts with activity history. The React dashboard uses the platform session for flow submissions, case management, and alert review. It does not include user registration, email-based recovery, refresh tokens, formal retention, a general authentication audit log, tenant isolation, incident correlation and external alert-source integrations, or production deployment.
+This slice provides authentication, migration-backed users and flow-result history, password change and one-time recovery codes, an authenticated AI proxy, shared MySQL-backed cases, analyst-promoted alerts, incidents linked by analysts, and an ADMIN-only audit log for workflow changes. The React dashboard uses the platform session for flow submissions, case management, alert review, and administrator audit review. It does not include user registration, email-based recovery, refresh tokens, formal audit retention, authentication/read-access audit logging, tenant isolation, incident correlation and external alert-source integrations, or production deployment.

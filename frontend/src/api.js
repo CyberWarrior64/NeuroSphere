@@ -132,6 +132,14 @@ export async function loadCases(accessToken, limit = 50, status) {
   })).data;
 }
 
+export async function loadAuditEvents(accessToken, limit = 100) {
+  if (!accessToken) throw new Error("Sign in to view audit events.");
+  return (await platformHttp.get("/api/v1/platform/admin/audit-events", {
+    params: { limit },
+    headers: { Authorization: "Bearer " + accessToken },
+  })).data;
+}
+
 export async function createCase(accessToken, payload) {
   return (await platformHttp.post("/api/v1/platform/cases", payload, {
     headers: { Authorization: "Bearer " + accessToken },

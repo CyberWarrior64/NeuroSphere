@@ -2,7 +2,7 @@
 
 ## Status and rules
 
-Current platform persistence: MySQL 8.4 with Flyway V1–V6 backs platform users/roles, flow-analysis result summaries, revoked JWT access-token IDs, authenticated case records/activity, analyst-promoted alert snapshots/activity, and incidents with linked alerts. The AI engine still loads model artifacts locally and does not use MySQL.
+Current platform persistence: MySQL 8.4 with Flyway V1–V9 backs platform users/roles, flow-analysis result summaries, revoked JWT access-token IDs, authenticated case records/activity, analyst-promoted alert snapshots/activity, incidents with linked alerts, password-recovery codes, and cross-workflow audit events. The AI engine still loads model artifacts locally and does not use MySQL.
 
 Use UTC timestamps, stable generated IDs, foreign keys, migrations, least-privilege DB accounts, and documented retention. Preserve provenance and model/schema versions. Store detector signals separately from analyst-confirmed incidents. Do not persist full flow vectors or raw PCAP by default; first agree on purpose, privacy, access, and retention. Keep credentials out of ordinary tables.
 
@@ -14,6 +14,8 @@ Use UTC timestamps, stable generated IDs, foreign keys, migrations, least-privil
 - platform_cases and platform_case_activity (Flyway V4): manually reviewed case records and append-only status/note activity, tied to authenticated usernames. No packet features or network addresses are stored in these tables.
 - platform_alerts and platform_alert_activity (Flyway V5): authenticated analyst-promoted snapshots of verified recent flagged capture predictions, with analyst-selected severity, rationale, model fields, lifecycle status, and status activity. The API checks the prediction against AI-engine history before storing it; raw features, IP addresses, and packet payloads are excluded.
 - platform_incidents, platform_incident_activity, and platform_incident_alerts (Flyway V6): manually opened incident records, status/note history, and deduplicated links to persisted review alerts. Incident creation and alert linking are analyst actions; there is no automatic correlation or response execution.
+- platform_password_reset_tokens (Flyway V7–V8): one-time SHA-256-digested recovery codes with expiry and use timestamps.
+- platform_audit_events (Flyway V9): append-only application events for case, analyst-review alert, and incident creation and changes. Reads are ADMIN-only and bounded to the latest 200 events. Notes, alert rationales, packet fields, and source addresses are excluded. Authentication attempts and read access are not yet recorded; MySQL administrators can still modify rows.
 
 The flow-analysis table currently has no automated retention policy. Define and implement retention before treating this as a production store.
 
@@ -51,7 +53,6 @@ The current 67-value CIC-IDS2017 payload is an inference input, not evidence of 
 - deception_events: id, source_id, observed_at, event_type, source_address, target_decoy, severity, evidence_reference, metadata_json.
 - twin_scenarios and twin_runs: versioned scenario definitions and isolated simulation results.
 - response_actions: id, alert_id, action_type, status, requested_by, approved_by, requested/approved/executed timestamps, result_json, idempotency_key. Keep execution unavailable until a separately approved response design.
-- audit_events: id, occurred_at, actor_id, action, target_type/id, request_id, source_ip, result, details_json. Append-only and restricted.
 
 ## Relationships and open decisions
 
