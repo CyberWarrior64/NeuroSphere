@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="9.5in" height="5.75in" viewBox="0 0 1900 1150">
+<rect width="100%" height="100%" fill="#fff"/>
+<text x="90" y="70" fill="#183247" font-family="Arial,sans-serif" font-size="42" font-weight="700" text-anchor="start" dominant-baseline="middle">Model performance on the Friday capture-day holdout</text>
+<text x="90" y="125" fill="#536879" font-family="Arial,sans-serif" font-size="23" font-weight="400" text-anchor="start" dominant-baseline="middle">Thresholds were frozen before Friday · trained Monday–Wednesday · calibrated Thursday · experimental evaluation</text>
+<line x1="90" y1="166" x2="1810" y2="166" stroke="#DCE5EC" stroke-width="2"/>
+<rect x="180" y="194" width="24" height="22" fill="#2878B5" stroke="none" stroke-width="1"/>
+<text x="216" y="205" fill="#536879" font-family="Arial,sans-serif" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">Random Forest V2</text>
+<rect x="540" y="194" width="24" height="22" fill="#E68A35" stroke="none" stroke-width="1"/>
+<text x="576" y="205" fill="#536879" font-family="Arial,sans-serif" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">Isolation Forest V2</text>
+<rect x="900" y="194" width="24" height="22" fill="#239B8E" stroke="none" stroke-width="1"/>
+<text x="936" y="205" fill="#536879" font-family="Arial,sans-serif" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">Hybrid OR</text>
+<rect x="1260" y="194" width="24" height="22" fill="#7963B6" stroke="none" stroke-width="1"/>
+<text x="1296" y="205" fill="#536879" font-family="Arial,sans-serif" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">Hybrid AND</text>
+<line x1="130" y1="850.0" x2="1120" y2="850.0" stroke="#DCE5EC" stroke-width="3"/>
+<text x="112" y="850.0" fill="#536879" font-family="Arial,sans-serif" font-size="19" font-weight="400" text-anchor="end" dominant-baseline="middle">0%</text>
+<line x1="130" y1="740.0" x2="1120" y2="740.0" stroke="#DCE5EC" stroke-width="2"/>
+<text x="112" y="740.0" fill="#536879" font-family="Arial,sans-serif" font-size="19" font-weight="400" text-anchor="end" dominant-baseline="middle">20%</text>
+<line x1="130" y1="630.0" x2="1120" y2="630.0" stroke="#DCE5EC" stroke-width="2"/>
+<text x="112" y="630.0" fill="#536879" font-family="Arial,sans-serif" font-size="19" font-weight="400" text-anchor="end" dominant-baseline="middle">40%</text>
+<line x1="130" y1="520.0" x2="1120" y2="520.0" stroke="#DCE5EC" stroke-width="2"/>
+<text x="112" y="520.0" fill="#536879" font-family="Arial,sans-serif" font-size="19" font-weight="400" text-anchor="end" dominant-baseline="middle">60%</text>
+<line x1="130" y1="410.0" x2="1120" y2="410.0" stroke="#DCE5EC" stroke-width="2"/>
+<text x="112" y="410.0" fill="#536879" font-family="Arial,sans-serif" font-size="19" font-weight="400" text-anchor="end" dominant-baseline="middle">80%</text>
+<line x1="130" y1="300.0" x2="1120" y2="300.0" stroke="#DCE5EC" stroke-width="2"/>
+<text x="112" y="300.0" fill="#536879" font-family="Arial,sans-serif" font-size="19" font-weight="400" text-anchor="end" dominant-baseline="middle">100%</text>
+<rect x="172.0" y="307.90723350999997" width="54" height="542.09276649" fill="#2878B5" stroke="none" stroke-width="1"/>
+<text x="199.0" y="290" fill="#183247" font-family="Arial,sans-serif" font-size="17" font-weight="700" text-anchor="middle" dominant-baseline="middle">98.6%</text>
+<rect x="236.0" y="449.7916453" width="54" height="400.2083547" fill="#E68A35" stroke="none" stroke-width="1"/>
+<text x="263.0" y="427.7916453" fill="#183247" font-family="Arial,sans-serif" font-size="17" font-weight="700" text-anchor="middle" dominant-baseline="middle">72.8%</text>
+<rect x="300.0" y="416.934383995" width="54" height="433.065616005" fill="#239B8E" stroke="none" stroke-width="1"/>
+<text x="327.0" y="394.934383995" fill="#183247" font-family="Arial,sans-serif" font-size="17" font-weight="700" text-anchor="middle" dominant-baseline="middle">78.7%</text>
+<rect x="364.0" y="300.03884111" width="54" height="549.96115889" fill="#7963B6" stroke="none" stroke-width="1"/>
+<text x="391.0" y="290" fill="#183247" font-family="Arial,sans-serif" font-size="17" font-weight="700" text-anchor="middle" dominant-baseline="middle">100.0%</text>
+<text x="295.0" y="892" fill="#183247" font-family="Arial,sans-serif" font-size="21" font-weight="700" text-anchor="middle" dominant-baseline="middle">Precision</text>
+<rect x="502.0" y="691.376135975" width="54" height="158.62386402500002" fill="#2878B5" stroke="none" stroke-width="1"/>
+<text x="529.0" y="669.376135975" fill="#183247" font-family="Arial,sans-serif" font-size="17" font-weight="700" text-anchor="middle" dominant-baseline="middle">28.8%</text>
+<rect x="566.0" y="741.570151165" width="54" height="108.42984883499999" fill="#E68A35" stroke="none" stroke-width="1"/>
+<text x="593.0" y="719.570151165" fill="#183247" font-family="Arial,sans-serif" font-size="17" font-weight="700" text-anchor="middle" dominant-baseline="middle">19.7%</text>
+<rect x="630.0" y="691.158324755" width="54" height="158.841675245" fill="#239B8E" stroke="none" stroke-width="1"/>
+<text x="657.0" y="669.158324755" fill="#183247" font-family="Arial,sans-serif" font-size="17" font-weight="700" text-anchor="middle" dominant-baseline="middle">28.9%</text>
+<rect x="694.0" y="741.787962385" width="54" height="108.21203761500001" fill="#7963B6" stroke="none" stroke-width="1"/>
+<text x="721.0" y="719.787962385" fill="#183247" font-family="Arial,sans-serif" font-size="17" font-weight="700" text-anchor="middle" dominant-baseline="middle">19.7%</text>
+<text x="625.0" y="892" fill="#183247" font-family="Arial,sans-serif" font-size="21" font-weight="700" text-anchor="middle" dominant-baseline="middle">Recall</text>
+<rect x="832.0" y="604.56883556" width="54" height="245.43116444" fill="#2878B5" stroke="none" stroke-width="1"/>
+<text x="859.0" y="582.56883556" fill="#183247" font-family="Arial,sans-serif" font-size="17" font-weight="700" text-anchor="middle" dominant-baseline="middle">44.6%</text>
+<rect x="896.0" y="679.369752025" width="54" height="170.63024797500003" fill="#E68A35" stroke="none" stroke-width="1"/>
+<text x="923.0" y="657.369752025" fill="#183247" font-family="Arial,sans-serif" font-size="17" font-weight="700" text-anchor="middle" dominant-baseline="middle">31.0%</text>
+<rect x="960.0" y="617.5687765800001" width="54" height="232.43122341999998" fill="#239B8E" stroke="none" stroke-width="1"/>
+<text x="987.0" y="595.5687765800001" fill="#183247" font-family="Arial,sans-serif" font-size="17" font-weight="700" text-anchor="middle" dominant-baseline="middle">42.3%</text>
+<rect x="1024.0" y="669.158793025" width="54" height="180.84120697499998" fill="#7963B6" stroke="none" stroke-width="1"/>
+<text x="1051.0" y="647.158793025" fill="#183247" font-family="Arial,sans-serif" font-size="17" font-weight="700" text-anchor="middle" dominant-baseline="middle">32.9%</text>
+<text x="955.0" y="892" fill="#183247" font-family="Arial,sans-serif" font-size="21" font-weight="700" text-anchor="middle" dominant-baseline="middle">F1</text>
+<text x="1265" y="260" fill="#183247" font-family="Arial,sans-serif" font-size="26" font-weight="700" text-anchor="start" dominant-baseline="middle">False-positive rate</text>
+<text x="1265" y="300" fill="#536879" font-family="Arial,sans-serif" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">0–6% scale</text>
+<line x1="1400.0" y1="375" x2="1400.0" y2="815" stroke="#DCE5EC" stroke-width="2"/>
+<text x="1400.0" y="845" fill="#536879" font-family="Arial,sans-serif" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">0%</text>
+<line x1="1468.3333333333333" y1="375" x2="1468.3333333333333" y2="815" stroke="#DCE5EC" stroke-width="2"/>
+<text x="1468.3333333333333" y="845" fill="#536879" font-family="Arial,sans-serif" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">1%</text>
+<line x1="1536.6666666666667" y1="375" x2="1536.6666666666667" y2="815" stroke="#DCE5EC" stroke-width="2"/>
+<text x="1536.6666666666667" y="845" fill="#536879" font-family="Arial,sans-serif" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">2%</text>
+<line x1="1605.0" y1="375" x2="1605.0" y2="815" stroke="#DCE5EC" stroke-width="2"/>
+<text x="1605.0" y="845" fill="#536879" font-family="Arial,sans-serif" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">3%</text>
+<line x1="1673.3333333333333" y1="375" x2="1673.3333333333333" y2="815" stroke="#DCE5EC" stroke-width="2"/>
+<text x="1673.3333333333333" y="845" fill="#536879" font-family="Arial,sans-serif" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">4%</text>
+<line x1="1741.6666666666667" y1="375" x2="1741.6666666666667" y2="815" stroke="#DCE5EC" stroke-width="2"/>
+<text x="1741.6666666666667" y="845" fill="#536879" font-family="Arial,sans-serif" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">5%</text>
+<line x1="1810.0" y1="375" x2="1810.0" y2="815" stroke="#DCE5EC" stroke-width="2"/>
+<text x="1810.0" y="845" fill="#536879" font-family="Arial,sans-serif" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">6%</text>
+<text x="1265" y="405" fill="#183247" font-family="Arial,sans-serif" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">Random Forest V2</text>
+<rect x="1400" y="430" width="19.97385178333333" height="27" fill="#2878B5" stroke="none" stroke-width="1"/>
+<text x="1431.9738517833334" y="443" fill="#183247" font-family="Arial,sans-serif" font-size="18" font-weight="700" text-anchor="start" dominant-baseline="middle">0.29%</text>
+<text x="1265" y="505" fill="#183247" font-family="Arial,sans-serif" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">Isolation Forest V2</text>
+<rect x="1400" y="530" width="350.34234456666667" height="27" fill="#E68A35" stroke="none" stroke-width="1"/>
+<text x="1762.3423445666667" y="543" fill="#183247" font-family="Arial,sans-serif" font-size="18" font-weight="700" text-anchor="start" dominant-baseline="middle">5.13%</text>
+<text x="1265" y="605" fill="#183247" font-family="Arial,sans-serif" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">Hybrid OR</text>
+<rect x="1400" y="630" width="370.2502212" height="27" fill="#239B8E" stroke="none" stroke-width="1"/>
+<text x="1782.2502212" y="643" fill="#183247" font-family="Arial,sans-serif" font-size="18" font-weight="700" text-anchor="start" dominant-baseline="middle">5.42%</text>
+<text x="1265" y="705" fill="#183247" font-family="Arial,sans-serif" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">Hybrid AND</text>
+<rect x="1400" y="730" width="3" height="27" fill="#7963B6" stroke="none" stroke-width="1"/>
+<text x="1412.0659744666666" y="743" fill="#183247" font-family="Arial,sans-serif" font-size="18" font-weight="700" text-anchor="start" dominant-baseline="middle">0.001%</text>
+<line x1="90" y1="920" x2="1810" y2="920" stroke="#DCE5EC" stroke-width="2"/>
+<text x="100" y="960" fill="#536879" font-family="Arial,sans-serif" font-size="20" font-weight="400" text-anchor="start" dominant-baseline="middle">Friday test set n = 702,164 · same CICIDS2017 benchmark; not external-network validation.</text>
+<text x="100" y="1000" fill="#536879" font-family="Arial,sans-serif" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">Hybrid OR/AND are offline combinations of detector signals; weak PortScan and Bot generalization remains a limitation.</text>
+</svg>

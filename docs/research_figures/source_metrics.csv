@@ -1,0 +1,29 @@
+evaluation,model_or_group,metric,value_percent,denominator_n
+Random split,Random Forest,precision,99.591916051302,56993
+Random split,Random Forest,recall,99.62095441733891,56993
+Random split,Random Forest,f1,99.6064331179243,56993
+Random split,Random Forest,false_positive_rate,0.08992805755395684,56993
+Random split,Isolation Forest,precision,88.16521048451152,56993
+Random split,Isolation Forest,recall,32.36466128875498,56993
+Random split,Isolation Forest,f1,47.348215555239584,56993
+Random split,Isolation Forest,false_positive_rate,0.9570914696813978,56993
+Friday capture-day holdout,Random Forest V2,Precision,98.56232118,702164
+Friday capture-day holdout,Random Forest V2,Recall,28.840702550000003,702164
+Friday capture-day holdout,Random Forest V2,F1,44.62384808,702164
+Friday capture-day holdout,Random Forest V2,FPR,0.29230027,702164
+Friday capture-day holdout,Isolation Forest V2,Precision,72.7651554,702164
+Friday capture-day holdout,Isolation Forest V2,Recall,19.71451797,702164
+Friday capture-day holdout,Isolation Forest V2,F1,31.02368145,702164
+Friday capture-day holdout,Isolation Forest V2,FPR,5.12696114,702164
+Friday capture-day holdout,Hybrid OR,Precision,78.73920290999999,702164
+Friday capture-day holdout,Hybrid OR,Recall,28.88030459,702164
+Friday capture-day holdout,Hybrid OR,F1,42.26022244,702164
+Friday capture-day holdout,Hybrid OR,FPR,5.41829592,702164
+Friday capture-day holdout,Hybrid AND,Precision,99.99293798,702164
+Friday capture-day holdout,Hybrid AND,Recall,19.67491593,702164
+Friday capture-day holdout,Hybrid AND,F1,32.88021945,702164
+Friday capture-day holdout,Hybrid AND,FPR,0.0009654799999999999,702164
+Feature parity,All direct matches,Feature-cell agreement,92.17,5831
+Feature parity,All direct matches,Complete 67-feature vectors,77.97976333390498,5831
+Feature parity,Core-exact subset,Feature-cell agreement,99.62,4899
+Feature parity,Core-exact subset,Complete 67-feature vectors,92.81,4899

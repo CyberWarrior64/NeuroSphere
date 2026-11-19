@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="8in" height="5in" viewBox="0 0 1600 1000">
+<rect width="100%" height="100%" fill="#fff"/>
+<text x="90" y="70" fill="#183247" font-family="Arial,sans-serif" font-size="42" font-weight="700" text-anchor="start" dominant-baseline="middle">Model performance on a stratified random split</text>
+<text x="90" y="125" fill="#536879" font-family="Arial,sans-serif" font-size="23" font-weight="400" text-anchor="start" dominant-baseline="middle">Filtered CICIDS2017 flow table · binary attack class · random split is not capture-day-disjoint</text>
+<line x1="90" y1="166" x2="1510" y2="166" stroke="#DCE5EC" stroke-width="2"/>
+<rect x="540" y="191" width="24" height="22" fill="#2878B5" stroke="none" stroke-width="1"/>
+<text x="576" y="202" fill="#536879" font-family="Arial,sans-serif" font-size="21" font-weight="400" text-anchor="start" dominant-baseline="middle">Random Forest</text>
+<rect x="800" y="191" width="24" height="22" fill="#E68A35" stroke="none" stroke-width="1"/>
+<text x="836" y="202" fill="#536879" font-family="Arial,sans-serif" font-size="21" font-weight="400" text-anchor="start" dominant-baseline="middle">Isolation Forest</text>
+<line x1="180" y1="700.0" x2="1430" y2="700.0" stroke="#DCE5EC" stroke-width="3"/>
+<text x="162" y="700.0" fill="#536879" font-family="Arial,sans-serif" font-size="19" font-weight="400" text-anchor="end" dominant-baseline="middle">0%</text>
+<line x1="180" y1="620.0" x2="1430" y2="620.0" stroke="#DCE5EC" stroke-width="2"/>
+<text x="162" y="620.0" fill="#536879" font-family="Arial,sans-serif" font-size="19" font-weight="400" text-anchor="end" dominant-baseline="middle">20%</text>
+<line x1="180" y1="540.0" x2="1430" y2="540.0" stroke="#DCE5EC" stroke-width="2"/>
+<text x="162" y="540.0" fill="#536879" font-family="Arial,sans-serif" font-size="19" font-weight="400" text-anchor="end" dominant-baseline="middle">40%</text>
+<line x1="180" y1="460.0" x2="1430" y2="460.0" stroke="#DCE5EC" stroke-width="2"/>
+<text x="162" y="460.0" fill="#536879" font-family="Arial,sans-serif" font-size="19" font-weight="400" text-anchor="end" dominant-baseline="middle">60%</text>
+<line x1="180" y1="380.0" x2="1430" y2="380.0" stroke="#DCE5EC" stroke-width="2"/>
+<text x="162" y="380.0" fill="#536879" font-family="Arial,sans-serif" font-size="19" font-weight="400" text-anchor="end" dominant-baseline="middle">80%</text>
+<line x1="180" y1="300.0" x2="1430" y2="300.0" stroke="#DCE5EC" stroke-width="2"/>
+<text x="162" y="300.0" fill="#536879" font-family="Arial,sans-serif" font-size="19" font-weight="400" text-anchor="end" dominant-baseline="middle">100%</text>
+<rect x="248.33333333333337" y="301.632335794792" width="135" height="398.367664205208" fill="#2878B5" stroke="none" stroke-width="1"/>
+<text x="315.83333333333337" y="290" fill="#183247" font-family="Arial,sans-serif" font-size="17" font-weight="700" text-anchor="middle" dominant-baseline="middle">99.6%</text>
+<rect x="393.33333333333337" y="347.3391580619539" width="135" height="352.6608419380461" fill="#E68A35" stroke="none" stroke-width="1"/>
+<text x="460.83333333333337" y="325.3391580619539" fill="#183247" font-family="Arial,sans-serif" font-size="17" font-weight="700" text-anchor="middle" dominant-baseline="middle">88.2%</text>
+<text x="388.33333333333337" y="742" fill="#183247" font-family="Arial,sans-serif" font-size="21" font-weight="700" text-anchor="middle" dominant-baseline="middle">Precision</text>
+<rect x="665.0" y="301.51618233064437" width="135" height="398.48381766935563" fill="#2878B5" stroke="none" stroke-width="1"/>
+<text x="732.5" y="290" fill="#183247" font-family="Arial,sans-serif" font-size="17" font-weight="700" text-anchor="middle" dominant-baseline="middle">99.6%</text>
+<rect x="810.0" y="570.5413548449801" width="135" height="129.45864515501992" fill="#E68A35" stroke="none" stroke-width="1"/>
+<text x="877.5" y="548.5413548449801" fill="#183247" font-family="Arial,sans-serif" font-size="17" font-weight="700" text-anchor="middle" dominant-baseline="middle">32.4%</text>
+<text x="805.0" y="742" fill="#183247" font-family="Arial,sans-serif" font-size="21" font-weight="700" text-anchor="middle" dominant-baseline="middle">Recall</text>
+<rect x="1081.6666666666667" y="301.5742675283028" width="135" height="398.4257324716972" fill="#2878B5" stroke="none" stroke-width="1"/>
+<text x="1149.1666666666667" y="290" fill="#183247" font-family="Arial,sans-serif" font-size="17" font-weight="700" text-anchor="middle" dominant-baseline="middle">99.6%</text>
+<rect x="1226.6666666666667" y="510.60713777904164" width="135" height="189.39286222095834" fill="#E68A35" stroke="none" stroke-width="1"/>
+<text x="1294.1666666666667" y="488.60713777904164" fill="#183247" font-family="Arial,sans-serif" font-size="17" font-weight="700" text-anchor="middle" dominant-baseline="middle">47.3%</text>
+<text x="1221.6666666666667" y="742" fill="#183247" font-family="Arial,sans-serif" font-size="21" font-weight="700" text-anchor="middle" dominant-baseline="middle">F1</text>
+<text x="90" y="790" fill="#536879" font-family="Arial,sans-serif" font-size="21" font-weight="700" text-anchor="start" dominant-baseline="middle">False-positive rate</text>
+<text x="345" y="790" fill="#2878B5" font-family="Arial,sans-serif" font-size="21" font-weight="700" text-anchor="start" dominant-baseline="middle">Random Forest  0.09%</text>
+<text x="810" y="790" fill="#E68A35" font-family="Arial,sans-serif" font-size="21" font-weight="700" text-anchor="start" dominant-baseline="middle">Isolation Forest  0.96%</text>
+<rect x="90" y="845" width="1420" height="88" fill="#F3F7FA" stroke="none" stroke-width="1"/>
+<text x="115" y="875" fill="#536879" font-family="Arial,sans-serif" font-size="20" font-weight="400" text-anchor="start" dominant-baseline="middle">Test n = 56,993  ·  Filtered total n = 284,963  ·  Stratified 60/20/20 split</text>
+<text x="115" y="909" fill="#536879" font-family="Arial,sans-serif" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">Conflict patterns and exact feature duplicates removed; this split does not test generalization to unseen capture days.</text>
+</svg>
