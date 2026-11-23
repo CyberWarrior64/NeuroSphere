@@ -1,0 +1,210 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1320" viewBox="0 0 1800 1320" role="img" aria-labelledby="title desc">
+  <title id="title">NeuroSphere V2 system architecture</title>
+  <desc id="desc">Black and white architecture diagram of the implemented NeuroSphere research prototype, showing the React dashboard, Spring Boot platform API, MySQL database, FastAPI AI engine, experimental packet capture workflow, local and external context sources, and separately marked future expansions.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#111"/>
+    </marker>
+    <marker id="arrowStart" markerWidth="10" markerHeight="10" refX="2" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M 10 0 L 0 5 L 10 10 z" fill="#111"/>
+    </marker>
+    <style>
+      text { font-family: Arial, Helvetica, sans-serif; fill: #111; }
+      .title { font-size: 34px; font-weight: 700; letter-spacing: .2px; }
+      .subtitle { font-size: 17px; fill: #444; }
+      .section { font-size: 15px; font-weight: 700; letter-spacing: 1.3px; }
+      .box { fill: #fff; stroke: #111; stroke-width: 2.2; }
+      .boxhead { fill: #e8e8e8; stroke: none; }
+      .box-title { font-size: 20px; font-weight: 700; }
+      .body { font-size: 15px; }
+      .small { font-size: 13px; fill: #333; }
+      .micro { font-size: 12px; fill: #333; }
+      .arrowline { fill: none; stroke: #111; stroke-width: 2.2; marker-end: url(#arrow); }
+      .duplex { fill: none; stroke: #111; stroke-width: 2.2; marker-start: url(#arrowStart); marker-end: url(#arrow); }
+      .future { fill: #fff; stroke: #222; stroke-width: 2; stroke-dasharray: 9 7; }
+      .future-card { fill: #fafafa; stroke: #333; stroke-width: 1.8; stroke-dasharray: 7 5; }
+      .label-bg { fill: #fff; stroke: none; }
+    </style>
+  </defs>
+
+  <rect width="1800" height="1320" fill="#fff"/>
+  <text x="60" y="62" class="title">NeuroSphere V2 — System Architecture</text>
+  <text x="60" y="95" class="subtitle">Implemented research prototype with future integrations clearly separated</text>
+
+  <!-- Current implementation boundary -->
+  <rect x="40" y="135" width="1720" height="755" rx="18" fill="#fff" stroke="#111" stroke-width="2.6"/>
+  <rect x="62" y="120" width="364" height="30" fill="#fff"/>
+  <text x="68" y="141" class="section">CURRENT IMPLEMENTED PROTOTYPE</text>
+
+  <!-- Top: analyst, UI, platform API, persistent store -->
+  <g aria-label="Analyst and browser">
+    <rect x="75" y="220" width="235" height="145" rx="12" class="box"/>
+    <rect x="75" y="220" width="235" height="43" rx="12" class="boxhead"/>
+    <rect x="75" y="251" width="235" height="12" fill="#e8e8e8"/>
+    <text x="94" y="249" class="box-title">Analyst</text>
+    <text x="94" y="294" class="body">SOC operator / faculty</text>
+    <text x="94" y="320" class="small">Uses a browser session</text>
+    <text x="94" y="343" class="small">Reviews signals and cases</text>
+  </g>
+
+  <g aria-label="React dashboard">
+    <rect x="390" y="205" width="400" height="175" rx="12" class="box"/>
+    <rect x="390" y="205" width="400" height="44" rx="12" class="boxhead"/>
+    <rect x="390" y="237" width="400" height="12" fill="#e8e8e8"/>
+    <text x="412" y="235" class="box-title">React SOC Dashboard</text>
+    <text x="412" y="278" class="body">React · Axios · React Router</text>
+    <text x="412" y="304" class="small">Monitoring, flow analysis, alerts, incidents,</text>
+    <text x="412" y="326" class="small">cases, reports, settings and source status</text>
+    <text x="412" y="354" class="small">Synthetic examples are labeled as simulated</text>
+  </g>
+
+  <g aria-label="Spring Boot platform API">
+    <rect x="920" y="205" width="410" height="175" rx="12" class="box"/>
+    <rect x="920" y="205" width="410" height="44" rx="12" class="boxhead"/>
+    <rect x="920" y="237" width="410" height="12" fill="#e8e8e8"/>
+    <text x="942" y="235" class="box-title">Platform API</text>
+    <text x="942" y="278" class="body">Java 21 · Spring Boot · Spring Security</text>
+    <text x="942" y="304" class="small">JWT authentication · role-protected REST</text>
+    <text x="942" y="326" class="small">Inference orchestration and analyst workflows</text>
+    <text x="942" y="354" class="small">Cases · alerts · incidents · audit activity</text>
+  </g>
+
+  <g aria-label="MySQL database">
+    <rect x="1450" y="225" width="245" height="145" rx="12" class="box"/>
+    <rect x="1450" y="225" width="245" height="43" rx="12" class="boxhead"/>
+    <rect x="1450" y="256" width="245" height="12" fill="#e8e8e8"/>
+    <text x="1470" y="254" class="box-title">MySQL 8.4</text>
+    <text x="1470" y="298" class="small">Accounts and analysis summaries</text>
+    <text x="1470" y="321" class="small">Cases, alerts and incidents</text>
+    <text x="1470" y="344" class="small">Audit and activity records</text>
+  </g>
+
+  <!-- Top row communication -->
+  <path d="M 310 292 H 390" class="arrowline"/>
+  <path d="M 790 292 H 920" class="arrowline"/>
+  <rect x="812" y="266" width="88" height="20" class="label-bg"/>
+  <text x="818" y="281" class="micro">REST + JWT</text>
+  <path d="M 1330 292 H 1450" class="duplex"/>
+  <rect x="1340" y="266" width="98" height="20" class="label-bg"/>
+  <text x="1348" y="281" class="micro">JPA / SQL</text>
+
+  <!-- Bottom: collection, AI engine, context inputs -->
+  <g aria-label="Approved packet sources">
+    <rect x="75" y="505" width="255" height="145" rx="12" class="box"/>
+    <rect x="75" y="505" width="255" height="43" rx="12" class="boxhead"/>
+    <rect x="75" y="536" width="255" height="12" fill="#e8e8e8"/>
+    <text x="94" y="534" class="box-title">Packet Source</text>
+    <text x="94" y="578" class="body">Approved live interface</text>
+    <text x="94" y="603" class="small">or imported PCAP file</text>
+    <text x="94" y="628" class="small">Authorized monitoring only</text>
+  </g>
+
+  <g aria-label="Capture and feature pipeline">
+    <rect x="405" y="485" width="355" height="185" rx="12" class="box"/>
+    <rect x="405" y="485" width="355" height="43" rx="12" class="boxhead"/>
+    <rect x="405" y="516" width="355" height="12" fill="#e8e8e8"/>
+    <text x="425" y="514" class="box-title">Capture &amp; Feature Pipeline</text>
+    <text x="425" y="558" class="body">Scapy live / PCAP runner</text>
+    <text x="425" y="584" class="small">Flow assembly and 67-feature extraction</text>
+    <text x="425" y="608" class="small">CICFlowMeter-compatible experimental adapter</text>
+    <text x="425" y="641" class="small">Feature parity and flow boundaries remain limited</text>
+  </g>
+
+  <g aria-label="FastAPI AI engine">
+    <rect x="880" y="455" width="440" height="235" rx="12" class="box"/>
+    <rect x="880" y="455" width="440" height="45" rx="12" class="boxhead"/>
+    <rect x="880" y="488" width="440" height="12" fill="#e8e8e8"/>
+    <text x="902" y="486" class="box-title">AI Engine</text>
+    <text x="902" y="531" class="body">Python · FastAPI</text>
+    <text x="902" y="558" class="small">Random Forest + Isolation Forest</text>
+    <text x="902" y="582" class="small">Validates the named 67-feature flow schema</text>
+    <text x="902" y="606" class="small">Returns separate prediction signals and metadata</text>
+    <text x="902" y="630" class="small">Health, model, capture and context status APIs</text>
+    <text x="902" y="662" class="small">Research output; analyst review required</text>
+  </g>
+
+  <g aria-label="Local and external context sources">
+    <rect x="1450" y="475" width="245" height="215" rx="12" class="box"/>
+    <rect x="1450" y="475" width="245" height="43" rx="12" class="boxhead"/>
+    <rect x="1450" y="506" width="245" height="12" fill="#e8e8e8"/>
+    <text x="1470" y="504" class="box-title">Context Sources</text>
+    <text x="1470" y="548" class="small">Ubuntu host telemetry</text>
+    <text x="1470" y="570" class="small">Optional loopback Cowrie status</text>
+    <text x="1470" y="592" class="small">Cached public threat indicators</text>
+    <line x1="1470" y1="608" x2="1675" y2="608" stroke="#aaa" stroke-width="1"/>
+    <text x="1470" y="632" class="micro">Health / context only</text>
+    <text x="1470" y="651" class="micro">Threat feed is not correlated</text>
+    <text x="1470" y="670" class="micro">with traffic or used to block</text>
+  </g>
+
+  <!-- Data flow arrows -->
+  <path d="M 330 578 H 405" class="arrowline"/>
+  <rect x="327" y="550" width="82" height="20" class="label-bg"/>
+  <text x="331" y="565" class="micro">Packets / PCAP</text>
+  <path d="M 760 578 H 880" class="arrowline"/>
+  <rect x="768" y="550" width="105" height="20" class="label-bg"/>
+  <text x="774" y="565" class="micro">Flow JSON + session</text>
+  <path d="M 1450 582 H 1320" class="duplex"/>
+  <rect x="1328" y="554" width="115" height="20" class="label-bg"/>
+  <text x="1331" y="569" class="micro">Read-only context</text>
+
+  <!-- Platform-to-engine inference and engine status links -->
+  <path d="M 1105 380 V 455" class="duplex"/>
+  <rect x="1114" y="402" width="145" height="37" class="label-bg"/>
+  <text x="1120" y="417" class="micro">Private REST</text>
+  <text x="1120" y="433" class="micro">inference / results</text>
+
+  <path d="M 720 380 V 424 H 930 V 455" class="arrowline"/>
+  <rect x="726" y="400" width="121" height="20" class="label-bg"/>
+  <text x="730" y="415" class="micro">Health / source status</text>
+
+  <!-- Data handling and model-safety note -->
+  <rect x="75" y="735" width="1620" height="112" rx="10" fill="#f1f1f1" stroke="#111" stroke-width="1.8"/>
+  <text x="98" y="768" class="box-title">Trust, data handling and analyst review</text>
+  <text x="98" y="798" class="body">Model outputs are investigation signals, not confirmed incidents. No automatic blocking or alert escalation is performed.</text>
+  <text x="98" y="824" class="small">The platform stores prediction summaries rather than raw packet payloads or submitted feature vectors. Demo records are labeled as simulated.</text>
+
+  <!-- Clearly separated future scope -->
+  <rect x="40" y="925" width="1720" height="286" rx="18" class="future"/>
+  <rect x="62" y="910" width="582" height="30" fill="#fff"/>
+  <text x="68" y="932" class="section">FUTURE EXPANSIONS — NOT CONNECTED IN CURRENT BUILD</text>
+
+  <g aria-label="Future managed collectors">
+    <rect x="75" y="975" width="380" height="155" rx="10" class="future-card"/>
+    <text x="98" y="1013" class="box-title">Managed Collectors</text>
+    <text x="98" y="1045" class="body">Production network and endpoint</text>
+    <text x="98" y="1068" class="body">sensor fleet with governed ingestion</text>
+    <text x="98" y="1100" class="small">Beyond the current manual capture runner</text>
+  </g>
+
+  <g aria-label="Future digital twin and deception platform">
+    <rect x="485" y="975" width="380" height="155" rx="10" class="future-card"/>
+    <text x="508" y="1013" class="box-title">Digital Twin &amp; Deception</text>
+    <text x="508" y="1045" class="body">Persistent twin state and isolated</text>
+    <text x="508" y="1068" class="body">scenario / decoy sensor deployment</text>
+    <text x="508" y="1100" class="small">Current pages do not provide this backend</text>
+  </g>
+
+  <g aria-label="Future event streaming">
+    <rect x="895" y="975" width="380" height="155" rx="10" class="future-card"/>
+    <text x="918" y="1013" class="box-title">Event Streaming</text>
+    <text x="918" y="1045" class="body">RabbitMQ and authenticated</text>
+    <text x="918" y="1068" class="body">WebSocket delivery</text>
+    <text x="918" y="1100" class="small">Broker and streaming are not configured</text>
+  </g>
+
+  <g aria-label="Future vulnerability and response workflows">
+    <rect x="1305" y="975" width="390" height="155" rx="10" class="future-card"/>
+    <text x="1328" y="1013" class="box-title">Response Integrations</text>
+    <text x="1328" y="1045" class="body">Vulnerability scanner and audited,</text>
+    <text x="1328" y="1068" class="body">analyst-approved response workflows</text>
+    <text x="1328" y="1100" class="small">No automatic response is enabled</text>
+  </g>
+
+  <!-- Legend and figure note -->
+  <line x1="75" y1="1250" x2="125" y2="1250" stroke="#111" stroke-width="2.2"/>
+  <text x="137" y="1255" class="small">Implemented component / data path</text>
+  <line x1="405" y1="1250" x2="455" y2="1250" stroke="#111" stroke-width="2" stroke-dasharray="8 6"/>
+  <text x="467" y="1255" class="small">Future or unconnected component</text>
+  <text x="880" y="1255" class="small">Figure 4.1 · NeuroSphere V2 architecture</text>
+</svg>
